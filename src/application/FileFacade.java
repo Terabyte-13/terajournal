@@ -1,6 +1,5 @@
 package application;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 //TODO: usa FileManagerDemo se si è in modalità demo
@@ -8,10 +7,6 @@ public class FileFacade {
 	FileManagerReal fm = new FileManagerReal();
 	Cipher c = new Cipher();
 	String key = null;
-	
-	int setKey(String newKey) {
-		return 1;
-	}
 
 	int encryptAndSave(String data, String outputPath, Boolean confirmOverwrite) {
 		String encryptedData;

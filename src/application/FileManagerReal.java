@@ -29,21 +29,21 @@ public class FileManagerReal extends FileManager {
 			}else {
 				outputFile = new File(fileName);
 			}
-			
-			if(outputFile.exists() == false || confirmOverwrite == true) {
+//              vv restituisce false anche se per qualche motivo OutputFile.exists() restituisce null
+			if(Boolean.TRUE.equals(outputFile.exists()) || confirmOverwrite == true) {
 				outputFile.createNewFile();
-				System.out.printf("<FileMan> File creato: %s\n", outputFile.getName());
+				System.out.printf("<FileMan> File creato: %s%n", outputFile.getName());
 			} else { // popup file già esistente --------------------------------------------------------------
 				System.out.println("<FileMan> File gia' esistente");
 				fileExistsAlert.setTitle("File già esistente");
 				fileExistsAlert.setHeaderText("Questo file è già presente. Sovrascrivere?");
-				fileExistsAlert.setContentText(outputPath + "/" + fileName);
+				fileExistsAlert.setContentText(outputPath + File.separator + fileName);
 				fileExistsAlert.getButtonTypes().setAll(overwrite,cancel);
 				Optional<ButtonType> choice = fileExistsAlert.showAndWait();
-				if(choice.get() == overwrite || confirmOverwrite == true) {
+				if(choice.isPresent() && choice.get() == overwrite) {
 					
 				}
-				if(choice.get() == cancel) {
+				if(choice.isPresent() && choice.get() == cancel) {
 					System.out.println("<FileMan> Creazione file annullata");
 					return 0;
 				}
