@@ -1,0 +1,61 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+#newDiaryButton{
+	-fx-background-color: yellow;
+	-fx-border-color: grey;
+	-fx-border-width: 2px;
+	-fx-border-radius: 1px;
+	-fx-border-insets: 2px;
+}
+
+/* #newDiaryButton:focused{
+	-fx-border-color: blue;
+	;
+}
+*/
+#newDiaryButton:pressed{
+	-fx-border-color: red;
+}
+
+
+#calendarButton{
+	-fx-font-size: 20px;
+	-fx-max-width: 999px;
+	-fx-max-height: 999px;
+	-fx-border-width: 2px;
+	-fx-border-color:black;
+	-fx-background-color:white;  /*cambiando background color rimuove il tema di default*/
+}
+
+#calendarButton:pressed{
+	-fx-border-color: red;
+}
+
+#calendarButtonToday{
+	-fx-font-size: 20px;
+	-fx-max-width: 999px;
+	-fx-max-height: 999px;
+	-fx-border-width: 3px;
+	-fx-border-color:black;
+	-fx-background-color:white; 
+	
+	-fx-background-image: url("file:./src/resources/images/dithert1.png");
+}
+
+#calendarButtonToday:pressed{
+	-fx-border-color: red;
+}
+
+#calendarButtonHasFile{
+	-fx-font-size: 20px;
+	-fx-max-width: 999px;
+	-fx-max-height: 999px;
+	-fx-border-width: 2px;
+	-fx-border-color:orange;
+	-fx-background-color:white;  /*cambiando background color rimuove il tema di default*/
+}
+
+#calendarGrid{
+	-fx-border-width: 2px;
+	-fx-border-color:black;
+	
+}
