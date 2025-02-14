@@ -1,7 +1,6 @@
 package application;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -72,14 +71,14 @@ public class CalendarSceneController extends SceneController {
 			if(i+1 == LocalDate.now().getDayOfMonth() && month == LocalDate.now().getMonth().getValue() && year == LocalDate.now().getYear()) {
 				button.setId("calendarButtonToday");
 			//}else if(fm.getPageAmount(diaryPath, year, month, i+1) >= 1) {
-			//	button.setId("calendarButtonHasFile"); //TODO temporaneo
+			//	button.setId("calendarButtonHasFile"); // temporaneo
 			}else button.setId("calendarButton");
 			
 			button.setOnAction(calendarButtonHandler);
 			button.setUserData(i+1); //per passare il numero del tasto all'handler
 			calendarGrid.add(button, i%7, i/7);
 		}
-		monthYearDisplay.setText(Integer.toString(month) + "/" + Integer.toString(year));
+		monthYearDisplay.setText(Integer.toString(month) + File.separator + Integer.toString(year));
 	}
 	
 	//------------------
@@ -90,7 +89,7 @@ public class CalendarSceneController extends SceneController {
 		System.out.println(selectedDay);
 		
 		EditorSceneController e = new EditorSceneController();
-		e.filePath = mp.getField("folder", diaryPath) + "/" + year + "/" + month + "/" + selectedDay + ".html";
+		e.filePath = mp.getField("folder", diaryPath) + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
 		e.diaryPath = diaryPath;
 		e.ffc = ffc;
 		e.loadScene(currentStage);
