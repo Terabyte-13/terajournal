@@ -32,12 +32,12 @@ public class FileManagerReal extends FileManager {
 //         				 vv restituisce false anche se per qualche motivo OutputFile.exists() restituisce null.			
 			if(Boolean.FALSE.equals(outputFile.exists()) || confirmOverwrite) {
 				outputFile.createNewFile();
-				System.out.printf("<FileMan> File creato: %s\n", outputFile.getName());
+				System.out.printf("<FileMan> File creato: %s%n", outputFile.getName());
 			} else { // popup file già esistente --------------------------------------------------------------
 				System.out.println("<FileMan> File gia' esistente");
 				fileExistsAlert.setTitle("File già esistente");
 				fileExistsAlert.setHeaderText("Questo file è già presente. Sovrascrivere?");
-				fileExistsAlert.setContentText(outputPath + "/" + fileName);
+				fileExistsAlert.setContentText(outputPath + File.separator + fileName);
 				fileExistsAlert.getButtonTypes().setAll(overwrite,cancel);
 				Optional<ButtonType> choice = fileExistsAlert.showAndWait();
 
@@ -52,12 +52,11 @@ public class FileManagerReal extends FileManager {
 			return 0;
 		}
 		
-		//creando il writer fra le parentesi del try, viene chiuso il writer anche in caso di eccezione
+		//creando il writer fra le parentesi del try, viene chiuso il writer automaticamente
 		try(FileWriter writer = new FileWriter(outputFile)){
 			// scrittura sul file ------------------------------------------------------------------------
 			writer.write(data);
-			writer.close();
-			System.out.printf("<FileMan> File scritto: %s\n", outputFile.getName());
+			System.out.printf("<FileMan> File scritto: %s%n", outputFile.getName());
 		}catch (IOException e){
 			System.out.println("<FileMan> Errore nella creazione del file");
 			e.printStackTrace();

@@ -27,7 +27,6 @@ public class MetadataParser {
 					}
 				
 				if(line.equals(fieldName) && tok.hasMoreTokens()) {
-					line = tok.nextToken();
 					return i;
 				}
 				i++;
@@ -45,7 +44,7 @@ public class MetadataParser {
 		String output = "";
 		int i = findField(fieldName, filePath);
 		if(i < 0) {
-			System.out.printf("<MetadataParser.getField> field '%s' non trovata.\n", fieldName);
+			System.out.printf("<MetadataParser.getField> field '%s' non trovata.%n", fieldName);
 			return "notFound";
 		}
 		try {
