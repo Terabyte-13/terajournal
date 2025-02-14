@@ -28,4 +28,22 @@
   <sonar.organization>terabyte-13</sonar.organization>
   <sonar.host.url>https://sonarcloud.io</sonar.host.url>
 </properties>
+<dependencies>
+    <!-- JavaFX dependencies -->
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-web</artifactId>
+        <version>23.0.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-controls</artifactId>
+        <version>23.0.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-fxml</artifactId>
+        <version>23.0.1</version>
+    </dependency>
+</dependencies>
 </project>
