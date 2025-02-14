@@ -24,9 +24,11 @@
       </plugin>
     </plugins>
   </build>
-   <properties>
+ <properties>
   <sonar.organization>terabyte-13</sonar.organization>
   <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+  <maven.compiler.source>21</maven.compiler.source>
+  <maven.compiler.target>21</maven.compiler.target>
 </properties>
 <dependencies>
     <!-- JavaFX dependencies -->
