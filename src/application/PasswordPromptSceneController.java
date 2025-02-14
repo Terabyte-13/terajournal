@@ -6,12 +6,12 @@ import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
 public class PasswordPromptSceneController extends SceneController {
-	
+	//commento prova
 	String diaryPath;
 	MetadataParser mp = new MetadataParser();
 	Hasher hasher = new Hasher();
 	
-	@FXML PasswordField passwordField;
+	@FXML PasswordField passwordField; 
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/PasswordPrompt.fxml"));
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
