@@ -30,12 +30,8 @@ public class CalendarSceneController extends SceneController {
 	FileFacade ffc = new FileFacade();
 	MetadataParser mp = new MetadataParser();
 	
-	
-	EventHandler<ActionEvent> calendarButtonHandler = new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
-			onCalendarButtonPress(event);
-		}
-	};
+	//espressione lambda. "event" è l'evento innescatore. verrà eseguito il codice dopo "->"
+	EventHandler<ActionEvent> calendarButtonHandler = event -> onCalendarButtonPress(event);
 	
 
 	
