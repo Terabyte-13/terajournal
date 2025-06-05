@@ -9,7 +9,8 @@ public class EditorSceneController extends SceneController {
 	
 	String filePath;
 	String diaryPath;
-	FileFacade ffc;
+	FileFacade ff;
+	String key;
 	
 	@FXML HTMLEditor editorText;
 	
@@ -19,19 +20,49 @@ public class EditorSceneController extends SceneController {
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
 		
-		editorText.setHtmlText(ffc.loadAndDecrypt(filePath));
+		//carico i dati dal file sull'editor
+		//caricamento dati nel bean ---------
+		FileBean fb = new FileBean();
+		fb.setPath(filePath);
+		fb.setKey(key);
+		fb = ff.loadAndDecryptBean(fb, true);
+		//------------------------------
+		editorText.setHtmlText(fb.getData());
 	}
 	
+	void setKey(String k) {
+		key = k;
+	}
+	
+	void setFF(FileFacade newff) {
+		ff = newff;
+		System.out.printf("<PasswordPromptSC> FF impostato: %s.%n", ff);
+	}
+	
+	//salva i dati dall'editor sul file
 	public void savePage() {
 		String data = editorText.getHtmlText();
-		ffc.encryptAndSave(data, filePath, false);
-		toCalendar();
+		
+		//se il file è vuoto, non salvo
+		if(!data.equals("<html dir=\"ltr\"><head></head><body contenteditable=\"true\"></body></html>")) {	
+			//impacchettamento bean --------
+			FileBean fb = new FileBean();
+			fb.setData(data);
+			fb.setPath(filePath);
+			fb.setKey(key);
+			//------------------------------
+			ff.encryptAndSaveBean(fb, false, true);
+		}
+		else {System.out.println("<EditorSC> Non c'è nulla da salvare.");}
+		
+		toCalendar(); //TODO porta fuori
 	}
 	
 	public void toCalendar(){
 		CalendarSceneController c = new CalendarSceneController();
 		c.diaryPath = diaryPath;
-		c.ffc = ffc;
+		c.setFF(ff);
+		c.setKey(key);
 		c.loadScene(currentStage);
 	}
 }

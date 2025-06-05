@@ -1,6 +1,5 @@
 package application;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -8,19 +7,16 @@ import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
 public class StartSceneController extends SceneController {
 	
 	@FXML ComboBox<String> diaryPicker;
+	FileFacade ff = new FileFacade(); //questo fileFacade deve essere l'unico fileFacade, passato tra le classi
 	
 	MetadataParser mp = new MetadataParser();
+	MetadataBean mb = new MetadataBean();
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Start.fxml"));
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
@@ -28,18 +24,22 @@ public class StartSceneController extends SceneController {
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
 		
+		mp.setFF(ff);
+		
 		diaryPicker.getItems().add("Importa un diario esistente");
 		populateDiaryList();
 	}
 	
 	public void toNewDiary(ActionEvent event) {
 		NewDiarySceneController n = new NewDiarySceneController();
+		n.setFF(ff);
 		n.loadScene(currentStage);
 	}
 	
 	void toPasswordPrompt(String diaryPath) {
 		PasswordPromptSceneController p = new PasswordPromptSceneController();
 		p.diaryPath = diaryPath;
+		p.setFF(ff);
 		p.loadScene(currentStage);
 	}
 	
@@ -55,12 +55,20 @@ public class StartSceneController extends SceneController {
 	public void onDiaryPickerPress(ActionEvent event) {
 		String selection = diaryPicker.getValue();
 		
-		Path p = Paths.get(mp.getField(selection, "diaryList"));
+		//Impacchettamento bean da mandare a getField
+		mb.setFieldName(selection);
+		mb.setPath("diaryList");
+		mb = mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
+		//-------------------------------------------
+		
+		Path p = Paths.get(mb.getFieldData());
 		System.out.printf("path: %s, cartella contenitore: %s\n", p, p.getParent());
 		
 		toPasswordPrompt(p.toString());
+	}
+	
+	public void onImportButtonPress(ActionEvent event) {
 		
-
 	}
 	
 

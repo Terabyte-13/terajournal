@@ -23,16 +23,18 @@ public class FileManagerReal extends FileManager {
 		try {
 			// creazione cartelle e file ------------------------------------------------------------------------
 			if(!outputPath.equals("")) {
-				outputFile = new File(outputPath);
+				outputFile = new File(outputPath); //directory
 				outputFile.mkdirs();
-				outputFile = new File(outputPath, fileName);
+				outputFile = new File(outputPath, fileName); //il file
 			}else {
-				outputFile = new File(fileName);
+				outputFile = new File(fileName); //direttamente il file se non c'è directory contenente
 			}
-//         				 vv restituisce false anche se per qualche motivo OutputFile.exists() restituisce null.			
+			//controllo se il file esiste già
+			//			 vv  uso questo perchè restituisce false anche se OutputFile.exists() restituisse null.			
 			if(Boolean.FALSE.equals(outputFile.exists()) || confirmOverwrite) {
 				outputFile.createNewFile();
 				System.out.printf("<FileMan> File creato: %s%n", outputFile.getName());
+				//return 1;
 			} else { // popup file già esistente --------------------------------------------------------------
 				System.out.println("<FileMan> File gia' esistente");
 				fileExistsAlert.setTitle("File già esistente");
@@ -40,16 +42,15 @@ public class FileManagerReal extends FileManager {
 				fileExistsAlert.setContentText(outputPath + File.separator + fileName);
 				fileExistsAlert.getButtonTypes().setAll(overwrite,cancel);
 				Optional<ButtonType> choice = fileExistsAlert.showAndWait();
-
 				if(choice.isPresent() && choice.get() == cancel) {
 					System.out.println("<FileMan> Creazione file annullata");
 					return 0;
 				}
+					//return 1;
 				}
 		}catch (IOException e) {
-			System.out.println("<FileMan> Errore nella creazione del file");
+			System.out.println("<FileMan> Errore nella creazione del file '" + outputPath + File.separator + fileName + "'");
 			e.printStackTrace();
-			return 0;
 		}
 		
 		//creando il writer fra le parentesi del try, viene chiuso il writer automaticamente
@@ -57,8 +58,9 @@ public class FileManagerReal extends FileManager {
 			// scrittura sul file ------------------------------------------------------------------------
 			writer.write(data);
 			System.out.printf("<FileMan> File scritto: %s%n", outputFile.getName());
+			System.out.printf("[%s]\n", data);
 		}catch (IOException e){
-			System.out.println("<FileMan> Errore nella creazione del file");
+			System.out.println("<FileMan> Errore nella scrittura del file '" + outputPath + File.separator + fileName + "'");
 			e.printStackTrace();
 			return 0;
 		}
@@ -83,11 +85,16 @@ public class FileManagerReal extends FileManager {
 		System.out.printf("<FileMan> File letto: %s%n", inputFile.getName());
 		// --------------
 		} catch (FileNotFoundException e) {
-			System.out.println("<FileMan> Errore nell'apertura del file");
+			System.out.println("<FileMan> Errore nell'apertura del file " + inputPath);
 			e.printStackTrace();
 			return null;
 		}
 		return data;
+	}
+	
+	Boolean checkForFile(String path) {
+		File file = new File(path);
+		return file.exists();
 	}
 	
 }

@@ -9,9 +9,13 @@ public class PasswordPromptSceneController extends SceneController {
 	//commento prova
 	String diaryPath;
 	MetadataParser mp = new MetadataParser();
+	MetadataBean mb = new MetadataBean();
 	Hasher hasher = new Hasher();
 	
+	FileFacade ff;
+	
 	@FXML PasswordField passwordField; 
+	
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/PasswordPrompt.fxml"));
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
@@ -19,11 +23,19 @@ public class PasswordPromptSceneController extends SceneController {
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
 		
-		if(mp.getField("pwdHash", diaryPath).equals("notFound")) { //se non c'è password
+		mp.ff = ff;
+		
+		if(mp.getField("pwdHash", diaryPath).equals("notFound")) { //se non c'è password, apro direttamente il calendario
 			CalendarSceneController c = new CalendarSceneController();
 			c.diaryPath = diaryPath;
+			c.setFF(ff);
 			c.loadScene(currentStage);
 		}
+	}
+	
+	void setFF(FileFacade newff) {
+		ff = newff;
+		System.out.printf("<PasswordPromptSC> FF impostato: %s.%n", ff);
 	}
 	
 	public void toStart() {
@@ -32,15 +44,17 @@ public class PasswordPromptSceneController extends SceneController {
 	}
 	
 	public void submitPassword() {
-		String password = passwordField.getText();
-		String hash = hasher.getHash(password, "SHA-256");
-		String pwdHash = mp.getField("pwdHash", diaryPath);
+		String password = passwordField.getText(); //password inserita
+		String hash = hasher.getHash(password, "SHA-256"); //hash della password inserita
+		mb.setFieldName("pwdHash");
+		mb.setPath(diaryPath);
+		String pwdHash = mp.getFieldBean(mb).getFieldData(); //hash preso dal file, da confrontare a hash
 		
-		if(hash.equals(pwdHash)) {
-			//NB: gli accessi a diaryList devono essere senza key. crea un ff nuovo
+		if(hash.equals(pwdHash)) { //se gli hash combaciano, la password inserita e' corretta
 			CalendarSceneController c = new CalendarSceneController();
 			c.diaryPath = diaryPath;
-			if(!password.equals("")) {c.ffc.key = hasher.getHash(password, "MD5");} //un hash diverso come key, non quello immagazzinato
+			if(!password.equals("")) {c.setKey(hasher.getHash(password, "MD5"));} //un hash diverso come key, non quello immagazzinato
+			c.setFF(ff);
 			c.loadScene(currentStage);
 		}else {
 			passwordField.setText("");

@@ -20,14 +20,23 @@ public class NewDiarySceneController extends SceneController {
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/NewDiary.fxml"));
 	DirectoryChooser dc = new DirectoryChooser();
-	FileFacade ff = new FileFacade();
 	MetadataParser mp = new MetadataParser();
 	Hasher hasher = new Hasher();
 	
+	FileFacade ff; //passato dalla scena precedente
+	String key;
+	
+
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
+		mp.setFF(ff);
+	}
+	
+	void setFF(FileFacade newff) {
+		ff = newff;
+		System.out.printf("<PasswordPromptSC> FF impostato: %s.%n", ff);
 	}
 	
 	public void toStart() {
@@ -45,7 +54,7 @@ public class NewDiarySceneController extends SceneController {
 	}
 	
 	public void createDiary() {	
-		if(nameField.getText() == null || pathField.getText() == null) {
+		if(nameField.getText().equals("") || pathField.getText().equals("")) {
 			System.out.println("Ci sono dei campi vuoti.");
 			return;
 		}
@@ -55,20 +64,56 @@ public class NewDiarySceneController extends SceneController {
 		}
 		
 		String metadataFilePath = pathField.getText() + "/" + nameField.getText() + "/" + nameField.getText() + ".jm";
-		if(ff.encryptAndSave("", metadataFilePath, false) == 1) {
+		
+		//impacchettamento fileBean per creare directory e file metadati ------
+		FileBean fb = new FileBean();
+		fb.setPath(metadataFilePath);
+		fb.setKey(null);
+		fb.setData("");
+		//--------------------------------
+		
+		//metadataBean per modificare il file metadati ------
+		MetadataBean mb = new MetadataBean();
+		//--------------------------------
+		
+		if(ff.encryptAndSaveBean(fb, false, false) == 1) { //creo directory e file metadati per il diario
 			System.out.println("Diario creato.");
-			mp.setField(nameField.getText(), "diaryList", metadataFilePath);
 			
-			//riempi metadati
-			mp.setField("name", metadataFilePath, nameField.getText());
-			mp.setField("folder", metadataFilePath, pathField.getText() + "/" + nameField.getText());
-			if(passwordField.getText().equals("")) {
-				mp.setField("pwdHash", metadataFilePath, "");
-			} else {mp.setField("pwdHash", metadataFilePath, hasher.getHash(passwordField.getText(), "SHA-256"));}
+			//aggiungo il diario alla lista dei diari
+			System.out.println("aggiungo il diario alla lista dei diari");
+			mb.setPath("diaryList");
+			mb.setFieldName(nameField.getText());
+			mb.setFieldData(metadataFilePath);
+			mp.setFieldBean(mb);
 			
+			//adesso opero sul file metadati del diario
+			mb.setPath(metadataFilePath);
+			
+			//riempio metadati
+			mb.setFieldName("name");
+			mb.setFieldData(nameField.getText());
+			mp.setFieldBean(mb);
+			
+			mb.setFieldName("folder");
+			mb.setFieldData(pathField.getText() + "/" + nameField.getText());
+			mp.setFieldBean(mb);
+			
+			if(passwordField.getText().equals("")) { //Se non inserisco una password, il diario non avrà password.
+				mb.setFieldName("pwdHash");
+				mb.setFieldData("");
+				mp.setFieldBean(mb);
+			} else { //Se viene inserita una password, salvo l'hash
+				mb.setFieldName("pwdHash");
+				mb.setFieldData(hasher.getHash(passwordField.getText(), "SHA-256"));
+				mp.setFieldBean(mb);
+				}
+			
+			//se e' tutto andato a buon fine, inizializzo e apro il calendario
 			CalendarSceneController c = new CalendarSceneController();
 			c.diaryPath = mp.getField(nameField.getText(), "diaryList");
-			if(!passwordField.getText().equals("")) {c.ffc.key = hasher.getHash(passwordField.getText(), "MD5");}
+			if(!passwordField.getText().equals("")) {key = hasher.getHash(passwordField.getText(), "MD5");} //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
+			c.setFF(ff);
+			c.setKey(key);
 			c.loadScene(currentStage);
 			
 		}else {System.out.println("Diario NON creato.");}

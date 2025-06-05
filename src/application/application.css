@@ -1,10 +1,10 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 #newDiaryButton{
-	-fx-background-color: yellow;
-	-fx-border-color: grey;
-	-fx-border-width: 2px;
-	-fx-border-radius: 1px;
-	-fx-border-insets: 2px;
+	-fx-background-color:linear-gradient(#ffdfd1,#e6c9bc);
+	-fx-border-width: 1px;
+	-fx-border-radius:3px;
+	-fx-border-color:linear-gradient(#ff0000,#d90404);
+	-fx-graphic: url("file:./src/resources/icons/page-plus.png")
 }
 
 /* #newDiaryButton:focused{
@@ -13,16 +13,32 @@
 }
 */
 #newDiaryButton:pressed{
-	-fx-border-color: red;
+	-fx-border-color: yellow;
 }
 
+#navHome{
+	-fx-background-color:linear-gradient(#ffdfd1,#e6c9bc);
+	-fx-border-width: 1px;
+	-fx-border-radius:3px;
+	-fx-border-color:black;
+	-fx-graphic: url("file:./src/resources/icons/home.png")
+}
+
+#navPrev{
+	-fx-graphic: url("file:./src/resources/icons/arrow-left.png")
+}
+
+#navNext{
+	-fx-graphic: url("file:./src/resources/icons/arrow-right.png")
+}
 
 #calendarButton{
-	-fx-font-size: 20px;
+	-fx-font-size: 24px;
+	-fx-alignment: TOP_RIGHT;
 	-fx-max-width: 999px;
 	-fx-max-height: 999px;
 	-fx-border-width: 2px;
-	-fx-border-color:black;
+	/*-fx-border-color:black;
 	-fx-background-color:white;  /*cambiando background color rimuove il tema di default*/
 }
 
@@ -31,14 +47,16 @@
 }
 
 #calendarButtonToday{
-	-fx-font-size: 20px;
+	-fx-font-size: 24px;
+	-fx-alignment: TOP_RIGHT;
 	-fx-max-width: 999px;
 	-fx-max-height: 999px;
 	-fx-border-width: 3px;
-	-fx-border-color:black;
-	-fx-background-color:white; 
+	-fx-border-color:linear-gradient(#ff0000,#d90404);
+	-fx-border-radius:2px;
+	/*-fx-background-color:white; 
 	
-	-fx-background-image: url("file:./src/resources/images/dithert1.png");
+	/*-fx-background-image: url("file:./src/resources/images/dithert1.png");*/
 }
 
 #calendarButtonToday:pressed{
@@ -46,16 +64,20 @@
 }
 
 #calendarButtonHasFile{
-	-fx-font-size: 20px;
+	-fx-font-size: 24px;
+	-fx-alignment: TOP_RIGHT;
 	-fx-max-width: 999px;
 	-fx-max-height: 999px;
-	-fx-border-width: 2px;
-	-fx-border-color:orange;
-	-fx-background-color:white;  /*cambiando background color rimuove il tema di default*/
+	-fx-border-width: 1px;
+	-fx-border-color:#c4aca1;
+	-fx-background-color:linear-gradient(#ffdfd1,#e6c9bc);  /*cambiando background color rimuove il tema di default*/
+	-fx-graphic: url("file:./src/resources/icons/pencil.png")
 }
 
 #calendarGrid{
-	-fx-border-width: 2px;
-	-fx-border-color:black;
-	
+	-fx-background-color:#eeeeee;
+}
+
+#navCalendar{
+	-fx-graphic: url("file:./src/resources/icons/calendar.png")
 }

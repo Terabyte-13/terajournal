@@ -34,7 +34,8 @@ public abstract class SceneController {
 	}
 	
 	SceneController() { //costruttore. parte quando viene istanziata la classe
-		System.out.println("nuova istanza creata: " + this);
+		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
+		System.out.println("nuova istanza creata da " + caller + " : " + this);
 	}
 	
 }
