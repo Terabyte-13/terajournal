@@ -38,7 +38,14 @@ public class CLIController {
 	Path currentDiaryPath;
 	String key;
 	
-	int year,month,day;
+	int year;
+	int month;
+	int day;
+	
+	//volute da sonarcloud. rende facile cambiare il nome dei field
+	static String PWDHASH = "pwdHash";
+	static String DIARYLIST = "diaryList";
+		
 	
 	void start() {
 		System.out.println(ANSI_CYAN + "Avvio della CLI..." + ANSI_RESET);
@@ -101,7 +108,7 @@ public class CLIController {
 	void diaryPicker() {
 		System.out.println(ANSI_CYAN_BG + ANSI_BLACK + "   Seleziona il diario...   " + ANSI_RESET);
 		
-		List<String> diaries = mp.getFieldNames("diaryList");
+		List<String> diaries = mp.getFieldNames(DIARYLIST);
 		int choice = getChoice(diaries.toArray(new String[0])); //mando la lista di stringhe come argomenti
 		setDiary(diaries.get(choice));
 		passwordPrompt();
@@ -111,7 +118,7 @@ public class CLIController {
 	
 	void passwordPrompt() {
 		//impacchetto bean e recupero risposta
-		mb.setFieldName("pwdHash"); //cerco il field pwdHash nel file nel path
+		mb.setFieldName(PWDHASH); //cerco il field pwdHash nel file nel path
 		mb.setPath(currentDiaryPath.toString());
 		beanAnswer = mp.getFieldBean(mb).getFieldData();
 		//-------------------
@@ -145,7 +152,7 @@ public class CLIController {
 		
 		//carico i dati dal file sull'editor
 		//caricamento dati nel bean ---------
-		FileBean fb = new FileBean();
+		fb = new FileBean();
 		fb.setPath(diaryFolder + dateString + ".html");
 		fb.setKey(key);
 		fb = ff.loadAndDecryptBean(fb, true);
@@ -169,22 +176,19 @@ public class CLIController {
 		String metadataFilePath = path + File.separator + name + File.separator + name + ".jm";
 		
 		//impacchettamento fileBean per creare directory e file metadati ------
-		FileBean fb = new FileBean();
+		fb = new FileBean();
 		fb.setPath(metadataFilePath);
 		fb.setKey(null);
 		fb.setData("");
 		//--------------------------------
 		
-		//metadataBean per modificare il file metadati ------
-		MetadataBean mb = new MetadataBean();
-		//--------------------------------
 		
 		if(ff.encryptAndSaveBean(fb, false, false) == 1) { //creo directory e file metadati per il diario
 			System.out.println("Creando diario...");
 			
 			//aggiungo il diario alla lista dei diari
 			System.out.println("aggiungo il diario alla lista dei diari");
-			mb.setPath("diaryList");
+			mb.setPath(DIARYLIST);
 			mb.setFieldName(name);
 			mb.setFieldData(metadataFilePath);
 			mp.setFieldBean(mb);
@@ -202,11 +206,11 @@ public class CLIController {
 			mp.setFieldBean(mb);
 			
 			if(password.equals("")) { //Se non inserisco una password, il diario non avrà password.
-				mb.setFieldName("pwdHash");
+				mb.setFieldName(PWDHASH);
 				mb.setFieldData("");
 				mp.setFieldBean(mb);
 			} else { //Se viene inserita una password, salvo l'hash
-				mb.setFieldName("pwdHash");
+				mb.setFieldName(PWDHASH);
 				mb.setFieldData(hasher.getHash(password, "SHA-256"));
 				mp.setFieldBean(mb);
 				}
@@ -225,7 +229,7 @@ public class CLIController {
 	
 	int checkPassword(String password){
 		String hash = hasher.getHash(password, "SHA-256"); //hash della password inserita
-		mb.setFieldName("pwdHash");
+		mb.setFieldName(PWDHASH);
 		mb.setPath(currentDiaryPath.toString());
 		String pwdHash = mp.getFieldBean(mb).getFieldData(); //hash preso dal file, da confrontare a hash
 		
@@ -241,10 +245,10 @@ public class CLIController {
 	
 	
 	int getNumberChoice(int min, int max, Boolean useLimits) {
-		if(useLimits) System.out.println("Inserisci un numero da " + min + " a " + max);
+		if(Boolean.TRUE.equals(useLimits)) System.out.println("Inserisci un numero da " + min + " a " + max);
 		else System.out.println("Inserisci un numero.");
 		int clinput = Integer.parseInt(scanner.nextLine());
-		if(useLimits && (clinput < min || clinput > max)) { //numero fuori dai limiti
+		if(Boolean.TRUE.equals(useLimits) && (clinput < min || clinput > max)) { //numero fuori dai limiti
 			System.out.println("Scelta invalida!");
 			return getNumberChoice(min, max, useLimits); //rifai
 		}else {
@@ -270,12 +274,12 @@ public class CLIController {
 	void setDiary(String selection) {
 		//Impacchettamento bean da mandare a getField
 		mb.setFieldName(selection);
-		mb.setPath("diaryList");
+		mb.setPath(DIARYLIST);
 		mb = mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
 		//-------------------------------------------
 		
 		currentDiaryPath = Paths.get(mb.getFieldData());
-		System.out.printf("path: %s, cartella contenitore: %s\n", currentDiaryPath, currentDiaryPath.getParent());
+		System.out.printf("path: %s, cartella contenitore: %s%n", currentDiaryPath, currentDiaryPath.getParent());
 	}
 	
 	void shutdown() {

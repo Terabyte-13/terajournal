@@ -109,7 +109,7 @@ public class MetadataParser {
 	int setField(String fieldName, String filePath, String newValue) {
 		try {
 			String data = ff.loadAndDecrypt(filePath, null, false);
-			List<String> lines = new ArrayList<String>(Arrays.asList(data.split("\n")));
+			List<String> lines = new ArrayList<>(Arrays.asList(data.split("\n")));
 			
 			int i = findField(fieldName, filePath);
 			if(i >= 0) {lines.set(i, fieldName + ":" + newValue);}
@@ -153,7 +153,7 @@ public class MetadataParser {
 	List<String> fileToList(String filePath) {
 		try{
 			List<String> output = null;
-			//ff = new FileFacade();
+			
 			String data = ff.loadAndDecrypt(filePath, null, false);
 			if(data != null) {output = new ArrayList<String>(Arrays.asList(data.split("\n")));}
 			return output;

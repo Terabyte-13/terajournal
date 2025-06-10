@@ -1,8 +1,6 @@
 package application;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -99,7 +97,7 @@ public class CalendarSceneController extends SceneController {
 			if(i == LocalDate.now().getDayOfMonth() && month == LocalDate.now().getMonth().getValue() && year == LocalDate.now().getYear()) {
 				button.setId("calendarButtonToday");
 			//Evidenzio i giorni con un file associato
-			}else if(ff.checkForFile(diaryFolder + File.separator + year + File.separator + month + File.separator + i + ".html") == true) {
+			}else if(ff.checkForFile(diaryFolder + File.separator + year + File.separator + month + File.separator + i + ".html")) {
 				button.setId("calendarButtonHasFile");
 			}else button.setId("calendarButton");
 			

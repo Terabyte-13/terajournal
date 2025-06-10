@@ -1,15 +1,14 @@
 package application;
 
-import java.io.File;
 import java.nio.file.Paths;
 
 public class FileFacade {
 	Cipher c = new Cipher();
 	FileManager fm;
-	Boolean demoMode = false;
+	Boolean demoMode = true;
 
 	FileFacade(){
-		if(demoMode == true) {fm = new FileManagerDemo();}
+		if(demoMode) {fm = new FileManagerDemo();}
 		else{fm = new FileManagerReal();}
 	}
 
@@ -44,7 +43,7 @@ public class FileFacade {
 		System.out.println(directory + "  " + fileName);
 		
 		//salvataggio e cifratura file (o gestione se il file non è stato salvato)
-		if(key != null && encrypt == true) {
+		if(key != null && encrypt) {
 			encryptedData = c.cipher(key, data, 0);
 			if(fm.save(encryptedData, directory, fileName, confirmOverwrite) == 1) {
 				return 1;
@@ -72,7 +71,7 @@ public class FileFacade {
 	String loadAndDecrypt(String inputPath, String key, Boolean decrypt) {
 		String decryptedData;
 		
-		if(key != null && decrypt == true) {
+		if(key != null && decrypt) {
 			decryptedData = c.cipher(key, fm.load(inputPath), 1);
 		}else {
 			System.out.println("<FileFacade> carico il file senza decifrare");

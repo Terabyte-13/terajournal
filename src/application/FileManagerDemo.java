@@ -40,7 +40,6 @@ public class FileManagerDemo extends FileManager {
 	
 	@Override
 	int save(String data, String outputPath, String fileName, Boolean confirmOverwrite) {
-		Boolean fileExists = false;
 		//preparazione variabili per essere usate da sql
 		int parentId = 0; //1 : root
 		List<String> dirs = parsePath(outputPath);
@@ -58,7 +57,6 @@ public class FileManagerDemo extends FileManager {
 			
 			if(results.next()) { //se ci sono risultati, la directory esiste già
 				System.out.println(fileName + " esiste già.");
-				fileExists = true;
 			}
 		}catch(SQLException e) {
 			e.printStackTrace();
@@ -88,7 +86,7 @@ public class FileManagerDemo extends FileManager {
 	String load(String inputPath) {
 		List<String> dirs = parsePath(inputPath);
 		ResultSet results = null;
-		try(PreparedStatement ps = connection.prepareStatement("SELECT * FROM demoFileSystem WHERE name = ? AND parent_id = ?")){
+		try(PreparedStatement ps = connection.prepareStatement("SELECT name, data, id FROM demoFileSystem WHERE name = ? AND parent_id = ?")){
 			ps.setInt(2, 0); //inizio la ricerca da 0 (root)
 			for(int i = 0; i < dirs.size(); i++) {
 				ps.setString(1, dirs.get(i));

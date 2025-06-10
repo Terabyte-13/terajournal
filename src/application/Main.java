@@ -9,7 +9,7 @@ import javafx.scene.Scene;
 
 public class Main extends Application {
 	
-	Boolean useCLI = true;
+	Boolean useCLI = false;
 	
 	@Override
 	public void start(Stage primaryStage) {
