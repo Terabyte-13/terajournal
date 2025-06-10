@@ -63,13 +63,15 @@ public class CLIController {
 			System.out.println(ANSI_CYAN_BG + ANSI_BLACK + "   t e r a j o u r n a l   " + ANSI_RESET);
 			System.out.println(ANSI_CYAN + "Benvenuto/a! Inserisci il numero corrispondente all'opzione che vuoi scegliere." + ANSI_RESET);
 			
-			choice = getChoice("Apri un diario esistente", "Crea un nuovo diario");
+			choice = getChoice("Apri un diario esistente", "Crea un nuovo diario", "Esci");
 			System.out.println("Input: " + choice);
 			
 			if(choice == 1) {
 				diaryPicker();
 			}else if (choice == 2) {
 				diaryCreator();
+			}else if (choice == 3) {
+				System.exit(0);
 			}else {
 				System.out.println(ANSI_YELLOW + "Opzione invalida!" + ANSI_RESET);
 			}
