@@ -71,11 +71,12 @@ public class CLIController {
 			}else if (choice == 2) {
 				diaryCreator();
 			}else if (choice == 3) {
-				System.exit(0);
+				break;
 			}else {
 				System.out.println(ANSI_YELLOW + "Opzione invalida!" + ANSI_RESET);
 			}
 		}
+		System.exit(0);
 	}
 	
 	//"schermate" --------------------------------------------------------------------------------------
