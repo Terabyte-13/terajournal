@@ -71,6 +71,7 @@ public class MetadataParser {
 	
 	String getField(String fieldName, String filePath) {
 		String output = "";
+		
 		int i = findField(fieldName, filePath);
 		if(i < 0) {
 			System.out.printf("%s<MetadataParser.getField> field '%s' non trovata in %s.%n%s", ANSI_YELLOW, fieldName, filePath, ANSI_RESET);
@@ -129,11 +130,13 @@ public class MetadataParser {
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
 	List<String> getFieldNames(String filePath){
+		String line = "";
+		
 		try{
 			List<String> output = fileToList(filePath);
 			if(output == null) {return null;}
 			for(int i = 0; i < output.size(); i++) {
-				System.out.println(output.get(i));
+				//System.out.println(output.get(i));
 				tok = new StringTokenizer(output.get(i), ":");
 				if(tok.hasMoreElements()) {output.set(i, tok.nextToken());} //prendo il primo token
 			}

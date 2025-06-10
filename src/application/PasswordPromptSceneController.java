@@ -10,6 +10,7 @@ public class PasswordPromptSceneController extends SceneController {
 	String diaryPath;
 	MetadataParser mp = new MetadataParser();
 	MetadataBean mb = new MetadataBean();
+	String beanAnswer;
 	Hasher hasher = new Hasher();
 	
 	FileFacade ff;
@@ -25,7 +26,12 @@ public class PasswordPromptSceneController extends SceneController {
 		
 		mp.ff = ff;
 		
-		if(mp.getField("pwdHash", diaryPath).equals("notFound")) { //se non c'è password, apro direttamente il calendario
+		//impacchetto bean e recupero risposta
+		mb.setFieldName("pwdHash"); //cerco il field pwdHash nel file nel path
+		mb.setPath(diaryPath);
+		beanAnswer = mp.getFieldBean(mb).getFieldData();
+		//-------------------
+		if(beanAnswer.equals("notFound")) { //se non c'è password, apro direttamente il calendario
 			CalendarSceneController c = new CalendarSceneController();
 			c.diaryPath = diaryPath;
 			c.setFF(ff);

@@ -34,4 +34,7 @@ public class FileBean {
 	public String getKey() {
 		return key;
 	}
+	
+	//-----------------------------
+	
 }

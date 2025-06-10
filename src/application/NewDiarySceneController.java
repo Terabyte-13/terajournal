@@ -22,6 +22,7 @@ public class NewDiarySceneController extends SceneController {
 	DirectoryChooser dc = new DirectoryChooser();
 	MetadataParser mp = new MetadataParser();
 	Hasher hasher = new Hasher();
+	StringBean hb = new StringBean();
 	
 	FileFacade ff; //passato dalla scena precedente
 	String key;
@@ -111,7 +112,10 @@ public class NewDiarySceneController extends SceneController {
 			//se e' tutto andato a buon fine, inizializzo e apro il calendario
 			CalendarSceneController c = new CalendarSceneController();
 			c.diaryPath = mp.getField(nameField.getText(), "diaryList");
-			if(!passwordField.getText().equals("")) {key = hasher.getHash(passwordField.getText(), "MD5");} //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
+			if(!passwordField.getText().equals("")) {
+				
+				key = hasher.getHash(passwordField.getText(), "MD5");
+				} //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
 			c.setFF(ff);
 			c.setKey(key);
 			c.loadScene(currentStage);
