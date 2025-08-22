@@ -13,7 +13,7 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-		if(useCLI == false) {	
+		if(Boolean.FALSE.equals(useCLI)) {	
 			FXMLLoader splash = new FXMLLoader(getClass().getResource("/fxml/Splash.fxml"));
 			StartSceneController start = new StartSceneController();
 			try {

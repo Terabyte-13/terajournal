@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -18,6 +20,8 @@ public class FileManagerReal extends FileManager {
 	ButtonType cancel = new ButtonType("Annulla");
 	
 	File outputFile;
+	
+	Logger logger = Logger.getLogger("Hasher");
 
 	int save(String data, String outputPath, String fileName, Boolean confirmOverwrite) {
 		try {
@@ -33,23 +37,23 @@ public class FileManagerReal extends FileManager {
 			//			 vv  uso questo perchè restituisce false anche se OutputFile.exists() restituisse null.			
 			if(Boolean.FALSE.equals(outputFile.exists()) || confirmOverwrite) {
 				outputFile.createNewFile();
-				System.out.printf("<FileMan> File creato: %s%n", outputFile.getName());
+				logger.log(Level.INFO, "File creato: " + outputFile.getName());
 				//return 1;
 			} else { // popup file già esistente -------------------------------------------------------------- TODO appare sempre
-				System.out.println("<FileMan> File gia' esistente");
+				logger.log(Level.INFO, "File gia' esistente");
 				fileExistsAlert.setTitle("File già esistente");
 				fileExistsAlert.setHeaderText("Questo file è già presente. Sovrascrivere?");
 				fileExistsAlert.setContentText(outputPath + File.separator + fileName);
 				fileExistsAlert.getButtonTypes().setAll(overwrite,cancel);
 				Optional<ButtonType> choice = fileExistsAlert.showAndWait();
 				if(choice.isPresent() && choice.get() == cancel) {
-					System.out.println("<FileMan> Creazione file annullata");
+					logger.log(Level.WARNING, "Creazione file annullata");
 					return 0;
 				}
 					//return 1;
 				}
 		}catch (IOException e) {
-			System.out.println("<FileMan> Errore nella creazione del file '" + outputPath + File.separator + fileName + "'");
+			logger.log(Level.SEVERE, "Errore nella creazione del file '" + outputPath + File.separator + fileName + "'");
 			e.printStackTrace();
 		}
 		
@@ -57,10 +61,9 @@ public class FileManagerReal extends FileManager {
 		try(FileWriter writer = new FileWriter(outputFile)){
 			// scrittura sul file ------------------------------------------------------------------------
 			writer.write(data);
-			System.out.printf("<FileMan> File scritto: %s%n", outputFile.getName());
-			System.out.printf("[%s]\n", data);
+			logger.log(Level.INFO, "File scritto: " + outputFile.getName());
 		}catch (IOException e){
-			System.out.println("<FileMan> Errore nella scrittura del file '" + outputPath + File.separator + fileName + "'");
+			logger.log(Level.SEVERE, "Errore nella scrittura del file '" + outputPath + File.separator + fileName + "'");
 			e.printStackTrace();
 			return 0;
 		}
@@ -82,10 +85,10 @@ public class FileManagerReal extends FileManager {
 			data = data + reader.nextLine() + "\n";
 		}
 		reader.close();
-		System.out.printf("<FileMan> File letto: %s%n", inputFile.getName());
+		logger.log(Level.INFO, "File letto: " + inputFile.getName());
 		// --------------
 		} catch (FileNotFoundException e) {
-			System.out.println("<FileMan> Errore nell'apertura del file " + inputPath);
+			logger.log(Level.SEVERE, "Errore nell'apertura del file " + inputPath);
 			e.printStackTrace();
 			return null;
 		}
