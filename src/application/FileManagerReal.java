@@ -37,7 +37,7 @@ public class FileManagerReal extends FileManager {
 			//			 vv  uso questo perchè restituisce false anche se OutputFile.exists() restituisse null.			
 			if(Boolean.FALSE.equals(outputFile.exists()) || confirmOverwrite) {
 				outputFile.createNewFile();
-				logger.log(Level.INFO, "File creato: " + outputFile.getName());
+				logger.log(Level.INFO, "File creato: {0}", outputFile.getName());
 				//return 1;
 			} else { // popup file già esistente -------------------------------------------------------------- TODO appare sempre
 				logger.log(Level.INFO, "File gia' esistente");
@@ -53,7 +53,7 @@ public class FileManagerReal extends FileManager {
 					//return 1;
 				}
 		}catch (IOException e) {
-			logger.log(Level.SEVERE, "Errore nella creazione del file '" + outputPath + File.separator + fileName + "'");
+			logger.log(Level.SEVERE, "Errore nella creazione del file {0}/{1}", new String[]{outputPath, fileName}); //va fatto cosi' se bisogna inserire più variabili in un log
 			e.printStackTrace();
 		}
 		
@@ -61,9 +61,9 @@ public class FileManagerReal extends FileManager {
 		try(FileWriter writer = new FileWriter(outputFile)){
 			// scrittura sul file ------------------------------------------------------------------------
 			writer.write(data);
-			logger.log(Level.INFO, "File scritto: " + outputFile.getName());
+			logger.log(Level.INFO, "File scritto: {0}", outputFile.getName());
 		}catch (IOException e){
-			logger.log(Level.SEVERE, "Errore nella scrittura del file '" + outputPath + File.separator + fileName + "'");
+			logger.log(Level.SEVERE, "Errore nella scrittura del file {0}/{1}", new String[]{outputPath, fileName});
 			e.printStackTrace();
 			return 0;
 		}
@@ -85,10 +85,10 @@ public class FileManagerReal extends FileManager {
 			data = data + reader.nextLine() + "\n";
 		}
 		reader.close();
-		logger.log(Level.INFO, "File letto: " + inputFile.getName());
+		logger.log(Level.INFO, "File letto: {0}", inputFile.getName());
 		// --------------
 		} catch (FileNotFoundException e) {
-			logger.log(Level.SEVERE, "Errore nell'apertura del file " + inputPath);
+			logger.log(Level.SEVERE, "Errore nell'apertura del file {0}", inputPath);
 			e.printStackTrace();
 			return null;
 		}
