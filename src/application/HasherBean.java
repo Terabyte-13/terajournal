@@ -1,7 +1,8 @@
 package application;
 
-public class StringBean {
+public class HasherBean {
 	private String string;
+	private String algorithm;
 	
 	public void setString(String s) {
 		string = s;
@@ -9,5 +10,13 @@ public class StringBean {
 	
 	public String getString() {
 		return string;
+	}
+	
+	public void setAlgorithm(String s) {
+		algorithm = s;
+	}
+	
+	public String getAlgorithm() {
+		return algorithm;
 	}
 }

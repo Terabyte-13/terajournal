@@ -70,7 +70,7 @@
       <Insets />
    </opaqueInsets>
    <top>
-      <Label fx:id="titleBar" prefHeight="53.0" prefWidth="937.0" text="gu" BorderPane.alignment="CENTER">
+      <Label fx:id="titleBar" prefHeight="53.0" prefWidth="937.0" text="Benvenuto/a!" BorderPane.alignment="CENTER">
          <font>
             <Font size="36.0" />
          </font>

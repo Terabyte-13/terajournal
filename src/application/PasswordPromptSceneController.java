@@ -12,6 +12,7 @@ public class PasswordPromptSceneController extends SceneController {
 	MetadataBean mb = new MetadataBean();
 	String beanAnswer;
 	Hasher hasher = new Hasher();
+	HasherBean hb = new HasherBean();
 	
 	FileFacade ff;
 	
@@ -51,7 +52,9 @@ public class PasswordPromptSceneController extends SceneController {
 	
 	public void submitPassword() {
 		String password = passwordField.getText(); //password inserita
-		String hash = hasher.getHash(password, "SHA-256"); //hash della password inserita
+			hb.setString(password);
+			hb.setAlgorithm("SHA-256");
+		String hash = hasher.getHashBean(hb).getString(); //hash della password inserita
 		mb.setFieldName("pwdHash");
 		mb.setPath(diaryPath);
 		String pwdHash = mp.getFieldBean(mb).getFieldData(); //hash preso dal file, da confrontare a hash
@@ -59,7 +62,11 @@ public class PasswordPromptSceneController extends SceneController {
 		if(hash.equals(pwdHash)) { //se gli hash combaciano, la password inserita e' corretta
 			CalendarSceneController c = new CalendarSceneController();
 			c.diaryPath = diaryPath;
-			if(!password.equals("")) {c.setKey(hasher.getHash(password, "MD5"));} //un hash diverso come key, non quello immagazzinato
+			if(!password.equals("")) {
+					hb.setString(password);
+					hb.setAlgorithm("MD5");
+				c.setKey(hasher.getHashBean(hb).getString()); //un hash diverso come key, non quello immagazzinato
+				} 
 			c.setFF(ff);
 			c.loadScene(currentStage);
 		}else {

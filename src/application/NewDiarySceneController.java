@@ -22,7 +22,7 @@ public class NewDiarySceneController extends SceneController {
 	DirectoryChooser dc = new DirectoryChooser();
 	MetadataParser mp = new MetadataParser();
 	Hasher hasher = new Hasher();
-	StringBean hb = new StringBean();
+	HasherBean hb = new HasherBean();
 	
 	FileFacade ff; //passato dalla scena precedente
 	String key;
@@ -105,7 +105,9 @@ public class NewDiarySceneController extends SceneController {
 				mp.setFieldBean(mb);
 			} else { //Se viene inserita una password, salvo l'hash
 				mb.setFieldName("pwdHash");
-				mb.setFieldData(hasher.getHash(passwordField.getText(), "SHA-256"));
+					hb.setString(passwordField.getText());
+					hb.setAlgorithm("SHA-256");
+				mb.setFieldData(hasher.getHashBean(hb).getString());
 				mp.setFieldBean(mb);
 				}
 			
@@ -113,8 +115,9 @@ public class NewDiarySceneController extends SceneController {
 			CalendarSceneController c = new CalendarSceneController();
 			c.diaryPath = mp.getField(nameField.getText(), "diaryList");
 			if(!passwordField.getText().equals("")) {
-				
-				key = hasher.getHash(passwordField.getText(), "MD5");
+					hb.setString(passwordField.getText());
+					hb.setAlgorithm("MD5");
+				key = hasher.getHashBean(hb).getString();
 				} //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
 			c.setFF(ff);
 			c.setKey(key);

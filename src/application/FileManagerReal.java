@@ -35,7 +35,7 @@ public class FileManagerReal extends FileManager {
 				outputFile.createNewFile();
 				System.out.printf("<FileMan> File creato: %s%n", outputFile.getName());
 				//return 1;
-			} else { // popup file già esistente --------------------------------------------------------------
+			} else { // popup file già esistente -------------------------------------------------------------- TODO appare sempre
 				System.out.println("<FileMan> File gia' esistente");
 				fileExistsAlert.setTitle("File già esistente");
 				fileExistsAlert.setHeaderText("Questo file è già presente. Sovrascrivere?");

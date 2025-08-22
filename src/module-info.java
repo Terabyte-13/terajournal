@@ -5,6 +5,7 @@ module terajournal {
 	requires javafx.base;
 	requires javafx.web;
 	requires java.sql;
+	//requires org.junit.jupiter.api;
 	
 	opens application to javafx.graphics, javafx.fxml;
 }

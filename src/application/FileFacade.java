@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 public class FileFacade {
 	Cipher c = new Cipher();
 	FileManager fm;
-	Boolean demoMode = true;
+	Boolean demoMode = false;
 
 	FileFacade(){
 		if(demoMode) {fm = new FileManagerDemo();}

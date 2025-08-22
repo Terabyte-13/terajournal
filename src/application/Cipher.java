@@ -4,7 +4,7 @@ public class Cipher {
 	
 	String cipher(String key, String string, int direction) {
 		//direction = 0: encrypt     direction = 1: decrypt
-		char[] chars = string.toCharArray(); //caratteri da criptare
+		char[] chars = string.toCharArray(); //caratteri da cifrare
 		char[] keypins = key.toCharArray(); //caratteri della chiave
 		System.out.printf("key: %s%n", key);
 

@@ -6,8 +6,9 @@ import java.security.NoSuchAlgorithmException;
 
 public class Hasher {
 	
-	StringBean getHashBean(StringBean hb, String algorithm) {
+	HasherBean getHashBean(HasherBean hb) {
 		String pw = hb.getString();
+		String algorithm = hb.getAlgorithm();
 		hb.setString(getHash(pw, algorithm));
 		return hb;
 	}

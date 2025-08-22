@@ -26,7 +26,18 @@ public class StartSceneController extends SceneController {
 		
 		mp.setFF(ff);
 		
-		diaryPicker.getItems().add("Importa un diario esistente");
+		//se non e' gia' presente, crea il file diaryList ------
+		//TODO fin quando non risolvo checkForFile nel file manager demo, restituisce sempre false quindi qua ogni volta ricrea il diaryList
+		if(ff.checkForFile("diaryList") == false) { //TODO tocca fare con stringbean
+			System.out.println("diaryList non esiste, lo creo.");
+			FileBean fb = new FileBean();
+			fb.setPath("diaryList");
+			fb.setKey(null);
+			fb.setData("");
+			ff.encryptAndSaveBean(fb, false, false);
+		}
+		//--------------------------------
+		
 		populateDiaryList();
 	}
 	
@@ -46,7 +57,7 @@ public class StartSceneController extends SceneController {
 	
 	void populateDiaryList() {
 		List<String> diaries = mp.getFieldNames("diaryList");
-		for(int i = 0; i < diaries.size(); i++) {
+		for(int i = 1; i < diaries.size(); i++) {
 			diaryPicker.getItems().add(diaries.get(i));
 		}
 	}
