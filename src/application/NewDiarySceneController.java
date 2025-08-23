@@ -9,6 +9,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NewDiarySceneController extends SceneController {
 	
@@ -37,7 +39,7 @@ public class NewDiarySceneController extends SceneController {
 	
 	void setFF(FileFacade newff) {
 		ff = newff;
-		System.out.printf("<PasswordPromptSC> FF impostato: %s.%n", ff);
+		logger.log(Level.FINE, "FileFacade impostato: {0}", ff);
 	}
 	
 	public void toStart() {
@@ -48,7 +50,7 @@ public class NewDiarySceneController extends SceneController {
 	public void pickDirectory(){
 		File selection = dc.showDialog(currentStage);
 		if(selection == null) {
-			System.out.println("nessun file scelto.");
+			logger.log(Level.INFO, "Nessun file scelto.");
 		}else {
 			pathField.setText(selection.getAbsolutePath());
 		}
@@ -56,15 +58,15 @@ public class NewDiarySceneController extends SceneController {
 	
 	public void createDiary() {	
 		if(nameField.getText().equals("") || pathField.getText().equals("")) {
-			System.out.println("Ci sono dei campi vuoti.");
+			logger.log(Level.INFO, "Ci sono dei campi vuoti.");
 			return;
 		}
 		if(!passwordField.getText().equals(confirmPasswordField.getText())) {
-			System.out.println("password e confirmPassword non combaciano.");
+			logger.log(Level.INFO, "password e confirmPassword non combaciano.");
 			return;
 		}
 		
-		String metadataFilePath = pathField.getText() + "/" + nameField.getText() + "/" + nameField.getText() + ".jm";
+		String metadataFilePath = pathField.getText() + File.separator + nameField.getText() + File.separator + nameField.getText() + ".jm";
 		
 		//impacchettamento fileBean per creare directory e file metadati ------
 		FileBean fb = new FileBean();
@@ -78,14 +80,14 @@ public class NewDiarySceneController extends SceneController {
 		//--------------------------------
 		
 		if(ff.encryptAndSaveBean(fb, false, false) == 1) { //creo directory e file metadati per il diario
-			System.out.println("Diario creato.");
+			logger.log(Level.INFO, "Diario creato.");
 			
 			//aggiungo il diario alla lista dei diari
-			System.out.println("aggiungo il diario alla lista dei diari");
 			mb.setPath("diaryList");
 			mb.setFieldName(nameField.getText());
 			mb.setFieldData(metadataFilePath);
 			mp.setFieldBean(mb);
+			logger.log(Level.INFO, "Diario aggiunto alla lista dei diari");
 			
 			//adesso opero sul file metadati del diario
 			mb.setPath(metadataFilePath);
@@ -96,7 +98,7 @@ public class NewDiarySceneController extends SceneController {
 			mp.setFieldBean(mb);
 			
 			mb.setFieldName("folder");
-			mb.setFieldData(pathField.getText() + "/" + nameField.getText());
+			mb.setFieldData(pathField.getText() + File.separator + nameField.getText());
 			mp.setFieldBean(mb);
 			
 			if(passwordField.getText().equals("")) { //Se non inserisco una password, il diario non avrà password.
@@ -123,7 +125,7 @@ public class NewDiarySceneController extends SceneController {
 			c.setKey(key);
 			c.loadScene(currentStage);
 			
-		}else {System.out.println("Diario NON creato.");}
+		}else {logger.log(Level.INFO, "Diario NON creato.");}
 	}
 	
 }

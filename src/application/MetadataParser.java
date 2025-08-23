@@ -5,8 +5,11 @@ import java.io.FileReader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MetadataParser {
 	
@@ -17,14 +20,16 @@ public class MetadataParser {
 	StringTokenizer tok;
 	FileFacade ff;
 	
+	Logger logger = Logger.getLogger("MetadataParser");
+	
 	MetadataParser(){
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
-		System.out.printf("<MetadataParser> aperto da %s.%n", caller);
+		logger.log(Level.FINE, "Creato da {0}.", caller);
 	}
 	
 	void setFF(FileFacade newff) {
 		ff = newff;
-		System.out.printf("<MetadataParser> FF impostato: %s.%n", ff);
+		logger.log(Level.FINE, "FileFacade impostato: {0}", ff);
 	}
 	
 	//------------------------------------------------------------------------------------------------------------------------------------
@@ -52,7 +57,7 @@ public class MetadataParser {
 			}
 			
 		} catch (Exception e) {
-			System.out.println(ANSI_YELLOW +"<MetadataParser.findField>: Errore nella lettura del file."+ ANSI_RESET);
+			logger.log(Level.SEVERE, "{0}Errore nella lettura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
 		}
 	return -1;
@@ -74,7 +79,7 @@ public class MetadataParser {
 		
 		int i = findField(fieldName, filePath);
 		if(i < 0) {
-			System.out.printf("%s<MetadataParser.getField> field '%s' non trovata in %s.%n%s", ANSI_YELLOW, fieldName, filePath, ANSI_RESET);
+			logger.log(Level.SEVERE, "{0}<MetadataParser.getField> field '{1}' non trovata in {2}.{3}", new Object[] {ANSI_YELLOW, fieldName, filePath, ANSI_RESET});
 			return "notFound";
 		}
 		try {
@@ -89,7 +94,7 @@ public class MetadataParser {
 			return tok.nextToken();
 			
 		} catch (Exception e) {
-			System.out.println(ANSI_YELLOW +"<MetadataParser.getField> Errore nella lettura del file." + ANSI_RESET);
+			logger.log(Level.SEVERE, "{0}Errore nella lettura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
 		}
 	return null;
@@ -116,12 +121,11 @@ public class MetadataParser {
 			if(i < 0) {lines.add(fieldName + ":" + newValue);}
 			
 			data = String.join("\n", lines);
-			System.out.println(data);
 			ff.encryptAndSave(filePath, data, null, true, false);
 			return 1;
 			
 		} catch (Exception e) {
-			System.out.println(ANSI_YELLOW + "<MetadataParser.setField> Errore nella scrittura del file." + ANSI_RESET);
+			logger.log(Level.SEVERE, "{0}Errore nella scrittura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
 			return -1;
 		}
@@ -130,21 +134,18 @@ public class MetadataParser {
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
 	List<String> getFieldNames(String filePath){
-		String line = "";
-		
 		try{
 			List<String> output = fileToList(filePath);
-			if(output == null) {return null;}
+			if(output == null) {return Collections.emptyList();}
 			for(int i = 0; i < output.size(); i++) {
-				//System.out.println(output.get(i));
 				tok = new StringTokenizer(output.get(i), ":");
 				if(tok.hasMoreElements()) {output.set(i, tok.nextToken());} //prendo il primo token
 			}
 			return output;
 			} catch (Exception e) {
-				System.out.println("<MetadataParser.getFieldNames> Errore nella lettura del file.");
+				logger.log(Level.SEVERE, "{0}Errore nella lettura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
 				e.printStackTrace();
-				return null;
+				return Collections.emptyList();
 			}
 	}
 	
@@ -155,12 +156,12 @@ public class MetadataParser {
 			List<String> output = null;
 			
 			String data = ff.loadAndDecrypt(filePath, null, false);
-			if(data != null) {output = new ArrayList<String>(Arrays.asList(data.split("\n")));}
+			if(data != null) {output = new ArrayList<>(Arrays.asList(data.split("\n")));}
 			return output;
 		} catch (Exception e) {
-			System.out.println("<MetadataParser.fileToList> Errore nella scrittura del file.");
+			logger.log(Level.SEVERE, "{0}Errore nella scrittura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
-			return null;
+			return Collections.emptyList();
 		}
 	}
 	
@@ -168,7 +169,6 @@ public class MetadataParser {
 	
 	int appendToFile(String filePath, String line) { //mi creo una funzione mia per farla interfacciare con FileFacade
 		try{
-			//ff = new FileFacade();
 			String data;
 			List<String> lines = fileToList(filePath);
 			lines.add(line);
@@ -176,7 +176,7 @@ public class MetadataParser {
 			ff.encryptAndSave(filePath, data, null, true, false);
 			return 1;
 		} catch (Exception e) {
-			System.out.println("<MetadataParser.appendToFile> Errore nella scrittura del file.");
+			logger.log(Level.SEVERE, "{0}Errore nella scrittura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
 			return 0;
 		}

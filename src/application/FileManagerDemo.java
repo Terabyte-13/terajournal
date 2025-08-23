@@ -13,27 +13,26 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
   File manager versione in-RAM, utilizzando un database H2
   In tutto il programma le view si passano la stessa istanza di FileFacade, 
   in modo che questo database rimanga in memoria durante la modalità demo.
-
-  Modalità demo:
-  - Tasto nella schermata principale. manda direttamente ad una schermata calendario, per un diario demo
-  - diaryPath vuoto (sarebbe il root del fs nel database)
 */
 
 public class FileManagerDemo extends FileManager {
 	
 	Connection connection;
+	Logger logger = Logger.getLogger("FileManagerDemo");
 	
 	FileManagerDemo(){
 		try {
 			connection = DriverManager.getConnection("jdbc:h2:mem:;INIT=RUNSCRIPT FROM 'src/resources/sql/demofs.sql'");
 			save("", "", "diaryList", true);
 		} catch (SQLException e) {
-			System.out.println("<FileManagerDemo.save> Eccezione SQL");
+			logger.log(Level.SEVERE, "Eccezione SQL nell'inizializzazione del database.");
 			e.printStackTrace();
 		}
 	}
@@ -72,11 +71,11 @@ public class FileManagerDemo extends FileManager {
 			ps.setBlob(3, blob);
 			
 			ps.executeUpdate();
-			System.out.printf("<FileManagerDemo.save> File %s salvato nella directory %s%n", fileName, outputPath);
+			logger.log(Level.INFO, "File {0} salvato nella directory {1}", new String[]{fileName, outputPath});
 			return 1;
 			
 		}catch(SQLException e) {
-			System.out.println("<FileManagerDemo.save> Errore nella creazione del file");
+			logger.log(Level.SEVERE, "Eccezione SQL nella creazione del file.");
 			e.printStackTrace();
 			return 0;
 		}
@@ -93,12 +92,12 @@ public class FileManagerDemo extends FileManager {
 				results = ps.executeQuery();
 				if(results.next()) {ps.setInt(2, results.getInt("id"));} //continuo la ricerca sulla directory trovata
 				else {
-					System.out.printf("<FileManagerDemo.load> File %s non trovato.%n", inputPath);
+					logger.log(Level.SEVERE, "File {0} non trovato.", inputPath);
 					printFileStructure();
 					return null;
 				}
 			}
-		System.out.println("<FileManagerDemo.load> apro il file: " + results.getString("name"));
+		logger.log(Level.INFO, "Apro il file: {0}", results.getString("name"));
 		
 		//lettura file
 		String data = "";
@@ -110,7 +109,6 @@ public class FileManagerDemo extends FileManager {
 			if(s == null) {break;}
 			data += s;
 		}
-		System.out.println("<FileManagerDemo.load> dati: " + data);
 		return data;
 			
 		}catch(Exception e) {
@@ -130,7 +128,6 @@ public class FileManagerDemo extends FileManager {
 			ResultSet results = ps.executeQuery();
 			
 			if(results.next()) { //se ci sono risultati, la directory esiste già
-				//System.out.println(results.getString("name") + " esiste già.");
 				return results.getInt("id");
 			}
 		}catch(SQLException e) {
@@ -161,7 +158,7 @@ public class FileManagerDemo extends FileManager {
 		return list;
 	}
 	
-	//da levare --------vv
+	//per provare --------vv
 	
 	void printFileStructure() {
 		try{
@@ -184,9 +181,8 @@ public class FileManagerDemo extends FileManager {
 	
 	void testDB() {   									              
 		try{
-			System.out.println("Validità connessione DB: " + connection.isValid(0));
+			logger.log(Level.INFO, "Validità connessione DB: {0}", connection.isValid(0));
 		}catch(SQLException e){
-			System.out.println("<FileManagerDemo> Eccezione SQL");
 			e.printStackTrace();
 		}
 		

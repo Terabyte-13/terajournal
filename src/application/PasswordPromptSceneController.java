@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PasswordPromptSceneController extends SceneController {
 	//commento prova
@@ -15,6 +17,8 @@ public class PasswordPromptSceneController extends SceneController {
 	HasherBean hb = new HasherBean();
 	
 	FileFacade ff;
+	
+	Logger logger = Logger.getLogger("PasswordPromptSC");
 	
 	@FXML PasswordField passwordField; 
 	
@@ -41,8 +45,8 @@ public class PasswordPromptSceneController extends SceneController {
 	}
 	
 	void setFF(FileFacade newff) {
-		ff = newff;
-		System.out.printf("<PasswordPromptSC> FF impostato: %s.%n", ff);
+		ff = newff;;
+		logger.log(Level.FINE, "FileFacade impostato: {0}", ff);
 	}
 	
 	public void toStart() {

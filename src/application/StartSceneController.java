@@ -3,6 +3,8 @@ package application;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +20,10 @@ public class StartSceneController extends SceneController {
 	MetadataParser mp = new MetadataParser();
 	MetadataBean mb = new MetadataBean();
 	
+	Logger logger = Logger.getLogger("StartSceneController");
+	
+	static final String DIARYLIST = "diaryList";
+	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Start.fxml"));
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
@@ -28,10 +34,10 @@ public class StartSceneController extends SceneController {
 		
 		//se non e' gia' presente, crea il file diaryList ------
 		//TODO fin quando non risolvo checkForFile nel file manager demo, restituisce sempre false quindi qua ogni volta ricrea il diaryList
-		if(ff.checkForFile("diaryList") == false) { //TODO tocca fare con stringbean
-			System.out.println("diaryList non esiste, lo creo.");
+		if(Boolean.FALSE.equals(ff.checkForFile(DIARYLIST))) { //TODO tocca fare con stringbean
+			logger.log(Level.INFO, "diaryList non esiste, lo creo.");
 			FileBean fb = new FileBean();
-			fb.setPath("diaryList");
+			fb.setPath(DIARYLIST);
 			fb.setKey(null);
 			fb.setData("");
 			ff.encryptAndSaveBean(fb, false, false);
@@ -56,7 +62,7 @@ public class StartSceneController extends SceneController {
 	
 	
 	void populateDiaryList() {
-		List<String> diaries = mp.getFieldNames("diaryList");
+		List<String> diaries = mp.getFieldNames(DIARYLIST);
 		for(int i = 1; i < diaries.size(); i++) {
 			diaryPicker.getItems().add(diaries.get(i));
 		}
@@ -68,12 +74,12 @@ public class StartSceneController extends SceneController {
 		
 		//Impacchettamento bean da mandare a getField
 		mb.setFieldName(selection);
-		mb.setPath("diaryList");
+		mb.setPath(DIARYLIST);
 		mb = mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
 		//-------------------------------------------
 		
 		Path p = Paths.get(mb.getFieldData());
-		System.out.printf("path: %s, cartella contenitore: %s\n", p, p.getParent());
+		logger.log(Level.INFO, "path: {0}, cartella contenitore: {1}", new Path[]{p, p.getParent()});
 		
 		toPasswordPrompt(p.toString());
 	}

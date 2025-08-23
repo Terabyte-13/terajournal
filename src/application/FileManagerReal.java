@@ -22,6 +22,7 @@ public class FileManagerReal extends FileManager {
 	File outputFile;
 	
 	Logger logger = Logger.getLogger("Hasher");
+	StringBuilder bui = new StringBuilder();
 
 	int save(String data, String outputPath, String fileName, Boolean confirmOverwrite) {
 		try {
@@ -40,7 +41,7 @@ public class FileManagerReal extends FileManager {
 				logger.log(Level.INFO, "File creato: {0}", outputFile.getName());
 				//return 1;
 			} else { // popup file già esistente -------------------------------------------------------------- TODO appare sempre
-				logger.log(Level.INFO, "File gia' esistente");
+				logger.log(Level.INFO, "File già esistente");
 				fileExistsAlert.setTitle("File già esistente");
 				fileExistsAlert.setHeaderText("Questo file è già presente. Sovrascrivere?");
 				fileExistsAlert.setContentText(outputPath + File.separator + fileName);
@@ -81,14 +82,18 @@ public class FileManagerReal extends FileManager {
 		inputFile = new File(inputPath);
 		reader = new Scanner(inputFile);
 		// lettura del file e scrittura sul buffer --------------
+		bui.setLength(0); //resetto lo stringbuilder
+		bui.append(data);
 		while(reader.hasNextLine()) {
-			data = data + reader.nextLine() + "\n";
+			bui.append(reader.nextLine());
+			bui.append("\n");
 		}
+		data = bui.toString();
 		reader.close();
 		logger.log(Level.INFO, "File letto: {0}", inputFile.getName());
 		// --------------
 		} catch (FileNotFoundException e) {
-			logger.log(Level.SEVERE, "Errore nell'apertura del file {0}", inputPath);
+			logger.log(Level.SEVERE, "Errore nell apertura del file {0}", inputPath);
 			e.printStackTrace();
 			return null;
 		}
