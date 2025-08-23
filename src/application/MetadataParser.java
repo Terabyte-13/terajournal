@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 public class MetadataParser {
 	
 	public static final String ANSI_YELLOW = "\u001B[33m";
+	public static final String ANSI_CYAN = "\\e[0;36m";
 	public static final String ANSI_RESET = "\u001B[0m";
 	
 	BufferedReader fr;
@@ -40,6 +41,7 @@ public class MetadataParser {
 		int i = 0;
 		try {
 			String data = ff.loadAndDecrypt(filePath, null, false);
+			if(data == null) {logger.log(Level.SEVERE, "{0}file vuoto!!{1}", new Object[] {ANSI_CYAN, ANSI_RESET});}
 			fr = new BufferedReader(new StringReader(data));
 			
 			line = fr.readLine(); //prendi la riga
@@ -79,7 +81,7 @@ public class MetadataParser {
 		
 		int i = findField(fieldName, filePath);
 		if(i < 0) {
-			logger.log(Level.SEVERE, "{0}<MetadataParser.getField> field '{1}' non trovata in {2}.{3}", new Object[] {ANSI_YELLOW, fieldName, filePath, ANSI_RESET});
+			logger.log(Level.SEVERE, "{0}field {1} non trovata in {2}.{3}", new Object[] {ANSI_YELLOW, fieldName, filePath, ANSI_RESET});
 			return "notFound";
 		}
 		try {
@@ -94,7 +96,7 @@ public class MetadataParser {
 			return tok.nextToken();
 			
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "{0}Errore nella lettura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
+			logger.log(Level.SEVERE, "{0}Errore in getField.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
 		}
 	return null;

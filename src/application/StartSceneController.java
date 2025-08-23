@@ -33,8 +33,7 @@ public class StartSceneController extends SceneController {
 		mp.setFF(ff);
 		
 		//se non e' gia' presente, crea il file diaryList ------
-		//TODO fin quando non risolvo checkForFile nel file manager demo, restituisce sempre false quindi qua ogni volta ricrea il diaryList
-		if(Boolean.FALSE.equals(ff.checkForFile(DIARYLIST))) { //TODO tocca fare con stringbean
+		if(Boolean.FALSE.equals(ff.checkForFile(DIARYLIST))) { //TODO bean?
 			logger.log(Level.INFO, "diaryList non esiste, lo creo.");
 			FileBean fb = new FileBean();
 			fb.setPath(DIARYLIST);

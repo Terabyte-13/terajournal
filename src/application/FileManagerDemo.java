@@ -1,6 +1,7 @@
 package application;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Blob;
@@ -30,7 +31,6 @@ public class FileManagerDemo extends FileManager {
 	FileManagerDemo(){
 		try {
 			connection = DriverManager.getConnection("jdbc:h2:mem:;INIT=RUNSCRIPT FROM 'src/resources/sql/demofs.sql'");
-			save("", "", "diaryList", true);
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "Eccezione SQL nell'inizializzazione del database.");
 			e.printStackTrace();
@@ -39,47 +39,63 @@ public class FileManagerDemo extends FileManager {
 	
 	@Override
 	int save(String data, String outputPath, String fileName, Boolean confirmOverwrite) {
-		//preparazione variabili per essere usate da sql
-		int parentId = 0; //1 : root
+		int parentId = 0; 
 		List<String> dirs = parsePath(outputPath);
-		
-		//creo le directory               
+
+		// creo le directory
 		for(int i = 0; i < dirs.size(); i++) {
 			parentId = createDirectory(dirs.get(i), parentId);
 		}
-		
-		//controllo se nella directory c'è già il file. sposta in checkForFile
-		try(PreparedStatement ps = connection.prepareStatement("SELECT id FROM demoFileSystem WHERE name = ? AND parent_id = ? AND is_directory = FALSE")){
-			ps.setString(1, fileName);
-			ps.setInt(2, parentId);
-			ResultSet results = ps.executeQuery();
-			
-			if(results.next()) { //se ci sono risultati, la directory esiste già
-				System.out.println(fileName + " esiste già.");
+
+		try {
+			// controllo se il file esiste già. non uso checkForFile() perchè voglio trovarmi l'ID del file.
+			try (PreparedStatement check = connection.prepareStatement(
+					"SELECT id FROM demoFileSystem WHERE name = ? AND parent_id = ? AND is_directory = FALSE")) {
+	            
+				check.setString(1, fileName);
+				check.setInt(2, parentId);
+				ResultSet results = check.executeQuery();
+
+				if (results.next()) {
+					// File già esistente -> UPDATE
+					int fileId = results.getInt("id");
+					try (PreparedStatement update = connection.prepareStatement(
+							"UPDATE demoFileSystem SET data = ? WHERE id = ?")) {
+	                    
+						Blob blob = connection.createBlob();
+						blob.setBytes(1, data.getBytes());
+						update.setBlob(1, blob);
+						update.setInt(2, fileId);
+						update.executeUpdate();
+
+						logger.log(Level.INFO, "File {0} aggiornato nella directory {1}", new String[]{fileName, outputPath});
+						return 2; // 2 = aggiornato
+					}
+				}
 			}
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		
-		//creo il file
-		try(PreparedStatement ps = connection.prepareStatement("INSERT INTO demoFileSystem (name, parent_id, is_directory, data) VALUES (?, ?, FALSE, ?)")){
-			ps.setString(1, fileName);
-			ps.setInt(2, parentId);
-			
-			Blob blob = connection.createBlob();
-			blob.setBytes(1, data.getBytes());
-			ps.setBlob(3, blob);
-			
-			ps.executeUpdate();
-			logger.log(Level.INFO, "File {0} salvato nella directory {1}", new String[]{fileName, outputPath});
-			return 1;
-			
-		}catch(SQLException e) {
-			logger.log(Level.SEVERE, "Eccezione SQL nella creazione del file.");
-			e.printStackTrace();
-			return 0;
+
+			// se non esiste → INSERT
+			try (PreparedStatement insert = connection.prepareStatement(
+					"INSERT INTO demoFileSystem (name, parent_id, is_directory, data) VALUES (?, ?, FALSE, ?)")) {
+	            
+				insert.setString(1, fileName);
+				insert.setInt(2, parentId);
+	            
+				Blob blob = connection.createBlob();
+				blob.setBytes(1, data.getBytes());
+				insert.setBlob(3, blob);
+
+				insert.executeUpdate();
+				logger.log(Level.INFO, "File {0} creato nella directory {1}", new String[]{fileName, outputPath});
+				return 1; // 1 = creato
+			}
+
+		} catch (SQLException e) {
+			logger.log(Level.SEVERE, "Errore SQL in save()", e);
+			return 0; // 0 = errore
 		}
 	}
+
 
 	@Override
 	String load(String inputPath) {
@@ -104,7 +120,7 @@ public class FileManagerDemo extends FileManager {
 		String s = "";
 		InputStream stream = results.getBlob("data").getBinaryStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-			while(1 == 1) {
+			while(true) {
 			s = br.readLine();
 			if(s == null) {break;}
 			data += s;
@@ -113,11 +129,50 @@ public class FileManagerDemo extends FileManager {
 			
 		}catch(Exception e) {
 			e.printStackTrace();
+			logger.log(Level.SEVERE, "Errore nell'apertura del file");
 		}
 		return null;
 	}
 	
 	Boolean checkForFile(String path){
+		List<String> dirs = parsePath(path);
+		if(dirs.isEmpty()) return false;
+
+		ResultSet results = null;
+
+			try(PreparedStatement ps = connection.prepareStatement(
+				"SELECT id, is_directory FROM demoFileSystem WHERE name = ? AND parent_id = ?")) {
+
+			int parentId = 0; // root
+
+			// Scorro tutti i token del path tranne l'ultimo (che sarà il file)
+			for(int i = 0; i < dirs.size() - 1; i++) {
+				ps.setString(1, dirs.get(i));
+				ps.setInt(2, parentId);
+				results = ps.executeQuery();
+				if(results.next() && results.getBoolean("is_directory")) {
+					parentId = results.getInt("id"); // entro nella directory
+				} else { // directory non trovata
+					return false;
+				}
+			}
+
+			// Ora controllo l'ultimo token (il file vero e proprio)
+			String fileName = dirs.get(dirs.size() - 1);
+			ps.setString(1, fileName);
+			ps.setInt(2, parentId);
+			results = ps.executeQuery();
+
+			if(results.next() && !results.getBoolean("is_directory")) {
+				return true; // trovato un file con quel nome
+			} else {
+				return false; // non trovato o è una directory
+			}
+
+		} catch(SQLException e) {
+			e.printStackTrace();
+		}
+
 		return false;
 	}
 	
@@ -158,7 +213,7 @@ public class FileManagerDemo extends FileManager {
 		return list;
 	}
 	
-	//per provare --------vv
+	//da rimuovere --------vv
 	
 	void printFileStructure() {
 		try{

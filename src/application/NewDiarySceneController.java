@@ -115,7 +115,7 @@ public class NewDiarySceneController extends SceneController {
 			
 			//se e' tutto andato a buon fine, inizializzo e apro il calendario
 			CalendarSceneController c = new CalendarSceneController();
-			c.diaryPath = mp.getField(nameField.getText(), "diaryList");
+			c.diaryPath = mp.getField(nameField.getText(), "diaryList"); //TODO beanizza
 			if(!passwordField.getText().equals("")) {
 					hb.setString(passwordField.getText());
 					hb.setAlgorithm("MD5");

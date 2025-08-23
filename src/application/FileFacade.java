@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class FileFacade {
 	Cipher c = new Cipher();
 	FileManager fm;
-	Boolean demoMode = false;
+	Boolean demoMode = true;
 	Logger logger = Logger.getLogger("FileFacade");
 
 	FileFacade(){
