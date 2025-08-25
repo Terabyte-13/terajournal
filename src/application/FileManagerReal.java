@@ -36,7 +36,7 @@ public class FileManagerReal extends FileManager {
 			}
 			//controllo se il file esiste già
 			//			 vv  uso questo perchè restituisce false anche se OutputFile.exists() restituisse null.			
-			if(Boolean.FALSE.equals(outputFile.exists()) || confirmOverwrite) {
+			if(Boolean.FALSE.equals(outputFile.exists()) || Boolean.TRUE.equals(confirmOverwrite)) {
 				outputFile.createNewFile();
 				logger.log(Level.INFO, "File creato: {0}", outputFile.getName());
 				//return 1;
@@ -83,7 +83,6 @@ public class FileManagerReal extends FileManager {
 		reader = new Scanner(inputFile);
 		// lettura del file e scrittura sul buffer --------------
 		bui.setLength(0); //resetto lo stringbuilder
-		bui.append(data);
 		while(reader.hasNextLine()) {
 			bui.append(reader.nextLine());
 			bui.append("\n");

@@ -1,7 +1,6 @@
 package application;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.sql.Blob;
@@ -27,6 +26,7 @@ public class FileManagerDemo extends FileManager {
 	
 	Connection connection;
 	Logger logger = Logger.getLogger("FileManagerDemo");
+	StringBuilder bui = new StringBuilder();
 	
 	FileManagerDemo(){
 		try {
@@ -116,16 +116,17 @@ public class FileManagerDemo extends FileManager {
 		logger.log(Level.INFO, "Apro il file: {0}", results.getString("name"));
 		
 		//lettura file
-		String data = "";
 		String s = "";
 		InputStream stream = results.getBlob("data").getBinaryStream();
 		BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-			while(true) {
+		
+		bui.setLength(0); //resetto lo stringbuilder
+		while(true) {
 			s = br.readLine();
 			if(s == null) {break;}
-			data += s;
+			bui.append(s);
 		}
-		return data;
+		return bui.toString();
 			
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -162,12 +163,10 @@ public class FileManagerDemo extends FileManager {
 			ps.setString(1, fileName);
 			ps.setInt(2, parentId);
 			results = ps.executeQuery();
+			
+			return (results.next() && !results.getBoolean("is_directory"));
+			// true: trovato un file con quel nome;  false: non trovato o è una directory
 
-			if(results.next() && !results.getBoolean("is_directory")) {
-				return true; // trovato un file con quel nome
-			} else {
-				return false; // non trovato o è una directory
-			}
 
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -206,7 +205,7 @@ public class FileManagerDemo extends FileManager {
 	
 	List<String> parsePath(String outputPath){
 		StringTokenizer tok = new StringTokenizer(outputPath, "/");
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		while(tok.hasMoreTokens()) {
 			list.add(tok.nextToken());
 		}

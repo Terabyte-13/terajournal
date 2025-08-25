@@ -7,11 +7,11 @@ import java.util.logging.Logger;
 public class FileFacade {
 	Cipher c = new Cipher();
 	FileManager fm;
-	Boolean demoMode = true;
+	Boolean demoMode = false;
 	Logger logger = Logger.getLogger("FileFacade");
 
 	FileFacade(){
-		if(demoMode) {fm = new FileManagerDemo();}
+		if(Boolean.TRUE.equals(demoMode)) {fm = new FileManagerDemo();}
 		else{fm = new FileManagerReal();}
 	}
 

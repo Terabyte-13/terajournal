@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EditorSceneController extends SceneController {
 	
@@ -11,6 +13,8 @@ public class EditorSceneController extends SceneController {
 	String diaryPath;
 	FileFacade ff;
 	String key;
+	
+	Logger logger = Logger.getLogger("FileManagerDemo");
 	
 	@FXML HTMLEditor editorText;
 	
@@ -36,14 +40,13 @@ public class EditorSceneController extends SceneController {
 	
 	void setFF(FileFacade newff) {
 		ff = newff;
-		System.out.printf("<PasswordPromptSC> FF impostato: %s.%n", ff);
 	}
 	
 	//salva i dati dall'editor sul file
 	public void savePage() {
 		String data = editorText.getHtmlText();
 		
-		//se il file è vuoto, non salvo
+		//se il file è vuoto, non salvo   TODO fai che rileva quando è uguale a prima
 		if(!data.equals("<html dir=\"ltr\"><head></head><body contenteditable=\"true\"></body></html>")) {	
 			//impacchettamento bean --------
 			FileBean fb = new FileBean();
@@ -53,7 +56,7 @@ public class EditorSceneController extends SceneController {
 			//------------------------------
 			ff.encryptAndSaveBean(fb, false, true);
 		}
-		else {System.out.println("<EditorSC> Non c'è nulla da salvare.");}
+		else {logger.log(Level.INFO, "Non c'è nulla da salvare");;}
 		
 		toCalendar(); //TODO porta fuori
 	}

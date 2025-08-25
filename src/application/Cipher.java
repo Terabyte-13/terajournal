@@ -6,7 +6,6 @@ public class Cipher {
 		//direction = 0: encrypt     direction = 1: decrypt
 		char[] chars = string.toCharArray(); //caratteri da cifrare
 		char[] keypins = key.toCharArray(); //caratteri della chiave
-		System.out.printf("key: %s%n", key);
 
 		for(int i = 0; i < chars.length-1; i++) {
 			int j = i % keypins.length; //riporta j a 0 se eccede keypins.

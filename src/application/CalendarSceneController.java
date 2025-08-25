@@ -15,6 +15,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CalendarSceneController extends SceneController {
 	
@@ -36,10 +38,11 @@ public class CalendarSceneController extends SceneController {
 	
 	MetadataParser mp = new MetadataParser();
 	MetadataBean mb = new MetadataBean();
+	Logger logger = Logger.getLogger("FileManagerDemo");
 	
 	CalendarSceneController(){
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
-		System.out.printf("<CalendarSC> aperto da %s.%n", caller);
+		logger.log(Level.FINE, "Aperto da {0}", caller);
 	}
 	
 	//l'evento da associare ai tasti del calendario generati da updateCalendar()
@@ -50,12 +53,10 @@ public class CalendarSceneController extends SceneController {
 	
 	void setKey(String k) {
 		key = k;
-		System.out.println("chiave : " + key);
 	}
 	
 	void setFF(FileFacade newff) {
 		ff = newff;
-		System.out.printf("<CalendarSC> FF impostato: %s.%n", ff);
 	}
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Calendar.fxml"));
@@ -132,7 +133,6 @@ public class CalendarSceneController extends SceneController {
 	public void onCalendarButtonPress(ActionEvent event) {
 		Node caller = (Node)event.getSource();
 		int selectedDay = (int)caller.getUserData();
-		System.out.println(selectedDay);
 		
 		EditorSceneController e = new EditorSceneController();
 		e.filePath = diaryFolder + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
