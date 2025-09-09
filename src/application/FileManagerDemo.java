@@ -109,7 +109,6 @@ public class FileManagerDemo extends FileManager {
 				if(results.next()) {ps.setInt(2, results.getInt("id"));} //continuo la ricerca sulla directory trovata
 				else {
 					logger.log(Level.SEVERE, "File {0} non trovato.", inputPath);
-					printFileStructure();
 					return null;
 				}
 			}
@@ -210,36 +209,6 @@ public class FileManagerDemo extends FileManager {
 			list.add(tok.nextToken());
 		}
 		return list;
-	}
-	
-	//da rimuovere --------vv
-	
-	void printFileStructure() {
-		try{
-			Statement s = connection.createStatement();
-			
-	        String query = "SELECT * FROM demoFileSystem";
-	        ResultSet rs = s.executeQuery(query);
-	        while (rs.next()) {
-	        	for(int i = 0; i < rs.getInt("parent_id"); i++) {
-	        		System.out.printf(" ");
-	        	}
-	            System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name") + ", Parent: " + rs.getInt("parent_id"));
-	        }
-			
-		}catch(SQLException e){
-			System.out.println("<FileManagerDemo.save> Eccezione SQL");
-			e.printStackTrace();
-		}
-	}
-	
-	void testDB() {   									              
-		try{
-			logger.log(Level.INFO, "Validità connessione DB: {0}", connection.isValid(0));
-		}catch(SQLException e){
-			e.printStackTrace();
-		}
-		
 	}
 	
 }

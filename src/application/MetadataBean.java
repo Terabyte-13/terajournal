@@ -8,7 +8,11 @@ public class MetadataBean {
 
 	
 	public void setFieldName(String s) {
-		fieldName = s;
+		if(s == null) {
+			throw new IllegalArgumentException("Il field metadati ricercato e' invalido!");
+		}else {
+			fieldName = s;
+		}
 	}
 	
 	public String getFieldName() {
@@ -18,7 +22,11 @@ public class MetadataBean {
 	//-----------------------------
 	
 	public void setFieldData(String s) {
-		fieldData = s;
+		if(s == null) {
+			fieldData = ""; //interpreto dati null come una stringa vuota
+		}else {
+			fieldData = s;
+		}
 	}
 	
 	public String getFieldData() {
@@ -28,7 +36,11 @@ public class MetadataBean {
 	//-----------------------------
 	
 	public void setPath(String s) {
-		path = s;
+		if(s == null) {
+			throw new IllegalArgumentException("Il percorso del file metadati specificato è invalido!");
+		}else {
+			path = s;
+		}
 	}
 	
 	public String getPath() {

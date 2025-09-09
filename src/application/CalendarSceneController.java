@@ -83,7 +83,7 @@ public class CalendarSceneController extends SceneController {
 	void populateDiaryList() {
 		List<String> diaries = mp.getFieldNames("diaryList");
 		for(int i = 0; i < diaries.size(); i++) {
-			//diaryPicker.getItems().add(diaries.get(i));
+			//diaryPicker .getItems().add(diaries.get(i));
 		}
 	}
 
@@ -98,7 +98,7 @@ public class CalendarSceneController extends SceneController {
 			if(i == LocalDate.now().getDayOfMonth() && month == LocalDate.now().getMonth().getValue() && year == LocalDate.now().getYear()) {
 				button.setId("calendarButtonToday");
 			//Evidenzio i giorni con un file associato
-			}else if(ff.checkForFile(diaryFolder + File.separator + year + File.separator + month + File.separator + i + ".html")) {
+			}else if(Boolean.TRUE.equals(ff.checkForFile(diaryFolder + File.separator + year + File.separator + month + File.separator + i + ".html"))) {
 				button.setId("calendarButtonHasFile");
 			}else button.setId("calendarButton");
 			
@@ -144,7 +144,7 @@ public class CalendarSceneController extends SceneController {
 	
 	//prendo da diaryList il filepath del diario selezionato
 	public void onDiaryPickerPress(ActionEvent event) { //viene chiamato subito al partire della scena per qualche motivo
-		/*System.out.println("AGAGAGAGA");
+		/*
 		String selection = diaryPicker.getValue();
 		
 		Path p = Paths.get(mp.getField(selection, "diaryList"));

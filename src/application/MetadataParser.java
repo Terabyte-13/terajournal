@@ -17,6 +17,9 @@ public class MetadataParser {
 	public static final String ANSI_CYAN = "\\e[0;36m";
 	public static final String ANSI_RESET = "\u001B[0m";
 	
+	private static final String WRITE_ERROR = "{0}Errore nella scrittura del file.{1}";
+	private static final String READ_ERROR = "{0}Errore nella lettura del file.{1}";
+	
 	BufferedReader fr;
 	StringTokenizer tok;
 	FileFacade ff;
@@ -59,7 +62,7 @@ public class MetadataParser {
 			}
 			
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "{0}Errore nella lettura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
+			logger.log(Level.SEVERE, READ_ERROR, new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
 		}
 	return -1;
@@ -68,12 +71,18 @@ public class MetadataParser {
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
 	MetadataBean getFieldBean(MetadataBean mb) {
-		//estrazione richiesta dal bean ---
-		String filePath = mb.getPath();
-		String fieldName = mb.getFieldName();
-		//----------------------------------
-		mb.setFieldData(getField(fieldName, filePath));
-		return mb;
+		try {
+			//estrazione richiesta dal bean ---
+			String filePath = mb.getPath();
+			String fieldName = mb.getFieldName();
+			//----------------------------------
+			mb.setFieldData(getField(fieldName, filePath));
+			return mb;
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, "Dati field invalidi.");
+			e.printStackTrace();
+			return mb;
+		}
 	}
 	
 	String getField(String fieldName, String filePath) {
@@ -127,7 +136,7 @@ public class MetadataParser {
 			return 1;
 			
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "{0}Errore nella scrittura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
+			logger.log(Level.SEVERE, WRITE_ERROR, new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
 			return -1;
 		}
@@ -145,7 +154,7 @@ public class MetadataParser {
 			}
 			return output;
 			} catch (Exception e) {
-				logger.log(Level.SEVERE, "{0}Errore nella lettura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
+				logger.log(Level.SEVERE, READ_ERROR, new Object[] {ANSI_YELLOW, ANSI_RESET});
 				e.printStackTrace();
 				return Collections.emptyList();
 			}
@@ -161,7 +170,7 @@ public class MetadataParser {
 			if(data != null) {output = new ArrayList<>(Arrays.asList(data.split("\n")));}
 			return output;
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "{0}Errore nella scrittura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
+			logger.log(Level.SEVERE, WRITE_ERROR, new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
 			return Collections.emptyList();
 		}
@@ -178,7 +187,7 @@ public class MetadataParser {
 			ff.encryptAndSave(filePath, data, null, true, false);
 			return 1;
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "{0}Errore nella scrittura del file.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
+			logger.log(Level.SEVERE, WRITE_ERROR, new Object[] {ANSI_YELLOW, ANSI_RESET});
 			e.printStackTrace();
 			return 0;
 		}

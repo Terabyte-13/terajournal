@@ -8,7 +8,11 @@ public class FileBean {
 	
 	
 	public void setData(String s) {
-		data = s;
+		if(s == null) {
+			data = ""; //interpreto dati null come una stringa vuota
+		}else {
+			data = s;
+		}
 	}
 	
 	public String getData() {

@@ -22,6 +22,8 @@ public class PasswordPromptSceneController extends SceneController {
 	
 	@FXML PasswordField passwordField; 
 	
+	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean."; 
+	
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/PasswordPrompt.fxml"));
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
@@ -30,17 +32,21 @@ public class PasswordPromptSceneController extends SceneController {
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
 		
 		mp.ff = ff;
-		
-		//impacchetto bean e recupero risposta
-		mb.setFieldName("pwdHash"); //cerco il field pwdHash nel file nel path
-		mb.setPath(diaryPath);
-		beanAnswer = mp.getFieldBean(mb).getFieldData();
-		//-------------------
-		if(beanAnswer.equals("notFound")) { //se non c'è password, apro direttamente il calendario
-			CalendarSceneController c = new CalendarSceneController();
-			c.diaryPath = diaryPath;
-			c.setFF(ff);
-			c.loadScene(currentStage);
+		try {
+			//impacchetto bean e recupero risposta
+			mb.setFieldName("pwdHash"); //cerco il field pwdHash nel file nel path
+			mb.setPath(diaryPath);
+			beanAnswer = mp.getFieldBean(mb).getFieldData();
+			//-------------------
+			if(beanAnswer.equals("notFound")) { //se non c'è password, apro direttamente il calendario
+				CalendarSceneController c = new CalendarSceneController();
+				c.diaryPath = diaryPath;
+				c.setFF(ff);
+				c.loadScene(currentStage);
+			}
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
 		}
 	}
 	
@@ -55,7 +61,8 @@ public class PasswordPromptSceneController extends SceneController {
 	}
 	
 	public void submitPassword() {
-		String password = passwordField.getText(); //password inserita
+		try {
+			String password = passwordField.getText(); //password inserita
 			hb.setString(password);
 			hb.setAlgorithm("SHA-256");
 		String hash = hasher.getHashBean(hb).getString(); //hash della password inserita
@@ -77,7 +84,10 @@ public class PasswordPromptSceneController extends SceneController {
 			passwordField.setText("");
 			passwordField.setPromptText("Password errata!");
 		}
-
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
+		}
 	}
 	
 }

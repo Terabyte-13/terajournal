@@ -61,7 +61,7 @@ public class FileFacade {
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
 	//carica i dati del file specificato dal bean sulla variabile Data del bean, e lo restituisce
-	FileBean loadAndDecryptBean(FileBean fileBean, Boolean decrypt) {
+	FileBean loadAndDecryptBean(FileBean fileBean, Boolean decrypt) { //TODO beanizza la bool
 		//Estrazione dati dal bean ----------
 		String inputPath = fileBean.getPath();
 		String key = fileBean.getKey();

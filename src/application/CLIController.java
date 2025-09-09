@@ -1,6 +1,8 @@
 package application;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
@@ -35,6 +37,7 @@ public class CLIController {
 	Hasher hasher;
 	HasherBean hb;
 	Scanner scanner;
+	Logger logger;
 	
 	Path currentDiaryPath;
 	String key;
@@ -44,28 +47,23 @@ public class CLIController {
 	int day;
 	
 	//volute da sonarcloud. rende facile cambiare il nome dei field
-	static String PWDHASH = "pwdHash";
-	static String DIARYLIST = "diaryList";
+	public static final String PWDHASH = "pwdHash";
+	public static final String DIARYLIST = "diaryList";
+	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean."; 
 		
 	
 	void start() {
 		System.out.println(ANSI_CYAN + "Avvio della CLI..." + ANSI_RESET);
 		
 		ff = new FileFacade();
-		System.out.println("FileFacade OK");
 		fb = new FileBean();
-		System.out.println("FileBean OK");
 		mp = new MetadataParser();
 		mp.ff = ff;
-		System.out.println("MetadataParser OK");
 		mb = new MetadataBean();
-		System.out.println("MetadataBean OK");
 		hasher = new Hasher();
-		System.out.println("Hasher OK");
 		hb = new HasherBean();
-		System.out.println("HasherBean OK");
 		scanner = new Scanner(System.in);
-		System.out.println("Scanner Input OK");
+		logger = Logger.getLogger("CLIController");
 		int choice = -1;
 		
 		
@@ -120,22 +118,28 @@ public class CLIController {
 	}
 	
 	void passwordPrompt() {
-		//impacchetto bean e recupero risposta dal metadataParser
-		mb.setFieldName(PWDHASH); //cerco il field pwdHash nel file nel path
-		mb.setPath(currentDiaryPath.toString());
-		beanAnswer = mp.getFieldBean(mb).getFieldData();
-		//-------------------
-		if(beanAnswer.equals("notFound")) { //se non c'è password, apro direttamente il calendario
-			System.out.println(ANSI_GREEN + "Il diario non ha password." + ANSI_RESET);
-		}else {
-			while(true) { //controllo password
-				System.out.println(ANSI_CYAN_BG + ANSI_BLACK + "   Inserisci la password per il diario.   "+ ANSI_RESET);
-				String clinput = scanner.nextLine();
-				if(checkPassword(clinput) == 1) {
-					break;
+		try {
+			//impacchetto bean e recupero risposta dal metadataParser
+			mb.setFieldName(PWDHASH); //cerco il field pwdHash nel file nel path
+			mb.setPath(currentDiaryPath.toString());
+			beanAnswer = mp.getFieldBean(mb).getFieldData();
+			//-------------------
+			if(beanAnswer.equals("notFound")) { //se non c'è password, apro direttamente il calendario
+				System.out.println(ANSI_GREEN + "Il diario non ha password." + ANSI_RESET);
+			}else {
+				while(true) { //controllo password
+					System.out.println(ANSI_CYAN_BG + ANSI_BLACK + "   Inserisci la password per il diario.   "+ ANSI_RESET);
+					String clinput = scanner.nextLine();
+					if(checkPassword(clinput) == 1) {
+						break;
+					}
 				}
 			}
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
 		}
+
 	}
 	
 	void datePrompt() {
@@ -149,101 +153,110 @@ public class CLIController {
 	}
 	
 	void editPage() {
-		String dateString = File.separator + year + File.separator + month + File.separator + day; 
-		String filePath = currentDiaryPath.getParent().toString() + dateString + ".html";
-		System.out.println(ANSI_CYAN_BG + ANSI_BLACK + dateString + ANSI_RESET);
-		
-		//se il file non esiste, lo creo
-		if(ff.checkForFile(filePath) == false) {
-			System.out.println("la pagina non esiste, la creo.");
-				FileBean fb = new FileBean();
-				fb.setPath(filePath);
-				fb.setKey(null); //creo il file vuoto, non c'e' bisogno di cifrare
-				fb.setData("");
-			ff.encryptAndSaveBean(fb, false, false);
+		try {
+			String dateString = File.separator + year + File.separator + month + File.separator + day; 
+			String filePath = currentDiaryPath.getParent().toString() + dateString + ".html";
+			System.out.println(ANSI_CYAN_BG + ANSI_BLACK + dateString + ANSI_RESET);
+			
+			//se il file non esiste, lo creo
+			if(ff.checkForFile(filePath) == false) {
+				System.out.println("la pagina non esiste, la creo.");
+					FileBean fb = new FileBean();
+					fb.setPath(filePath);
+					fb.setKey(null); //creo il file vuoto, non c'e' bisogno di cifrare
+					fb.setData("");
+				ff.encryptAndSaveBean(fb, false, false);
+			}
+			
+			//carico i dati dal file sull'editor
+			//caricamento dati nel bean ---------
+			fb = new FileBean();
+			fb.setPath(filePath);
+			fb.setKey(key);
+			fb = ff.loadAndDecryptBean(fb, true);
+			//------------------------------
+			
+			while(true) {
+				String data = fb.getData();
+				System.out.println(ANSI_CYAN_BG + ANSI_BLACK + "Inserisci una riga da aggiungere alla pagina." + ANSI_RESET);
+				System.out.println(ANSI_CYAN + "(Inserisci una riga vuota per uscire)" + ANSI_RESET);
+				String clinput = scanner.nextLine();
+				if(clinput.equals("")) break; //se si inserisce una riga vuota, torna alla schermata iniziale
+				fb.setData(data + clinput + "<br>" + System.lineSeparator()); //br per l'html. lineseparator per rendere il file piu' ordinato
+				ff.encryptAndSaveBean(fb, false, true);
+			}
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
 		}
-		
-		//carico i dati dal file sull'editor
-		//caricamento dati nel bean ---------
-		fb = new FileBean();
-		fb.setPath(filePath);
-		fb.setKey(key);
-		fb = ff.loadAndDecryptBean(fb, true);
-		//------------------------------
-		
-		while(true) {
-			String data = fb.getData();
-			System.out.println(ANSI_CYAN_BG + ANSI_BLACK + "Inserisci una riga da aggiungere alla pagina." + ANSI_RESET);
-			System.out.println(ANSI_CYAN + "(Inserisci una riga vuota per uscire)" + ANSI_RESET);
-			String clinput = scanner.nextLine();
-			if(clinput.equals("")) break; //se si inserisce una riga vuota, torna alla schermata iniziale
-			fb.setData(data + clinput + "<br>" + System.lineSeparator()); //br per l'html. lineseparator per rendere il file piu' ordinato
-			ff.encryptAndSaveBean(fb, false, true);
-		}
-		
 	}
 	//----------------------------------------------------------------st---------------------------------
 	
 	public void createDiary(String name, String password, String path) {	
-		
-		String metadataFilePath = path + File.separator + name + File.separator + name + ".jm";
-		
-		//impacchettamento fileBean per creare directory e file metadati ------
-		fb = new FileBean();
-		fb.setPath(metadataFilePath);
-		fb.setKey(null);
-		fb.setData("");
-		//--------------------------------
-		
-		
-		if(ff.encryptAndSaveBean(fb, false, false) == 1) { //creo directory e file metadati per il diario
-			System.out.println("Creando diario...");
+		try {
+			String metadataFilePath = path + File.separator + name + File.separator + name + ".jm";
 			
-			//aggiungo il diario alla lista dei diari
-			System.out.println("aggiungo il diario alla lista dei diari");
-				mb.setPath(DIARYLIST);
-				mb.setFieldName(name);
-				mb.setFieldData(metadataFilePath);
-			mp.setFieldBean(mb);
+			//impacchettamento fileBean per creare directory e file metadati ------
+			fb = new FileBean();
+			fb.setPath(metadataFilePath);
+			fb.setKey(null);
+			fb.setData("");
+			//--------------------------------
 			
-			//adesso opero sul file metadati del diario
-			mb.setPath(metadataFilePath);
 			
-			//riempio metadati
-				mb.setFieldName("name");
-				mb.setFieldData(name);
-			mp.setFieldBean(mb);
-			
-				mb.setFieldName("folder");
-				mb.setFieldData(path + "/" + name);
-			mp.setFieldBean(mb);
-			
-			if(password.equals("")) { //Se non inserisco una password, il diario non avrà password.
+			if(ff.encryptAndSaveBean(fb, false, false) == 1) { //creo directory e file metadati per il diario
+				System.out.println("Creando diario...");
+				
+				//aggiungo il diario alla lista dei diari
+				System.out.println("aggiungo il diario alla lista dei diari");
+					mb.setPath(DIARYLIST);
+					mb.setFieldName(name);
+					mb.setFieldData(metadataFilePath);
+				mp.setFieldBean(mb);
+				
+				//adesso opero sul file metadati del diario
+				mb.setPath(metadataFilePath);
+				
+				//riempio metadati
+					mb.setFieldName("name");
+					mb.setFieldData(name);
+				mp.setFieldBean(mb);
+				
+					mb.setFieldName("folder");
+					mb.setFieldData(path + "/" + name);
+				mp.setFieldBean(mb);
+				
+				if(password.equals("")) { //Se non inserisco una password, il diario non avrà password.
+						mb.setFieldName(PWDHASH);
+						mb.setFieldData("");
+					mp.setFieldBean(mb);
+				} else { //Se viene inserita una password, salvo l'hash
 					mb.setFieldName(PWDHASH);
-					mb.setFieldData("");
-				mp.setFieldBean(mb);
-			} else { //Se viene inserita una password, salvo l'hash
-				mb.setFieldName(PWDHASH);
-					hb.setString(password);
-					hb.setAlgorithm("SHA-256");
-				mb.setFieldData(hasher.getHashBean(hb).getString());
-				mp.setFieldBean(mb);
-				}
-			
-			//se e' tutto andato a buon fine, inizializzo e apro il calendario
-			if(!password.equals("")) {
-					hb.setString(password);
-					hb.setAlgorithm("MD5");
-				key = hasher.getHashBean(hb).getString();
-				} //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
-			System.out.println("Diario creato!");
-			
-		}else {System.out.println("Diario NON creato.");}
+						hb.setString(password);
+						hb.setAlgorithm("SHA-256");
+					mb.setFieldData(hasher.getHashBean(hb).getString());
+					mp.setFieldBean(mb);
+					}
+				
+				//se e' tutto andato a buon fine, inizializzo e apro il calendario
+				if(!password.equals("")) {
+						hb.setString(password);
+						hb.setAlgorithm("MD5");
+					key = hasher.getHashBean(hb).getString();
+					} //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
+				System.out.println("Diario creato!");
+				
+			}else {System.out.println("Diario NON creato.");}
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
+		}
 	}
 	
 	
 	
 	int checkPassword(String password){
+		try {
 			hb.setString(password);
 			hb.setAlgorithm("SHA-256");
 		String hash = hasher.getHashBean(hb).getString(); //hash della password inserita
@@ -259,6 +272,11 @@ public class CLIController {
 			return 1;
 		}else {
 			System.out.println(ANSI_YELLOW + "Password errata!" + ANSI_RESET);
+			return 0;
+		}
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
 			return 0;
 		}
 	}
@@ -292,14 +310,19 @@ public class CLIController {
 	}
 	
 	void setDiary(String selection) {
-		//Impacchettamento bean da mandare a getField
-		mb.setFieldName(selection);
-		mb.setPath(DIARYLIST);
-		mb = mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
-		//-------------------------------------------
-		
-		currentDiaryPath = Paths.get(mb.getFieldData());
-		System.out.printf("path: %s, cartella contenitore: %s%n", currentDiaryPath, currentDiaryPath.getParent());
+		try {
+			//Impacchettamento bean da mandare a getField
+			mb.setFieldName(selection);
+			mb.setPath(DIARYLIST);
+			mb = mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
+			//-------------------------------------------
+			currentDiaryPath = Paths.get(mb.getFieldData());
+			System.out.printf("path: %s, cartella contenitore: %s%n", currentDiaryPath, currentDiaryPath.getParent());
+			
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
+		}
 	}
 	
 	void shutdown() {

@@ -39,8 +39,8 @@ public class FileManagerReal extends FileManager {
 			if(Boolean.FALSE.equals(outputFile.exists()) || Boolean.TRUE.equals(confirmOverwrite)) {
 				outputFile.createNewFile();
 				logger.log(Level.INFO, "File creato: {0}", outputFile.getName());
-				//return 1;
-			} else { // popup file già esistente -------------------------------------------------------------- TODO appare sempre
+				return 1;
+			} else { // popup file già esistente --------------------------------------------------------------
 				logger.log(Level.INFO, "File già esistente");
 				fileExistsAlert.setTitle("File già esistente");
 				fileExistsAlert.setHeaderText("Questo file è già presente. Sovrascrivere?");
@@ -51,7 +51,7 @@ public class FileManagerReal extends FileManager {
 					logger.log(Level.WARNING, "Creazione file annullata");
 					return 0;
 				}
-					//return 1;
+					return 1;
 				}
 		}catch (IOException e) {
 			logger.log(Level.SEVERE, "Errore nella creazione del file {0}/{1}", new String[]{outputPath, fileName}); //va fatto cosi' se bisogna inserire più variabili in un log

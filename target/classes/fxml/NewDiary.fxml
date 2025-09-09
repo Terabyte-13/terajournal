@@ -43,7 +43,7 @@
       <Insets />
    </opaqueInsets>
    <top>
-      <Label fx:id="titleBar" prefHeight="53.0" prefWidth="937.0" text="\\%newdiary" BorderPane.alignment="CENTER">
+      <Label fx:id="titleBar" prefHeight="53.0" prefWidth="937.0" text="Nuovo diario" BorderPane.alignment="CENTER">
          <font>
             <Font size="36.0" />
          </font>
@@ -58,7 +58,7 @@
    <center>
       <VBox alignment="CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" spacing="5.0" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="fieldLabel" text="\%diaryNamePrompt">
+            <Label fx:id="fieldLabel" text="Nome diario">
                <font>
                   <Font size="18.0" />
                </font>
@@ -71,7 +71,7 @@
                   <Font size="22.0" />
                </font>
             </TextField>
-            <Label fx:id="fieldLabel1" text="\\%newPasswordPrompt">
+            <Label fx:id="fieldLabel1" text="Password">
                <font>
                   <Font size="18.0" />
                </font>
@@ -84,7 +84,7 @@
                   <Font size="22.0" />
                </font>
             </PasswordField>
-            <Label fx:id="fieldLabel11" text="\%confirmPasswordPrompt">
+            <Label fx:id="fieldLabel11" text="Conferma Password">
                <font>
                   <Font size="18.0" />
                </font>
@@ -97,7 +97,7 @@
                   <Font size="22.0" />
                </font>
             </PasswordField>
-            <Label text="\%createDirectoryIn">
+            <Label text="Crea la cartella del diario in:">
                <font>
                   <Font size="18.0" />
                </font>
@@ -110,7 +110,7 @@
                   <Insets />
                </VBox.margin>
                <children>
-                  <TextField fx:id="pathField" prefHeight="46.0" prefWidth="700.0" promptText="\%chooseAFile">
+                  <TextField fx:id="pathField" prefHeight="46.0" prefWidth="700.0" promptText="Scegli un percorso">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -118,10 +118,10 @@
                         <Insets />
                      </HBox.margin>
                   </TextField>
-                  <Button fx:id="directoryPickerButton" mnemonicParsing="false" onAction="#pickDirectory" prefHeight="46.0" prefWidth="345.0" text="\%directoryPicker" />
+                  <Button fx:id="directoryPickerButton" mnemonicParsing="false" onAction="#pickDirectory" prefHeight="46.0" prefWidth="345.0" text="Sfoglia..." />
                </children>
             </HBox>
-            <Button fx:id="createDiaryButton" mnemonicParsing="false" onAction="#createDiary" text="\%create">
+            <Button fx:id="createDiaryButton" mnemonicParsing="false" onAction="#createDiary" text="Crea nuovo diario ">
                <font>
                   <Font size="18.0" />
                </font>

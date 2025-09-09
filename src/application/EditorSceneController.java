@@ -14,7 +14,8 @@ public class EditorSceneController extends SceneController {
 	FileFacade ff;
 	String key;
 	
-	Logger logger = Logger.getLogger("FileManagerDemo");
+	Logger logger = Logger.getLogger("EditorSceneController");
+	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean."; 
 	
 	@FXML HTMLEditor editorText;
 	
@@ -27,9 +28,14 @@ public class EditorSceneController extends SceneController {
 		//carico i dati dal file sull'editor
 		//caricamento dati nel bean ---------
 		FileBean fb = new FileBean();
-		fb.setPath(filePath);
-		fb.setKey(key);
-		fb = ff.loadAndDecryptBean(fb, true);
+		try {
+			fb.setPath(filePath);
+			fb.setKey(key);
+			fb = ff.loadAndDecryptBean(fb, true);
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
+		}
 		//------------------------------
 		editorText.setHtmlText(fb.getData());
 	}
@@ -46,19 +52,23 @@ public class EditorSceneController extends SceneController {
 	public void savePage() {
 		String data = editorText.getHtmlText();
 		
-		//se il file è vuoto, non salvo   TODO fai che rileva quando è uguale a prima
+		//se il file è vuoto, non salvo
 		if(!data.equals("<html dir=\"ltr\"><head></head><body contenteditable=\"true\"></body></html>")) {	
 			//impacchettamento bean --------
 			FileBean fb = new FileBean();
-			fb.setData(data);
-			fb.setPath(filePath);
-			fb.setKey(key);
-			//------------------------------
+			try {
+				fb.setData(data);
+				fb.setPath(filePath);
+				fb.setKey(key);
+			}catch(IllegalArgumentException e) {
+				logger.log(Level.SEVERE, BEAN_ERROR);
+				e.printStackTrace();
+			}
 			ff.encryptAndSaveBean(fb, false, true);
+			//------------------------------
 		}
-		else {logger.log(Level.INFO, "Non c'è nulla da salvare");;}
-		
-		toCalendar(); //TODO porta fuori
+		else {logger.log(Level.INFO, "Non c'è nulla da salvare");}
+		toCalendar();
 	}
 	
 	public void toCalendar(){

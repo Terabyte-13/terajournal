@@ -25,6 +25,7 @@ public class NewDiarySceneController extends SceneController {
 	MetadataParser mp = new MetadataParser();
 	Hasher hasher = new Hasher();
 	HasherBean hb = new HasherBean();
+	Logger logger = Logger.getLogger("NewDiarySceneController");
 	
 	FileFacade ff; //passato dalla scena precedente
 	String key;
@@ -57,75 +58,81 @@ public class NewDiarySceneController extends SceneController {
 	}
 	
 	public void createDiary() {	
-		if(nameField.getText().equals("") || pathField.getText().equals("")) {
-			logger.log(Level.INFO, "Ci sono dei campi vuoti.");
-			return;
-		}
-		if(!passwordField.getText().equals(confirmPasswordField.getText())) {
-			logger.log(Level.INFO, "password e confirmPassword non combaciano.");
-			return;
-		}
-		
-		String metadataFilePath = pathField.getText() + File.separator + nameField.getText() + File.separator + nameField.getText() + ".jm";
-		
-		//impacchettamento fileBean per creare directory e file metadati ------
-		FileBean fb = new FileBean();
-		fb.setPath(metadataFilePath);
-		fb.setKey(null);
-		fb.setData("");
-		//--------------------------------
-		
-		//metadataBean per modificare il file metadati ------
-		MetadataBean mb = new MetadataBean();
-		//--------------------------------
-		
-		if(ff.encryptAndSaveBean(fb, false, false) == 1) { //creo directory e file metadati per il diario
-			logger.log(Level.INFO, "Diario creato.");
+		try {
+			if(nameField.getText().equals("") || pathField.getText().equals("")) {
+				logger.log(Level.INFO, "Ci sono dei campi vuoti.");
+				return;
+			}
+			if(!passwordField.getText().equals(confirmPasswordField.getText())) {
+				logger.log(Level.INFO, "password e confirmPassword non combaciano.");
+				return;
+			}
 			
-			//aggiungo il diario alla lista dei diari
-			mb.setPath("diaryList");
-			mb.setFieldName(nameField.getText());
-			mb.setFieldData(metadataFilePath);
-			mp.setFieldBean(mb);
-			logger.log(Level.INFO, "Diario aggiunto alla lista dei diari");
+			String metadataFilePath = pathField.getText() + File.separator + nameField.getText() + File.separator + nameField.getText() + ".jm";
 			
-			//adesso opero sul file metadati del diario
-			mb.setPath(metadataFilePath);
+			//impacchettamento fileBean per creare directory e file metadati ------
+			FileBean fb = new FileBean();
+			fb.setPath(metadataFilePath);
+			fb.setKey(null);
+			fb.setData("");
+			//--------------------------------
 			
-			//riempio metadati
-			mb.setFieldName("name");
-			mb.setFieldData(nameField.getText());
-			mp.setFieldBean(mb);
+			//metadataBean per modificare il file metadati ------
+			MetadataBean mb = new MetadataBean();
+			//--------------------------------
 			
-			mb.setFieldName("folder");
-			mb.setFieldData(pathField.getText() + File.separator + nameField.getText());
-			mp.setFieldBean(mb);
-			
-			if(passwordField.getText().equals("")) { //Se non inserisco una password, il diario non avrà password.
-				mb.setFieldName("pwdHash");
-				mb.setFieldData("");
+			if(ff.encryptAndSaveBean(fb, false, false) == 1) { //creo directory e file metadati per il diario
+				logger.log(Level.INFO, "Diario creato.");
+				
+				//aggiungo il diario alla lista dei diari
+				mb.setPath("diaryList");
+				mb.setFieldName(nameField.getText());
+				mb.setFieldData(metadataFilePath);
 				mp.setFieldBean(mb);
-			} else { //Se viene inserita una password, salvo l'hash
-				mb.setFieldName("pwdHash");
-					hb.setString(passwordField.getText());
-					hb.setAlgorithm("SHA-256");
-				mb.setFieldData(hasher.getHashBean(hb).getString());
+				logger.log(Level.INFO, "Diario aggiunto alla lista dei diari");
+				
+				//adesso opero sul file metadati del diario
+				mb.setPath(metadataFilePath);
+				
+				//riempio metadati
+				mb.setFieldName("name");
+				mb.setFieldData(nameField.getText());
 				mp.setFieldBean(mb);
-				}
-			
-			//se e' tutto andato a buon fine, inizializzo e apro il calendario
-			CalendarSceneController c = new CalendarSceneController();
-			c.diaryPath = mp.getField(nameField.getText(), "diaryList"); //TODO beanizza
-			if(!passwordField.getText().equals("")) {
-					hb.setString(passwordField.getText());
-					hb.setAlgorithm("MD5");
-				key = hasher.getHashBean(hb).getString();
-				} //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
-			c.setFF(ff);
-			c.setKey(key);
-			c.loadScene(currentStage);
-			
-		}else {logger.log(Level.INFO, "Diario NON creato.");}
+				
+				mb.setFieldName("folder");
+				mb.setFieldData(pathField.getText() + File.separator + nameField.getText());
+				mp.setFieldBean(mb);
+				
+				if(passwordField.getText().equals("")) { //Se non inserisco una password, il diario non avrà password.
+					mb.setFieldName("pwdHash");
+					mb.setFieldData("");
+					mp.setFieldBean(mb);
+				} else { //Se viene inserita una password, salvo l'hash
+					mb.setFieldName("pwdHash");
+						hb.setString(passwordField.getText());
+						hb.setAlgorithm("SHA-256");
+					mb.setFieldData(hasher.getHashBean(hb).getString());
+					mp.setFieldBean(mb);
+					}
+				
+				//se e' tutto andato a buon fine, inizializzo e apro il calendario
+				CalendarSceneController c = new CalendarSceneController();
+				c.diaryPath = mp.getField(nameField.getText(), "diaryList"); //TODO beanizza
+				if(!passwordField.getText().equals("")) {
+						hb.setString(passwordField.getText());
+						hb.setAlgorithm("MD5");
+					key = hasher.getHashBean(hb).getString();
+					} //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
+				c.setFF(ff);
+				c.setKey(key);
+				c.loadScene(currentStage);
+				
+			}else {logger.log(Level.INFO, "Diario NON creato.");}
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, "Errore nell'impostazione di un bean");
+			e.printStackTrace();
+		}
+		
 	}
 	
 }

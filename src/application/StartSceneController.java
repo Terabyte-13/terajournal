@@ -22,7 +22,8 @@ public class StartSceneController extends SceneController {
 	
 	Logger logger = Logger.getLogger("StartSceneController");
 	
-	static final String DIARYLIST = "diaryList";
+	public static final String DIARYLIST = "diaryList";
+	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean."; 
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Start.fxml"));
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
@@ -33,13 +34,18 @@ public class StartSceneController extends SceneController {
 		mp.setFF(ff);
 		
 		//se non e' gia' presente, crea il file diaryList ------
-		if(Boolean.FALSE.equals(ff.checkForFile(DIARYLIST))) { //TODO bean?
-			logger.log(Level.INFO, "diaryList non esiste, lo creo.");
-			FileBean fb = new FileBean();
-			fb.setPath(DIARYLIST);
-			fb.setKey(null);
-			fb.setData("");
-			ff.encryptAndSaveBean(fb, false, false);
+		try {
+			if(Boolean.FALSE.equals(ff.checkForFile(DIARYLIST))) { //TODO bean?
+				logger.log(Level.INFO, "diaryList non esiste, lo creo.");
+				FileBean fb = new FileBean();
+				fb.setPath(DIARYLIST);
+				fb.setKey(null);
+				fb.setData("");
+				ff.encryptAndSaveBean(fb, false, false);
+			}
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
 		}
 		//--------------------------------
 		
@@ -72,9 +78,14 @@ public class StartSceneController extends SceneController {
 		String selection = diaryPicker.getValue();
 		
 		//Impacchettamento bean da mandare a getField
-		mb.setFieldName(selection);
-		mb.setPath(DIARYLIST);
-		mb = mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
+		try {
+			mb.setFieldName(selection);
+			mb.setPath(DIARYLIST);
+			mb = mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
+		}catch(IllegalArgumentException e) {
+			logger.log(Level.SEVERE, BEAN_ERROR);
+			e.printStackTrace();
+		}
 		//-------------------------------------------
 		
 		Path p = Paths.get(mb.getFieldData());

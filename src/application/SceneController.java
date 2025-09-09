@@ -17,7 +17,7 @@ public abstract class SceneController {
 	Stage currentStage;
 	Scene scene;
 	Parent root;
-	Logger logger = Logger.getLogger("SceneController");
+	Logger l = Logger.getLogger("SceneController");
 	
 	void showScene(Stage stage, FXMLLoader sceneLoader) {
 		try{
@@ -32,14 +32,14 @@ public abstract class SceneController {
 			stage.show();
 			
 		}catch(IOException e){
-			logger.log(Level.SEVERE, "IOException nello SceneController");
+			l.log(Level.SEVERE, "IOException nello SceneController");
 			e.printStackTrace();
 		}
 	}
 	
 	SceneController() { //costruttore. parte quando viene istanziata la classe
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
-		logger.log(Level.FINE, "Nuova istanza creata da {0}: {1}", new Object[]{caller, this});
+		l.log(Level.FINE, "Nuova istanza creata da {0}: {1}", new Object[]{caller, this});
 	}
 	
 }
