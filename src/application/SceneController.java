@@ -18,6 +18,10 @@ public abstract class SceneController {
 	Scene scene;
 	Parent root;
 	Logger l = Logger.getLogger("SceneController");
+	FileFacade ff;
+	SceneManager sm;
+	MetadataParser mp;
+	//non dichiarare di nuovo queste variabili nelle sottoclassi
 	
 	void showScene(Stage stage, FXMLLoader sceneLoader) {
 		try{
@@ -35,6 +39,12 @@ public abstract class SceneController {
 			l.log(Level.SEVERE, "IOException nello SceneController");
 			e.printStackTrace();
 		}
+	}
+
+	abstract void loadScene(Stage stage);
+
+	void setFF(FileFacade newff) {
+		ff = newff;
 	}
 	
 	SceneController() { //costruttore. parte quando viene istanziata la classe

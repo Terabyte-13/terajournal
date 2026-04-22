@@ -15,9 +15,7 @@ import javafx.stage.Stage;
 public class StartSceneController extends SceneController {
 	
 	@FXML ComboBox<String> diaryPicker;
-	FileFacade ff = new FileFacade(); //questo fileFacade deve essere l'unico fileFacade, passato tra le classi
-	
-	MetadataParser mp = new MetadataParser();
+
 	MetadataBean mb = new MetadataBean();
 	
 	Logger logger = Logger.getLogger("StartSceneController");
@@ -26,12 +24,11 @@ public class StartSceneController extends SceneController {
 	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean."; 
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Start.fxml"));
-	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
+
+	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse TODO ?? rivedi sto commento
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
-		
-		mp.setFF(ff);
 		
 		//se non e' gia' presente, crea il file diaryList ------
 		try {
@@ -53,22 +50,14 @@ public class StartSceneController extends SceneController {
 	}
 	
 	public void toNewDiary(ActionEvent event) {
-		NewDiarySceneController n = new NewDiarySceneController();
-		n.setFF(ff);
-		n.loadScene(currentStage);
-	}
-	
-	void toPasswordPrompt(String diaryPath) {
-		PasswordPromptSceneController p = new PasswordPromptSceneController();
-		p.diaryPath = diaryPath;
-		p.setFF(ff);
-		p.loadScene(currentStage);
+		sm.toNewDiary();
 	}
 	
 	
 	void populateDiaryList() {
 		List<String> diaries = mp.getFieldNames(DIARYLIST);
-		for(int i = 1; i < diaries.size(); i++) {
+		if(diaries.isEmpty()){return;}
+		for(int i = 0; i < diaries.size(); i++) {
 			diaryPicker.getItems().add(diaries.get(i));
 		}
 	}
@@ -91,7 +80,7 @@ public class StartSceneController extends SceneController {
 		Path p = Paths.get(mb.getFieldData());
 		logger.log(Level.INFO, "path: {0}, cartella contenitore: {1}", new Path[]{p, p.getParent()});
 		
-		toPasswordPrompt(p.toString());
+		sm.toPasswordPrompt(p.toString());
 	}
 	
 	public void onImportButtonPress(ActionEvent event) {

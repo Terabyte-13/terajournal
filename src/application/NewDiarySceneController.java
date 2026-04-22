@@ -26,8 +26,7 @@ public class NewDiarySceneController extends SceneController {
 	Hasher hasher = new Hasher();
 	HasherBean hb = new HasherBean();
 	Logger logger = Logger.getLogger("NewDiarySceneController");
-	
-	FileFacade ff; //passato dalla scena precedente
+
 	String key;
 	
 
@@ -44,8 +43,7 @@ public class NewDiarySceneController extends SceneController {
 	}
 	
 	public void toStart() {
-		StartSceneController n = new StartSceneController();
-		n.loadScene(currentStage);
+		sm.toStart();
 	}
 	
 	public void pickDirectory(){
@@ -116,16 +114,13 @@ public class NewDiarySceneController extends SceneController {
 					}
 				
 				//se e' tutto andato a buon fine, inizializzo e apro il calendario
-				CalendarSceneController c = new CalendarSceneController();
-				c.diaryPath = mp.getField(nameField.getText(), "diaryList"); //TODO beanizza
+				String d = mp.getField(nameField.getText(), "diaryList"); //TODO beanizza
 				if(!passwordField.getText().equals("")) {
 						hb.setString(passwordField.getText());
 						hb.setAlgorithm("MD5");
 					key = hasher.getHashBean(hb).getString();
 					} //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
-				c.setFF(ff);
-				c.setKey(key);
-				c.loadScene(currentStage);
+				sm.toCalendar(d, key);
 				
 			}else {logger.log(Level.INFO, "Diario NON creato.");}
 		}catch(IllegalArgumentException e) {

@@ -33,7 +33,6 @@ public class CalendarSceneController extends SceneController {
 	
 	String diaryPath;
 	String diaryFolder;
-	FileFacade ff;
 	String key;
 	
 	MetadataParser mp = new MetadataParser();
@@ -53,10 +52,6 @@ public class CalendarSceneController extends SceneController {
 	
 	void setKey(String k) {
 		key = k;
-	}
-	
-	void setFF(FileFacade newff) {
-		ff = newff;
 	}
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Calendar.fxml"));
@@ -133,13 +128,9 @@ public class CalendarSceneController extends SceneController {
 	public void onCalendarButtonPress(ActionEvent event) {
 		Node caller = (Node)event.getSource();
 		int selectedDay = (int)caller.getUserData();
-		
-		EditorSceneController e = new EditorSceneController();
-		e.filePath = diaryFolder + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
-		e.diaryPath = diaryPath;
-		e.setFF(ff);
-		e.setKey(key);
-		e.loadScene(currentStage);
+
+		String fp = diaryFolder + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
+		sm.toEditor(fp, diaryPath, key);
 	}
 	
 	//prendo da diaryList il filepath del diario selezionato
@@ -171,15 +162,11 @@ public class CalendarSceneController extends SceneController {
 
 	
 	public void toStart() {
-		StartSceneController n = new StartSceneController();
-		n.loadScene(currentStage);
+		sm.toStart();
 	}
 	
 	void toPasswordPrompt(String diaryPath) {
-		PasswordPromptSceneController p = new PasswordPromptSceneController();
-		p.diaryPath = diaryPath;
-		p.setFF(ff);
-		p.loadScene(currentStage);
+		sm.toPasswordPrompt(diaryPath);
 	}
 	
 }

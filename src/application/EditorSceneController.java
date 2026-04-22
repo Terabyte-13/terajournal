@@ -11,7 +11,6 @@ public class EditorSceneController extends SceneController {
 	
 	String filePath;
 	String diaryPath;
-	FileFacade ff;
 	String key;
 	
 	Logger logger = Logger.getLogger("EditorSceneController");
@@ -21,6 +20,7 @@ public class EditorSceneController extends SceneController {
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Editor.fxml"));
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
+		logger.log(Level.INFO, "Carico l'editor...");
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
@@ -37,6 +37,7 @@ public class EditorSceneController extends SceneController {
 			e.printStackTrace();
 		}
 		//------------------------------
+		logger.log(Level.INFO, "Carico il file...");
 		editorText.setHtmlText(fb.getData());
 	}
 	
@@ -72,10 +73,6 @@ public class EditorSceneController extends SceneController {
 	}
 	
 	public void toCalendar(){
-		CalendarSceneController c = new CalendarSceneController();
-		c.diaryPath = diaryPath;
-		c.setFF(ff);
-		c.setKey(key);
-		c.loadScene(currentStage);
+		sm.toCalendar(diaryPath, key);
 	}
 }

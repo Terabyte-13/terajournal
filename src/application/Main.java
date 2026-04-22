@@ -13,20 +13,11 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-		if(Boolean.FALSE.equals(useCLI)) {	
-			FXMLLoader splash = new FXMLLoader(getClass().getResource("/fxml/Splash.fxml"));
-			StartSceneController start = new StartSceneController();
+		if(Boolean.FALSE.equals(useCLI)) {
 			try {
-				Parent root = splash.load();
-				Scene scene = new Scene(root,800,600);
-				scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-				primaryStage.setScene(scene);
-				primaryStage.setTitle("Terajournal");
-				primaryStage.show();
-				primaryStage.centerOnScreen();
-				
-				start.loadScene(primaryStage);
-				
+				SceneManager sm = new SceneManager();
+				sm.initAndStart(primaryStage);
+
 				} catch(Exception e) {
 					e.printStackTrace();
 				}

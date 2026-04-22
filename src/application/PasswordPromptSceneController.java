@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 public class PasswordPromptSceneController extends SceneController {
 	//commento prova
 	String diaryPath;
-	MetadataParser mp = new MetadataParser();
 	MetadataBean mb = new MetadataBean();
 	String beanAnswer;
 	Hasher hasher = new Hasher();
@@ -30,8 +29,7 @@ public class PasswordPromptSceneController extends SceneController {
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
-		
-		mp.ff = ff;
+
 		try {
 			//impacchetto bean e recupero risposta
 			mb.setFieldName("pwdHash"); //cerco il field pwdHash nel file nel path
@@ -71,15 +69,13 @@ public class PasswordPromptSceneController extends SceneController {
 		String pwdHash = mp.getFieldBean(mb).getFieldData(); //hash preso dal file, da confrontare a hash
 		
 		if(hash.equals(pwdHash)) { //se gli hash combaciano, la password inserita e' corretta
-			CalendarSceneController c = new CalendarSceneController();
-			c.diaryPath = diaryPath;
+			String k = null;
 			if(!password.equals("")) {
 					hb.setString(password);
 					hb.setAlgorithm("MD5");
-				c.setKey(hasher.getHashBean(hb).getString()); //un hash diverso come key, non quello immagazzinato
-				} 
-			c.setFF(ff);
-			c.loadScene(currentStage);
+				k = hasher.getHashBean(hb).getString();
+				}
+			sm.toCalendar(diaryPath, k);
 		}else {
 			passwordField.setText("");
 			passwordField.setPromptText("Password errata!");

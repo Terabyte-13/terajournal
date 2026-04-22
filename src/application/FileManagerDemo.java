@@ -18,8 +18,8 @@ import java.util.logging.Logger;
 
 /*
   File manager versione in-RAM, utilizzando un database H2
-  In tutto il programma le view si passano la stessa istanza di FileFacade, 
-  in modo che questo database rimanga in memoria durante la modalità demo.
+  In tutto il programma le view si passano la stessa istanza di FileFacade, come un testimone.
+  In questo modo il database rimane in memoria durante la modalità demo.
 */
 
 public class FileManagerDemo extends FileManager {
@@ -30,7 +30,7 @@ public class FileManagerDemo extends FileManager {
 	
 	FileManagerDemo(){
 		try {
-			connection = DriverManager.getConnection("jdbc:h2:mem:;INIT=RUNSCRIPT FROM 'src/resources/sql/demofs.sql'");
+			connection = DriverManager.getConnection("jdbc:h2:mem:demoFS;INIT=RUNSCRIPT FROM 'src/resources/sql/demofs.sql'");
 		} catch (SQLException e) {
 			logger.log(Level.SEVERE, "Eccezione SQL nell'inizializzazione del database.");
 			e.printStackTrace();
@@ -69,6 +69,7 @@ public class FileManagerDemo extends FileManager {
 						update.executeUpdate();
 
 						logger.log(Level.INFO, "File {0} aggiornato nella directory {1}", new String[]{fileName, outputPath});
+						logger.log(Level.INFO, "dati:[{0}]", data);
 						return 2; // 2 = aggiornato
 					}
 				}
@@ -87,6 +88,7 @@ public class FileManagerDemo extends FileManager {
 
 				insert.executeUpdate();
 				logger.log(Level.INFO, "File {0} creato nella directory {1}", new String[]{fileName, outputPath});
+				logger.log(Level.INFO, "dati:[{0}]", data);
 				return 1; // 1 = creato
 			}
 
@@ -99,6 +101,7 @@ public class FileManagerDemo extends FileManager {
 
 	@Override
 	String load(String inputPath) {
+		printFileStructure();
 		List<String> dirs = parsePath(inputPath);
 		ResultSet results = null;
 		try(PreparedStatement ps = connection.prepareStatement("SELECT name, data, id FROM demoFileSystem WHERE name = ? AND parent_id = ?")){
@@ -124,7 +127,9 @@ public class FileManagerDemo extends FileManager {
 			s = br.readLine();
 			if(s == null) {break;}
 			bui.append(s);
+			bui.append("\n");
 		}
+		System.out.println(bui.toString()); //TODO rimuovi
 		return bui.toString();
 			
 		}catch(Exception e) {
@@ -209,6 +214,38 @@ public class FileManagerDemo extends FileManager {
 			list.add(tok.nextToken());
 		}
 		return list;
+	}
+
+
+	//da rimuovere --------vv
+
+	void printFileStructure() {
+		try{
+			Statement s = connection.createStatement();
+
+			String query = "SELECT * FROM demoFileSystem";
+			ResultSet rs = s.executeQuery(query);
+			System.out.println("Struttura demoFS (" + this + "): ----------------");
+			while (rs.next()) {
+				for(int i = 0; i < rs.getInt("parent_id"); i++) {
+					System.out.printf(" ");
+				}
+				System.out.println("ID: " + rs.getInt("id") + ", Name: " + rs.getString("name") + ", Parent: " + rs.getInt("parent_id"));
+			}
+
+		}catch(SQLException e){
+			System.out.println("<FileManagerDemo.save> Eccezione SQL");
+			e.printStackTrace();
+		}
+	}
+
+	void testDB() {
+		try{
+			logger.log(Level.INFO, "Validità connessione DB: {0}", connection.isValid(0));
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+
 	}
 	
 }

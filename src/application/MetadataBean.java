@@ -1,5 +1,7 @@
 package application;
 
+import java.util.logging.Level;
+
 //le view mandano il bean con fieldName e path. MetadataParser estrae il field richiesto e lo restituisce su fieldData
 public class MetadataBean {
 	private String fieldName;
@@ -37,7 +39,7 @@ public class MetadataBean {
 	
 	public void setPath(String s) {
 		if(s == null) {
-			throw new IllegalArgumentException("Il percorso del file metadati specificato è invalido!");
+			throw new IllegalArgumentException("Il percorso del file metadati specificato è null!");
 		}else {
 			path = s;
 		}
