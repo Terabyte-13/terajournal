@@ -34,8 +34,7 @@ public class CalendarSceneController extends SceneController {
 	String diaryPath;
 	String diaryFolder;
 	String key;
-	
-	MetadataParser mp = new MetadataParser();
+
 	MetadataBean mb = new MetadataBean();
 	Logger logger = Logger.getLogger("FileManagerDemo");
 	

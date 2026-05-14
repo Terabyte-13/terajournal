@@ -1,16 +1,15 @@
 package application;
 	
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 
+/*RICORDA: se il programma non parte perchè javafx non trova la variabile d'ambiente DISPLAY
+esegui "xhost +si:localuser:$(whoami)" nel terminale*/
 
 public class Main extends Application {
 	
 	Boolean useCLI = false;
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		if(Boolean.FALSE.equals(useCLI)) {

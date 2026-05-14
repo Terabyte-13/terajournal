@@ -52,7 +52,7 @@ public class MetadataParser {
 		String line = "";
 		int i = 0;
 		try {
-			String data = ff.loadAndDecrypt(filePath, null, false); //TODO beanizza
+			String data = ff.loadAndDecrypt(filePath, null, false);
 			logger.log(Level.INFO, "Leggo metadati: {0}path:{1} ## data:[{2}]{3}", new Object[] {ANSI_CYAN, filePath, data, ANSI_RESET});
 			if(data == null) {
 				logger.log(Level.SEVERE, "{0}file {1} vuoto!! (istanza FM: {2}){3}", new Object[] {ANSI_CYAN, filePath, ff.fm, ANSI_RESET});

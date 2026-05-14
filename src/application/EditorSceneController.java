@@ -14,7 +14,7 @@ public class EditorSceneController extends SceneController {
 	String key;
 	
 	Logger logger = Logger.getLogger("EditorSceneController");
-	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean."; 
+	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean.";
 	
 	@FXML HTMLEditor editorText;
 	
@@ -49,26 +49,9 @@ public class EditorSceneController extends SceneController {
 		ff = newff;
 	}
 	
-	//salva i dati dall'editor sul file
+	//salva i dati dall'editor sul file e torna al calendario
 	public void savePage() {
-		String data = editorText.getHtmlText();
-		
-		//se il file è vuoto, non salvo
-		if(!data.equals("<html dir=\"ltr\"><head></head><body contenteditable=\"true\"></body></html>")) {	
-			//impacchettamento bean --------
-			FileBean fb = new FileBean();
-			try {
-				fb.setData(data);
-				fb.setPath(filePath);
-				fb.setKey(key);
-			}catch(IllegalArgumentException e) {
-				logger.log(Level.SEVERE, BEAN_ERROR);
-				e.printStackTrace();
-			}
-			ff.encryptAndSaveBean(fb, false, true);
-			//------------------------------
-		}
-		else {logger.log(Level.INFO, "Non c'è nulla da salvare");}
+		sm.savePage(editorText.getHtmlText(), filePath, key);
 		toCalendar();
 	}
 	

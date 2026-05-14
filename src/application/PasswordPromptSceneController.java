@@ -15,8 +15,6 @@ public class PasswordPromptSceneController extends SceneController {
 	Hasher hasher = new Hasher();
 	HasherBean hb = new HasherBean();
 	
-	FileFacade ff;
-	
 	Logger logger = Logger.getLogger("PasswordPromptSC");
 	
 	@FXML PasswordField passwordField; 
