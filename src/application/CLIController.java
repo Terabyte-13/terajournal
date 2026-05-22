@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
-
+//TODO fai in modo da usare le funzioni di scenemanager anche qua
 public class CLIController {
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";

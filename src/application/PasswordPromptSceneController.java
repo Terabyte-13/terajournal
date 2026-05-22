@@ -28,17 +28,14 @@ public class PasswordPromptSceneController extends SceneController {
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
 
-		try {
+		try { //TODO df.getDiaryMetadata
 			//impacchetto bean e recupero risposta
 			mb.setFieldName("pwdHash"); //cerco il field pwdHash nel file nel path
 			mb.setPath(diaryPath);
-			beanAnswer = mp.getFieldBean(mb).getFieldData();
+			beanAnswer = sm.mp.getFieldBean(mb).getFieldData();
 			//-------------------
 			if(beanAnswer.equals("notFound")) { //se non c'è password, apro direttamente il calendario
-				CalendarSceneController c = new CalendarSceneController();
-				c.diaryPath = diaryPath;
-				c.setFF(ff);
-				c.loadScene(currentStage);
+				sm.toCalendar(diaryPath, "");
 			}
 		}catch(IllegalArgumentException e) {
 			logger.log(Level.SEVERE, BEAN_ERROR);
@@ -46,28 +43,20 @@ public class PasswordPromptSceneController extends SceneController {
 		}
 	}
 	
-	void setFF(FileFacade newff) {
-		ff = newff;;
-		logger.log(Level.FINE, "FileFacade impostato: {0}", ff);
-	}
-	
-	public void toStart() {
-		StartSceneController n = new StartSceneController();
-		n.loadScene(currentStage);
-	}
+	public void toStart() {sm.toStart();}
 	
 	public void submitPassword() {
-		try {
+		try { //TODO df.checkPassword()
 			String password = passwordField.getText(); //password inserita
 			hb.setString(password);
 			hb.setAlgorithm("SHA-256");
 		String hash = hasher.getHashBean(hb).getString(); //hash della password inserita
 		mb.setFieldName("pwdHash");
 		mb.setPath(diaryPath);
-		String pwdHash = mp.getFieldBean(mb).getFieldData(); //hash preso dal file, da confrontare a hash
+		String pwdHash = sm.mp.getFieldBean(mb).getFieldData(); //hash preso dal file, da confrontare a hash
 		
 		if(hash.equals(pwdHash)) { //se gli hash combaciano, la password inserita e' corretta
-			String k = null;
+			String k = "";
 			if(!password.equals("")) {
 					hb.setString(password);
 					hb.setAlgorithm("MD5");

@@ -32,13 +32,13 @@ public class StartSceneController extends SceneController {
 		
 		//se non e' gia' presente, crea il file diaryList ------
 		try {
-			if(Boolean.FALSE.equals(ff.checkForFile(DIARYLIST))) { //TODO bean?
+			if(Boolean.FALSE.equals(sm.ff.checkForFile(DIARYLIST))) { //TODO df.checkForDiaryList
 				logger.log(Level.INFO, "diaryList non esiste, lo creo.");
 				FileBean fb = new FileBean();
 				fb.setPath(DIARYLIST);
 				fb.setKey(null);
 				fb.setData("");
-				ff.encryptAndSaveBean(fb, false, false);
+				sm.ff.encryptAndSaveBean(fb, false, false);
 			}
 		}catch(IllegalArgumentException e) {
 			logger.log(Level.SEVERE, BEAN_ERROR);
@@ -55,7 +55,7 @@ public class StartSceneController extends SceneController {
 	
 	
 	void populateDiaryList() {
-		List<String> diaries = mp.getFieldNames(DIARYLIST);
+		List<String> diaries = sm.mp.getFieldNames(DIARYLIST); //TODO df.getDiaryList
 		if(diaries.isEmpty()){return;}
 		for(int i = 0; i < diaries.size(); i++) {
 			diaryPicker.getItems().add(diaries.get(i));
@@ -65,12 +65,12 @@ public class StartSceneController extends SceneController {
 	//prendo da diaryList il filepath del diario selezionato
 	public void onDiaryPickerPress(ActionEvent event) {
 		String selection = diaryPicker.getValue();
-		
+		//TODO df.getDiaryMetadata, poi prendi il path
 		//Impacchettamento bean da mandare a getField
 		try {
 			mb.setFieldName(selection);
 			mb.setPath(DIARYLIST);
-			mb = mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
+			mb = sm.mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
 		}catch(IllegalArgumentException e) {
 			logger.log(Level.SEVERE, BEAN_ERROR);
 			e.printStackTrace();

@@ -18,11 +18,12 @@ public abstract class SceneController {
 	Scene scene;
 	Parent root;
 	Logger l = Logger.getLogger("SceneController");
-	FileFacade ff;
 	SceneManager sm;
-	MetadataParser mp;
-	//non dichiarare di nuovo queste variabili nelle sottoclassi
-	
+
+	void setSm(SceneManager sceneManager){
+		sm = sceneManager;
+	}
+
 	void showScene(Stage stage, FXMLLoader sceneLoader) {
 		try{
 			//inizializzazione interfaccia: prepara variabili, carica CSS e carica la scena Main ---------------------
@@ -42,10 +43,6 @@ public abstract class SceneController {
 	}
 
 	abstract void loadScene(Stage stage);
-
-	void setFF(FileFacade newff) {
-		ff = newff;
-	}
 	
 	SceneController() { //costruttore. parte quando viene istanziata la classe
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();

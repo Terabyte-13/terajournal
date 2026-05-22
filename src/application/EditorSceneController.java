@@ -31,7 +31,7 @@ public class EditorSceneController extends SceneController {
 		try {
 			fb.setPath(filePath);
 			fb.setKey(key);
-			fb = ff.loadAndDecryptBean(fb, true);
+			fb = sm.ff.loadAndDecryptBean(fb, true);
 		}catch(IllegalArgumentException e) {
 			logger.log(Level.SEVERE, BEAN_ERROR);
 			e.printStackTrace();
@@ -45,13 +45,9 @@ public class EditorSceneController extends SceneController {
 		key = k;
 	}
 	
-	void setFF(FileFacade newff) {
-		ff = newff;
-	}
-	
 	//salva i dati dall'editor sul file e torna al calendario
 	public void savePage() {
-		sm.savePage(editorText.getHtmlText(), filePath, key);
+		sm.savePage(editorText.getHtmlText(), filePath, key); //TODO df.savePage
 		toCalendar();
 	}
 	

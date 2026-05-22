@@ -58,24 +58,23 @@ public class CalendarSceneController extends SceneController {
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
-		mp.setFF(ff);
 		
 		mb.setPath(diaryPath); //opero sul file metadati del diario
 		
 		mb.setFieldName("folder"); //cerco il field "folder"
-		diaryFolder = mp.getFieldBean(mb).getFieldData(); //prendo i dati del field restituiti sul bean da mp
+		diaryFolder = sm.mp.getFieldBean(mb).getFieldData(); //prendo i dati del field restituiti sul bean da mp
 		
 		populateDiaryList();
 		
 		mb.setFieldName("name"); //cerco il field "name"
-		diaryPicker.setValue(mp.getFieldBean(mb).getFieldData()); //prendo i dati del field restituiti sul bean da mp
+		diaryPicker.setValue(sm.mp.getFieldBean(mb).getFieldData()); //prendo i dati del field restituiti sul bean da mp
 		
 		updateCalendar();
 	}
 	
-	//non va
+	//non va TODO df.getDiaryList
 	void populateDiaryList() {
-		List<String> diaries = mp.getFieldNames("diaryList");
+		List<String> diaries = sm.mp.getFieldNames("diaryList");
 		for(int i = 0; i < diaries.size(); i++) {
 			//diaryPicker .getItems().add(diaries.get(i));
 		}
@@ -92,7 +91,7 @@ public class CalendarSceneController extends SceneController {
 			if(i == LocalDate.now().getDayOfMonth() && month == LocalDate.now().getMonth().getValue() && year == LocalDate.now().getYear()) {
 				button.setId("calendarButtonToday");
 			//Evidenzio i giorni con un file associato
-			}else if(Boolean.TRUE.equals(ff.checkForFile(diaryFolder + File.separator + year + File.separator + month + File.separator + i + ".html"))) {
+			}else if(Boolean.TRUE.equals(sm.ff.checkForFile(diaryFolder + File.separator + year + File.separator + month + File.separator + i + ".html"))) {
 				button.setId("calendarButtonHasFile");
 			}else button.setId("calendarButton");
 			
@@ -126,13 +125,13 @@ public class CalendarSceneController extends SceneController {
 	//apertura della pagina di un giorno
 	public void onCalendarButtonPress(ActionEvent event) {
 		Node caller = (Node)event.getSource();
-		int selectedDay = (int)caller.getUserData();
+		int selectedDay = (int)caller.getUserData(); //serve per capire il numero del giorno del tasto premuto
 
 		String fp = diaryFolder + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
 		sm.toEditor(fp, diaryPath, key);
 	}
 	
-	//prendo da diaryList il filepath del diario selezionato
+	//prendo da diaryList il filepath del diario selezionato TODO leva?
 	public void onDiaryPickerPress(ActionEvent event) { //viene chiamato subito al partire della scena per qualche motivo
 		/*
 		String selection = diaryPicker.getValue();
@@ -157,9 +156,7 @@ public class CalendarSceneController extends SceneController {
 		month = date.getMonthValue();
 		updateCalendar();
 	}
-	
 
-	
 	public void toStart() {
 		sm.toStart();
 	}

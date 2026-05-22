@@ -27,6 +27,7 @@ public class SceneManager {
     gli scenecontroller precedenti vengono chiusi dal garbage collector*/
     SceneController currentSceneController;
     MetadataParser mp = new MetadataParser();
+
     Hasher hasher = new Hasher();
 
     Logger logger = Logger.getLogger("SceneManager");
@@ -41,17 +42,15 @@ public class SceneManager {
         primaryStage.show();
         primaryStage.centerOnScreen();
 
-        currentStage = primaryStage;
-        mp.setFF(ff); //TODO bean?
+        mp.setFF(ff);
 
-        currentSceneController = new StartSceneController();
-        loadScene();
+        currentStage = primaryStage;
+        toStart();
     }
 
     void loadScene(){
-        currentSceneController.setFF(ff);
         currentSceneController.sm = this; //passo un riferimento in modo che la scena può dire a questa classe di caricarne un'altra prima di returnare
-        currentSceneController.mp = mp;
+        //while(currentSceneController.sm == null){System.out.println("Sborra");}
         currentSceneController.loadScene(currentStage);
     }
 

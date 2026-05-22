@@ -22,23 +22,13 @@ public class NewDiarySceneController extends SceneController {
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/NewDiary.fxml"));
 	DirectoryChooser dc = new DirectoryChooser();
-	Hasher hasher = new Hasher();
-	HasherBean hb = new HasherBean();
 	Logger logger = Logger.getLogger("NewDiarySceneController");
-
-	String key;
 	
 
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
-		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
-		mp.setFF(ff);
-	}
-	
-	void setFF(FileFacade newff) {
-		ff = newff;
-		logger.log(Level.FINE, "FileFacade impostato: {0}", ff);
+		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua TODO rivedi questo
 	}
 	
 	public void toStart() {
