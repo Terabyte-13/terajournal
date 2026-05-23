@@ -2,7 +2,6 @@ package application;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,15 +26,9 @@ public class CalendarSceneController extends SceneController {
 
 	
 	LocalDate date = LocalDate.now();
-	int day = date.getDayOfMonth();
 	int month = date.getMonthValue();
 	int year = date.getYear();
-	
-	String diaryPath;
-	String diaryFolder;
-	String key;
 
-	MetadataBean mb = new MetadataBean();
 	Logger logger = Logger.getLogger("FileManagerDemo");
 	
 	CalendarSceneController(){
@@ -49,35 +42,25 @@ public class CalendarSceneController extends SceneController {
 	
 	//--------------------
 	
-	void setKey(String k) {
-		key = k;
-	}
-	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Calendar.fxml"));
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
-		
-		mb.setPath(diaryPath); //opero sul file metadati del diario
-		
-		mb.setFieldName("folder"); //cerco il field "folder"
-		diaryFolder = sm.mp.getFieldBean(mb).getFieldData(); //prendo i dati del field restituiti sul bean da mp
-		
-		populateDiaryList();
-		
-		mb.setFieldName("name"); //cerco il field "name"
-		diaryPicker.setValue(sm.mp.getFieldBean(mb).getFieldData()); //prendo i dati del field restituiti sul bean da mp
+
+		//populateDiaryList();
+
+		diaryPicker.setValue(sm.getCurrentDiaryName()); //imposto sull'UI il nome del diario attuale
 		
 		updateCalendar();
 	}
 	
 	//non va TODO df.getDiaryList
 	void populateDiaryList() {
-		List<String> diaries = sm.mp.getFieldNames("diaryList");
-		for(int i = 0; i < diaries.size(); i++) {
+		//List<String> diaries = sm.mp.getFieldNames("diaryList");
+		//for(int i = 0; i < diaries.size(); i++) {
 			//diaryPicker .getItems().add(diaries.get(i));
-		}
+		//}
 	}
 
 	//aggiunge programmaticamente i tasti dei giorni del calendario
@@ -91,7 +74,7 @@ public class CalendarSceneController extends SceneController {
 			if(i == LocalDate.now().getDayOfMonth() && month == LocalDate.now().getMonth().getValue() && year == LocalDate.now().getYear()) {
 				button.setId("calendarButtonToday");
 			//Evidenzio i giorni con un file associato
-			}else if(Boolean.TRUE.equals(sm.ff.checkForFile(diaryFolder + File.separator + year + File.separator + month + File.separator + i + ".html"))) {
+			}else if(Boolean.TRUE.equals(sm.isPageWritten(year, month, i))) {
 				button.setId("calendarButtonHasFile");
 			}else button.setId("calendarButton");
 			
@@ -127,8 +110,8 @@ public class CalendarSceneController extends SceneController {
 		Node caller = (Node)event.getSource();
 		int selectedDay = (int)caller.getUserData(); //serve per capire il numero del giorno del tasto premuto
 
-		String fp = diaryFolder + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
-		sm.toEditor(fp, diaryPath, key);
+		//String fp = diaryFolder + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
+		sm.toEditor(year, month, selectedDay);
 	}
 	
 	//prendo da diaryList il filepath del diario selezionato TODO leva?

@@ -19,8 +19,7 @@ public class StartSceneController extends SceneController {
 	MetadataBean mb = new MetadataBean();
 	
 	Logger logger = Logger.getLogger("StartSceneController");
-	
-	public static final String DIARYLIST = "diaryList";
+
 	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean."; 
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Start.fxml"));
@@ -31,21 +30,7 @@ public class StartSceneController extends SceneController {
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
 		
 		//se non e' gia' presente, crea il file diaryList ------
-		try {
-			if(Boolean.FALSE.equals(sm.ff.checkForFile(DIARYLIST))) { //TODO df.checkForDiaryList
-				logger.log(Level.INFO, "diaryList non esiste, lo creo.");
-				FileBean fb = new FileBean();
-				fb.setPath(DIARYLIST);
-				fb.setKey(null);
-				fb.setData("");
-				sm.ff.encryptAndSaveBean(fb, false, false);
-			}
-		}catch(IllegalArgumentException e) {
-			logger.log(Level.SEVERE, BEAN_ERROR);
-			e.printStackTrace();
-		}
-		//--------------------------------
-		
+		sm.checkForDiaryList();
 		populateDiaryList();
 	}
 	
@@ -55,7 +40,7 @@ public class StartSceneController extends SceneController {
 	
 	
 	void populateDiaryList() {
-		List<String> diaries = sm.mp.getFieldNames(DIARYLIST); //TODO df.getDiaryList
+		List<String> diaries = sm.getDiaryNames();
 		if(diaries.isEmpty()){return;}
 		for(int i = 0; i < diaries.size(); i++) {
 			diaryPicker.getItems().add(diaries.get(i));
@@ -65,22 +50,7 @@ public class StartSceneController extends SceneController {
 	//prendo da diaryList il filepath del diario selezionato
 	public void onDiaryPickerPress(ActionEvent event) {
 		String selection = diaryPicker.getValue();
-		//TODO df.getDiaryMetadata, poi prendi il path
-		//Impacchettamento bean da mandare a getField
-		try {
-			mb.setFieldName(selection);
-			mb.setPath(DIARYLIST);
-			mb = sm.mp.getFieldBean(mb); //faccio inserire il fieldData corrispondente, da MetadataParser
-		}catch(IllegalArgumentException e) {
-			logger.log(Level.SEVERE, BEAN_ERROR);
-			e.printStackTrace();
-		}
-		//-------------------------------------------
-		
-		Path p = Paths.get(mb.getFieldData());
-		logger.log(Level.INFO, "path: {0}, cartella contenitore: {1}", new Path[]{p, p.getParent()});
-		
-		sm.toPasswordPrompt(p.toString());
+		sm.openDiary(selection);
 	}
 	
 	public void onImportButtonPress(ActionEvent event) {

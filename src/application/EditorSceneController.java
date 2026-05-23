@@ -8,10 +8,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class EditorSceneController extends SceneController {
-	
-	String filePath;
-	String diaryPath;
-	String key;
+
+	int year;
+	int month;
+	int day;
 	
 	Logger logger = Logger.getLogger("EditorSceneController");
 	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean.";
@@ -24,34 +24,28 @@ public class EditorSceneController extends SceneController {
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
-		
-		//carico i dati dal file sull'editor
-		//caricamento dati nel bean ---------
-		FileBean fb = new FileBean();
-		try {
-			fb.setPath(filePath);
-			fb.setKey(key);
-			fb = sm.ff.loadAndDecryptBean(fb, true);
-		}catch(IllegalArgumentException e) {
-			logger.log(Level.SEVERE, BEAN_ERROR);
-			e.printStackTrace();
-		}
-		//------------------------------
+
 		logger.log(Level.INFO, "Carico il file...");
-		editorText.setHtmlText(fb.getData());
+		loadPage();
 	}
-	
-	void setKey(String k) {
-		key = k;
+
+	public void setDate(int y, int m, int d){
+		year = y;
+		month = m;
+		day = d;
 	}
-	
+
+	public void loadPage(){
+		editorText.setHtmlText(sm.loadPage(year, month, day));
+	}
+
 	//salva i dati dall'editor sul file e torna al calendario
 	public void savePage() {
-		sm.savePage(editorText.getHtmlText(), filePath, key); //TODO df.savePage
+		sm.savePage(editorText.getHtmlText(), year, month, day);
 		toCalendar();
 	}
 	
 	public void toCalendar(){
-		sm.toCalendar(diaryPath, key);
+		sm.toCalendar();
 	}
 }
