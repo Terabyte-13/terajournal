@@ -15,13 +15,9 @@ import javafx.stage.Stage;
 public class StartSceneController extends SceneController {
 	
 	@FXML ComboBox<String> diaryPicker;
-
-	MetadataBean mb = new MetadataBean();
 	
 	Logger logger = Logger.getLogger("StartSceneController");
 
-	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean."; 
-	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Start.fxml"));
 
 	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse TODO ?? rivedi sto commento

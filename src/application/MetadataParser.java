@@ -107,12 +107,7 @@ public class MetadataParser {
 			return "notFound";
 		}
 		try {
-			//leggo il file tramite bean ------
-			FileBean fb = new FileBean();
-			fb.setPath(filePath);
-			fb = ff.loadAndDecryptBean(fb, false);
-			//--------------------------------
-			fr = new BufferedReader(new StringReader(fb.getData()));
+			fr = new BufferedReader(new StringReader(ff.loadAndDecrypt(filePath, null, false)));
 			
 			for(int n = 0; n < i; n++) { //vado alla posizione trovata del field
 				fr.readLine();

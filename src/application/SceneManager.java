@@ -1,6 +1,9 @@
 package application;
 
+import application.bean.CreateDiaryBean;
+import application.bean.DateBean;
 import application.bean.DiaryBean;
+import application.bean.PasswordBean;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -67,16 +70,16 @@ public class SceneManager {
     }
 
     void toStart(){
-        switchDiary("", "");//per sicurezza
+        DiaryBean db = new DiaryBean();
+        db.setName("");
+        db.setKey("");
+        switchDiary(db);//per sicurezza
         currentSceneController = new StartSceneController();
         loadScene();
     }
 
     void toEditor(int year, int month, int day){
         EditorSceneController e = new EditorSceneController();
-        //DiaryBean d = df.getDiaryMetadata("");
-        //e.filePath = diaryFolder + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
-        //e.diaryPath = ;
         e.setDate(year, month, day);
         currentSceneController = e;
         loadScene();
@@ -85,7 +88,13 @@ public class SceneManager {
 
     //creazione di un nuovo diario
     public void createDiary(String name, String path, String password, String confirmPassword) {
-        df.createDiary(name, path, password, confirmPassword); //TODO beanizza
+        CreateDiaryBean cd = new CreateDiaryBean();
+        cd.setName(name);
+        cd.setPath(path);
+        cd.setPassword(password);
+        cd.setConfirmPassword(confirmPassword);
+
+        df.createDiaryBean(cd);
         toCalendar();
     }
 
@@ -111,8 +120,11 @@ public class SceneManager {
     }
 
     String loadPage(int year, int month, int day){
-        //TODO beanizza la data
-        FileBean fb = df.loadPage(year, month, day);
+        DateBean db = new DateBean();
+        db.setYear(year);
+        db.setMonth(month);
+        db.setDay(day);
+        FileBean fb = df.loadPageBean(db);
         return fb.getData();
     }
 
@@ -131,11 +143,15 @@ public class SceneManager {
     }
 
     Boolean checkPassword(String password){
-        return df.checkPassword(password); //TODO beanizza
+        PasswordBean pb = new PasswordBean();
+        pb.setPassword(password);
+        return df.checkPasswordBean(pb);
     }
 
     String generateKey(String password){
-        return df.generateKey(password); //TODO beanizza
+        PasswordBean pb = new PasswordBean();
+        pb.setPassword(password);
+        return df.generateKeyBean(pb);
     }
 
     //in comune tra più scene. potrebbe rimanere qui
@@ -143,7 +159,8 @@ public class SceneManager {
     void openDiary(String diaryName){
         DiaryBean d = df.getDiaryMetadata(diaryName);
         String storedHash = d.getPwdHash();
-        switchDiary(diaryName, ""); //imposto il diario, ma non ho ancora la key
+        d.setKey("");
+        switchDiary(d); //imposto il diario, ma non ho ancora la key
         if(storedHash.equals("notFound")){ //se non c'è pwd, vai direttamente al calendario, senza key
             toCalendar();
         } else { //se c'è pwd, vai al password prompt per inserire la pwd e generare una key
@@ -151,18 +168,24 @@ public class SceneManager {
         }
     }
 
-    void switchDiary(String diaryName, String key){
-        df.switchDiary(diaryName, key); //TODO DiaryBean?
+    void switchDiary(DiaryBean db){
+        df.switchDiaryBean(db);
     }
 
     void setKey(String key) {
-        df.setKey(key); //TODO DiaryBean?
+        DiaryBean db = new DiaryBean();
+        db.setKey(key);
+        df.setKeyBean(db);
     }
 
     //per Calendar, potrebbe andare in un controller tutto suo
     //restituisce la lista di giorni che hanno pagina, per un dato mese
     Boolean isPageWritten(int year, int month, int day){
-        return df.isPageWritten(year, month, day); //TODO Beanizza..?
+        DateBean db = new DateBean();
+        db.setYear(year);
+        db.setMonth(month);
+        db.setDay(day);
+        return df.isPageWrittenBean(db);
     }
 
 }
