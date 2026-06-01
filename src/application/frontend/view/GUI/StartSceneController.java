@@ -1,9 +1,6 @@
-package application;
+package application.frontend.view.GUI;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
@@ -20,7 +17,7 @@ public class StartSceneController extends SceneController {
 
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Start.fxml"));
 
-	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse TODO ?? rivedi sto commento
+	public void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse TODO ?? rivedi sto commento
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua

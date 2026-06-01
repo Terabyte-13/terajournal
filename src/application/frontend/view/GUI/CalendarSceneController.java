@@ -1,4 +1,4 @@
-package application;
+package application.frontend.view.GUI;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -31,7 +31,7 @@ public class CalendarSceneController extends SceneController {
 
 	Logger logger = Logger.getLogger("FileManagerDemo");
 	
-	CalendarSceneController(){
+	public CalendarSceneController(){
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
 		logger.log(Level.FINE, "Aperto da {0}", caller);
 	}
@@ -43,7 +43,7 @@ public class CalendarSceneController extends SceneController {
 	//--------------------
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Calendar.fxml"));
-	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
+	public void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua

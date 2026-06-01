@@ -1,5 +1,7 @@
 package application;
 	
+import application.frontend.viewcontroller.CLIManager;
+import application.frontend.viewcontroller.SceneManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -21,9 +23,13 @@ public class Main extends Application {
 					e.printStackTrace();
 				}
 		}else {
-			CLIController cc = new CLIController();
-			cc.start();
-		}
+			try {
+				CLIManager cm = new CLIManager();
+                cm.initAndStart(primaryStage);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
 	}
 	
 	public static void main(String[] args) {

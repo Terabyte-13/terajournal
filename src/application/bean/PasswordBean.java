@@ -19,5 +19,4 @@ public class PasswordBean {
         return password;
     };
 
-    //
 }

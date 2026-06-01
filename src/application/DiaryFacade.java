@@ -1,9 +1,6 @@
 package application;
 
-import application.bean.CreateDiaryBean;
-import application.bean.DateBean;
-import application.bean.DiaryBean;
-import application.bean.PasswordBean;
+import application.bean.*;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -16,60 +13,26 @@ public class DiaryFacade {
 
     public static final String DIARYLIST = "diaryList";
 
-    String currentKey = "";
-    String currentDiaryPath = ""; //path del file metadati
-    String currentDiaryFolder; //path della cartella
-
     FileFacade ff = new FileFacade(); //questo fileFacade deve essere l'unica istanza di fileFacade, altrimenti in modalità demo verranno creati più DB separati
     MetadataParser mp = new MetadataParser();
     Hasher hasher = new Hasher();
 
     Logger logger = Logger.getLogger("diaryFacade");
 
-    DiaryFacade() {
+    public DiaryFacade() {
         mp.setFF(ff);
     }
 
-    void switchDiaryBean(DiaryBean db){
-        switchDiary(db.getName(), db.getKey());
-    }
-
-    void switchDiary(String diaryName, String key){
-        currentDiaryPath = mp.getField(diaryName, DIARYLIST);
-
-        Path p = Paths.get(currentDiaryPath).getParent();
-        if(p != null){
-            currentDiaryFolder = p.toString(); //prendo la directory parente
-        } else {currentDiaryFolder = "";}
-
-        currentKey = key;
-    }
-
-    void setKeyBean(DiaryBean db){
-        currentKey = db.getKey();
-    }
-
-    void setKey(String k){
-        currentKey = k;
-    }
-
-    public void createDiaryBean(CreateDiaryBean cd){
-        createDiary(cd.getName(), cd.getPath(), cd.getPassword(), cd.getConfirmPassword());
+    public DiaryBean createDiaryBean(CreateDiaryBean cd){
+        String k = createDiary(cd.getName(), cd.getPath(), cd.getPassword(), cd.getConfirmPassword());
+        DiaryBean db = new DiaryBean();
+        db.setKey(k);
+        return db; //restituisco la chiave attraverso un diaryBean
     }
 
     //creazione di un nuovo diario
-    public void createDiary(String name, String path, String password, String confirmPassword) {
-        printStatus(); //TODO leva
+    public String createDiary(String name, String path, String password, String confirmPassword) {
         try {
-            if(name.equals("") || path.equals("")) {
-                logger.log(Level.INFO, "Ci sono dei campi vuoti.");
-                return;
-            }
-            if(!password.equals(confirmPassword)) {
-                logger.log(Level.INFO, "password e confirmPassword non combaciano.");
-                return;
-            }
-
             String metadataFilePath = path + File.separator + name + File.separator + name + ".jm";
 
             if(ff.encryptAndSave(metadataFilePath, "", null, false, false) == 1) { //creo directory e file metadati per il diario
@@ -89,12 +52,11 @@ public class DiaryFacade {
                     mp.setField("pwdHash", metadataFilePath, hasher.getHash(password, "SHA-256"));
                 }
 
-                //se e' tutto andato a buon fine, inizializzo e apro il calendario
                 //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
                 if(!password.equals("")) {
-                    switchDiary(name, hasher.getHash(password, "MD5"));
+                    return hasher.getHash(password, "MD5");
                 } else {
-                    switchDiary(name, "");
+                    return "";
                 }
 
 
@@ -103,48 +65,42 @@ public class DiaryFacade {
             logger.log(Level.SEVERE, "Errore nell'impostazione di un bean");
             e.printStackTrace();
         }
-
+        return ""; //TODO temporaneo, leva sti return provenienti da filefacade e usa eccezioni
     }
 
     public void savePage(FileBean fb) {
         //combina i dati in arrivo dalla view con quelli che conosce questa classe (key e path del diario attuale)
-        String p = currentDiaryFolder + fb.getPath();
+        String p = fb.getPath();
         logger.log(Level.INFO, "Salvo la pagina in: " + p);
-        ff.encryptAndSave(p, fb.getData(), currentKey, false, true);
+        ff.encryptAndSave(p, fb.getData(), fb.getKey(), true, true);
     }
 
-    FileBean loadPageBean(DateBean db){
-        return loadPage(db.getYear(), db.getMonth(), db.getDay());
+    public FileBean loadPageBean(FileBean fb) throws Exception {
+        return loadPage(fb.getPath(),fb.getKey());
     }
 
-    FileBean loadPage(int year, int month, int day){
-        String p = currentDiaryFolder + File.separator + year + File.separator + month + File.separator + day + ".html";
+    FileBean loadPage(String path, String key) throws Exception {
         FileBean fb = new FileBean();
-        fb.setData(ff.loadAndDecrypt(p, currentKey, true));
-        fb.setPath(p);
+        fb.setData(ff.loadAndDecrypt(path, key, true));
+        fb.setPath(path);
+        fb.setKey(key);
         return fb;
     }
 
-    void checkForDiaryList(){
+    public void checkForDiaryList(){
         if(Boolean.FALSE.equals(ff.checkForFile(DIARYLIST))) {
             logger.log(Level.INFO, "diaryList non esiste, lo creo.");
-            ff.encryptAndSave("diaryList", "", null, false, false);
+            ff.encryptAndSave("diaryList", "", null, true, false);
         }
     }
 
-    List<String> getDiaryNames(){
+    public List<String> getDiaryNames(){
         return mp.getFieldNames(DIARYLIST);
     }
 
-    DiaryBean getDiaryMetadata(String name){
-        String p = "";
+    public DiaryBean getDiaryMetadata(String name){
+        String p = mp.getField(name, DIARYLIST);
         DiaryBean b = new DiaryBean();
-
-        if(!name.equals("")) {
-            p = mp.getField(name, DIARYLIST);
-        } else { //se l'argomento è vuoto restituisco i metadati del diario attuale
-            p = currentDiaryPath;
-        }
 
         b.setName(mp.getField("name", p));
         b.setFolder(mp.getField("folder", p));
@@ -152,17 +108,17 @@ public class DiaryFacade {
         return b;
     }
 
-    Boolean checkPasswordBean(PasswordBean pb){
-        return checkPassword(pb.getPassword());
+    public Boolean checkPasswordBean(PasswordBean pb, FilePathBean fp){
+        return checkPassword(fp.getPath(), pb.getPassword());
     }
 
-    Boolean checkPassword(String password){
+    Boolean checkPassword(String path, String password){
         String hash = hasher.getHash(password, "SHA-256");
-        String storedHash = mp.getField("pwdHash", currentDiaryPath);
+        String storedHash = mp.getField("pwdHash", path);
         return hash.equals(storedHash); //se gli hash combaciano, la password inserita e' corretta
     }
 
-    String generateKeyBean(PasswordBean pb){
+    public String generateKeyBean(PasswordBean pb){
         return generateKey(pb.getPassword()); //TODO neamozza pure la key?
     }
 
@@ -172,17 +128,13 @@ public class DiaryFacade {
         }else{return "";}
     }
 
-    Boolean isPageWrittenBean(DateBean db){
-        return isPageWritten(db.getYear(), db.getMonth(), db.getDay());
+    public Boolean isPageWrittenBean(DateBean db, FilePathBean fp){
+        return isPageWritten(db.getYear(), db.getMonth(), db.getDay(), fp.getPath());
     }
 
-    Boolean isPageWritten(int year, int month, int day){
-        return ff.checkForFile(currentDiaryFolder + File.separator + year + File.separator + month + File.separator + day + ".html");
+    Boolean isPageWritten(int year, int month, int day, String folder){
+        return ff.checkForFile(folder + File.separator + year + File.separator + month + File.separator + day + ".html");
     }
 
-    void printStatus(){
-        System.out.println("currentDiaryPath: " + currentDiaryPath);
-        System.out.println("currentKey: " + currentKey);
-    }
 }
 

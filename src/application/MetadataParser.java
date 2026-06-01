@@ -124,7 +124,7 @@ public class MetadataParser {
 			//return tok.nextToken();
 			
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "{0}Errore in getField. fieldName:{1}; filePath:{2}; Dati: {3}{4}", new Object[] {ANSI_YELLOW, fieldName, filePath, ff.loadAndDecrypt(filePath, null, false), ANSI_RESET});
+			logger.log(Level.SEVERE, "{0}Errore in getField. fieldName:{1}; filePath:{2}; Dati: {3}{4}", new Object[] {ANSI_YELLOW, fieldName, filePath, "-", ANSI_RESET});
 			e.printStackTrace();
 		}
 	return null;

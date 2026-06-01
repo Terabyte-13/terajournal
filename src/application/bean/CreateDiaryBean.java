@@ -3,13 +3,13 @@ package application.bean;
 public class CreateDiaryBean {
 
     private String name;
-    private String path;
+    private String path; //path della cartella
     private String password;
     private String confirmPassword;
 
     public void setName(String s) {
-        if(s == null) {
-            throw new IllegalArgumentException("Il nome del createDiaryBean è invalido!");
+        if(s == null || s == "") {
+            throw new IllegalArgumentException("Il nome del CreateDiaryBean è invalido!");
         }else {
             name = s;
         }
@@ -22,7 +22,7 @@ public class CreateDiaryBean {
     //------
 
     public void setPath(String p) {
-        if(p == null) {
+        if(p == null || p == "") {
             throw new IllegalArgumentException("Il percorso del CreateDiaryBean è invalido!");
             //TODO incolla controllo valid path
         }else {
@@ -38,7 +38,7 @@ public class CreateDiaryBean {
 
     public void setPassword(String p) {
         if(p == null) { //la password puo essere vuota, ma se qualcosa la imposta a null c'è un problema
-            throw new IllegalArgumentException("Il nome del diaryBean è invalido!");
+            throw new IllegalArgumentException("La password del CreateDiaryBean è invalido!");
         }else {
             password = p;
         }
@@ -51,8 +51,8 @@ public class CreateDiaryBean {
     //------
 
     public void setConfirmPassword(String p) {
-        if(p == null) {
-            throw new IllegalArgumentException("Il nome del diaryBean è invalido!");
+        if(!p.equals(password)) {
+            throw new IllegalArgumentException("ConfirmPassword non coincide con Password nel CreateDiaryBean!");
         }else {
             confirmPassword = p;
         }

@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 public class FileFacade {
 	Cipher c = new Cipher();
 	FileManager fm;
-	Boolean demoMode = false;
+	Boolean demoMode = true;
 	Logger logger = Logger.getLogger("FileFacade");
 
 	FileFacade(){
@@ -61,7 +61,7 @@ public class FileFacade {
 	//------------------------------------------------------------------------------------------------------------------------------------
 	
 	//carica i dati del file specificato dal bean sulla variabile Data del bean, e lo restituisce
-	FileBean loadAndDecryptBean(FileBean fileBean, Boolean decrypt) { //TODO beanizza la bool
+	FileBean loadAndDecryptBean(FileBean fileBean, Boolean decrypt) throws Exception { //TODO beanizza la bool
 		//Estrazione dati dal bean ----------
 		String inputPath = fileBean.getPath();
 		String key = fileBean.getKey();
@@ -70,7 +70,7 @@ public class FileFacade {
 		return fileBean;
 	}
 	
-	String loadAndDecrypt(String inputPath, String key, Boolean decrypt) {
+	String loadAndDecrypt(String inputPath, String key, Boolean decrypt) throws Exception {
 		String decryptedData;
 		
 		if(key != null && decrypt) {

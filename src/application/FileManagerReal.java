@@ -70,7 +70,7 @@ public class FileManagerReal extends FileManager {
 		return 1;
 	}
 	
-	String load(String inputPath) {
+	String load(String inputPath) throws Exception {
 		File inputFile;
 		Scanner reader;
 		String data = "";

@@ -1,4 +1,4 @@
-package application;
+package application.frontend.view.GUI;
 
 import java.io.File;
 
@@ -25,7 +25,7 @@ public class NewDiarySceneController extends SceneController {
 	Logger logger = Logger.getLogger("NewDiarySceneController");
 	
 
-	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
+	public void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua TODO rivedi questo

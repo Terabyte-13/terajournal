@@ -1,10 +1,10 @@
-package application;
+package application.frontend.view.GUI;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
-import java.util.logging.Level;
+
 import java.util.logging.Logger;
 
 public class PasswordPromptSceneController extends SceneController {
@@ -19,13 +19,13 @@ public class PasswordPromptSceneController extends SceneController {
 	
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/PasswordPrompt.fxml"));
-	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
+	public void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
 	}
 
-	void setStoredHash(String s){
+	public void setStoredHash(String s){
 		storedHash = s;
 	}
 

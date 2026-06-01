@@ -11,5 +11,7 @@ module terajournal {
     //requires org.junit.platform.launcher;
 	
 	opens application to javafx.graphics, javafx.fxml;
+	opens application.frontend.viewcontroller to javafx.fxml, javafx.graphics;
+	opens application.frontend.view.GUI to javafx.fxml, javafx.graphics;
 	//opens tests to org.junit.platform.commons;
 }

@@ -1,7 +1,8 @@
-package application;
+package application.frontend.view.GUI;
 
 import java.io.IOException;
 
+import application.frontend.viewcontroller.SceneManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,7 +19,7 @@ public abstract class SceneController {
 	Scene scene;
 	Parent root;
 	Logger l = Logger.getLogger("SceneController");
-	SceneManager sm;
+	public SceneManager sm;
 
 	void setSm(SceneManager sceneManager){
 		sm = sceneManager;
@@ -28,7 +29,7 @@ public abstract class SceneController {
 		try{
 			//inizializzazione interfaccia: prepara variabili, carica CSS e carica la scena Main ---------------------
 			scene = new Scene(sceneLoader.load());
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm()); //TODO CSS cambiabile, in base al tema scelto
+			//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm()); //TODO posso levarlo? il css se lo carica da solo
 			stage.setScene(scene);
 			//titolo e icona -------------------------------------------------
 			stage.setTitle("terajournal"); //TODO titolo in base al documento aperto
@@ -42,10 +43,10 @@ public abstract class SceneController {
 		}
 	}
 
-	abstract void loadScene(Stage stage);
+	public abstract void loadScene(Stage stage);
 	
-	SceneController() { //costruttore. parte quando viene istanziata la classe
-		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
+	SceneController() {
+		String caller = Thread.currentThread().getStackTrace()[2].getClassName(); //TODO leva
 		l.log(Level.FINE, "Nuova istanza creata da {0}: {1}", new Object[]{caller, this});
 	}
 	

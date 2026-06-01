@@ -100,7 +100,7 @@ public class FileManagerDemo extends FileManager {
 
 
 	@Override
-	String load(String inputPath) {
+	String load(String inputPath) throws Exception {
 		printFileStructure();
 		List<String> dirs = parsePath(inputPath);
 		ResultSet results = null;

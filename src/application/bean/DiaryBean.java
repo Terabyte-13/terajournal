@@ -5,7 +5,7 @@ public class DiaryBean {
     //TODO controlli sintattici
 
     private String name;
-    private String folder;
+    private String folder; //TODO cambia nome, è il percorso del file .jm
     private String pwdHash;
     private String key;
 

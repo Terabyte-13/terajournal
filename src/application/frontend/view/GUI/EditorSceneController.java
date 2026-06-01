@@ -1,9 +1,11 @@
-package application;
+package application.frontend.view.GUI;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.Stage;
+
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +21,7 @@ public class EditorSceneController extends SceneController {
 	@FXML HTMLEditor editorText;
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/fxml/Editor.fxml"));
-	void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
+	public void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
 		logger.log(Level.INFO, "Carico l'editor...");
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
@@ -36,7 +38,11 @@ public class EditorSceneController extends SceneController {
 	}
 
 	public void loadPage(){
-		editorText.setHtmlText(sm.loadPage(year, month, day));
+		try {
+			editorText.setHtmlText(sm.loadPage(year, month, day));
+		} catch (Exception e) {
+			editorText.setHtmlText("");
+		}
 	}
 
 	//salva i dati dall'editor sul file e torna al calendario
