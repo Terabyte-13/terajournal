@@ -7,11 +7,6 @@
 	-fx-graphic: url("file:./src/resources/icons/page-plus.png")
 }
 
-/* #newDiaryButton:focused{
-	-fx-border-color: blue;
-	;
-}
-*/
 #newDiaryButton:pressed{
 	-fx-border-color: yellow;
 }

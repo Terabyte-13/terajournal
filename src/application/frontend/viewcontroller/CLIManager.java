@@ -1,7 +1,9 @@
 package application.frontend.viewcontroller;
 
-import application.frontend.view.CLI.*;
+import application.frontend.view.cli.*;
 import javafx.stage.Stage;
+
+import static application.frontend.view.cli.Colors.*;
 
 public class CLIManager extends UIManager{
 
@@ -39,6 +41,13 @@ public class CLIManager extends UIManager{
     public void toEditor(int year, int month, int day){
         currentView = new EditorViewCLI(year, month, day);
         loadScene();
+    }
+
+    public void toError(Exception e){
+        System.out.println(ANSI_RED_BG + ANSI_BLACK + "  Errore!  " + ANSI_RESET);
+        System.out.println(ANSI_WHITE_BG + ANSI_BLACK + e.getClass().getSimpleName() + ANSI_RESET);
+        System.out.println(ANSI_WHITE_BG + ANSI_BLACK + e.getMessage() + ANSI_RESET);
+        System.exit(0);
     }
 
 }

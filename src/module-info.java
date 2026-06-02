@@ -12,6 +12,9 @@ module terajournal {
 	
 	opens application to javafx.graphics, javafx.fxml;
 	opens application.frontend.viewcontroller to javafx.fxml, javafx.graphics;
-	opens application.frontend.view.GUI to javafx.fxml, javafx.graphics;
+	opens application.frontend.view.gui to javafx.fxml, javafx.graphics;
+	opens application.bean to javafx.fxml, javafx.graphics;
+	opens application.backend.file to javafx.fxml, javafx.graphics;
+	opens application.backend to javafx.fxml, javafx.graphics;
 	//opens tests to org.junit.platform.commons;
 }

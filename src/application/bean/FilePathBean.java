@@ -1,6 +1,5 @@
 package application.bean;
 
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,7 +8,7 @@ public class FilePathBean {
     Logger logger = Logger.getLogger("FilePathBean");
 
     public void setPath(String p){
-        if(path == null){
+        if(p == null){
             logger.log(Level.WARNING, "Un FilePathBean è stato impostato a NULL!");
         }
         path = p;
@@ -17,5 +16,5 @@ public class FilePathBean {
 
     public String getPath(){
         return path;
-    };
+    }
 }

@@ -1,7 +1,7 @@
 package application;
 	
 import application.frontend.viewcontroller.CLIManager;
-import application.frontend.viewcontroller.SceneManager;
+import application.frontend.viewcontroller.GUIManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -10,13 +10,13 @@ esegui "xhost +si:localuser:$(whoami)" nel terminale*/
 
 public class Main extends Application {
 	
-	Boolean useCLI = false;
+	Boolean useCLI = true;
 
 	@Override
 	public void start(Stage primaryStage) {
 		if(Boolean.FALSE.equals(useCLI)) {
 			try {
-				SceneManager sm = new SceneManager();
+				GUIManager sm = new GUIManager();
 				sm.initAndStart(primaryStage);
 
 				} catch(Exception e) {

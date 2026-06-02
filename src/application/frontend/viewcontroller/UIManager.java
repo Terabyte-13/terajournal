@@ -2,15 +2,19 @@ package application.frontend.viewcontroller;
 
 //TODO leva sto commento: nel diagramma metti questa astratta come quadratino accanto a GUIManager che la implementa
 
-import application.DiaryFacade;
-import application.FileBean;
+import application.backend.DiaryFacade;
+import application.backend.MetadataParser;
+import application.bean.FileBean;
 import application.bean.*;
+import application.exception.CreateDiaryException;
+import application.exception.FileFacadeException;
+import application.exception.MetadataParserException;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.file.FileAlreadyExistsException;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +49,7 @@ public abstract class UIManager {
 
     abstract public void toEditor(int year, int month, int day);
 
+    abstract public void toError(Exception e);
 
     //creazione di un nuovo diario
     public void createDiary(String name, String path, String password, String confirmPassword) {
@@ -64,7 +69,11 @@ public abstract class UIManager {
         cd.setPassword(password);
         cd.setConfirmPassword(confirmPassword);
 
-        String k = df.createDiaryBean(cd).getKey();
+        try {
+            String k = df.createDiaryBean(cd).getKey();
+        } catch (CreateDiaryException e) {
+            toError(e);
+        }
         openDiary(name); //i dati inseriti come arogmenti sono già stati controllati dal CreateDiaryBean quindi li do per buoni e li uso
     }
 
@@ -83,28 +92,47 @@ public abstract class UIManager {
                 logger.log(Level.SEVERE, BEAN_ERROR);
                 e.printStackTrace();
             }
-            df.savePage(fb);
+            try {
+                df.savePage(fb);
+            } catch (FileFacadeException e) {
+                toError(e);
+            }
             //------------------------------
         }
         else {logger.log(Level.INFO, "Non c'è nulla da salvare");}
     }
 
-    public String loadPage(int year, int month, int day) throws Exception {
+    public String loadPage(int year, int month, int day) {
         FileBean fb = new FileBean();
         fb.setPath(currentDiaryFolder + File.separator + year + File.separator + month + File.separator + day + ".html");
         fb.setKey(currentKey);
-        fb = df.loadPageBean(fb);
+
+        try {
+            fb = df.loadPageBean(fb);
+        } catch (FileFacadeException e) {
+            toError(e);
+        }
+
         return fb.getData();
     }
 
     //Crea il file diaryList se non c'è
     public void checkForDiaryList(){
-        df.checkForDiaryList();
+        try {
+            df.checkForDiaryList();
+        } catch (FileFacadeException e) {
+            toError(e);
+        }
     }
 
     //Restituisce i nomi dei diari in diaryList
     public List<String> getDiaryNames(){
-        return df.getDiaryNames(); //TODO beanizza?
+        try{
+            return df.getDiaryNames();
+        } catch (MetadataParserException e) {
+            toError(e);
+            return Collections.emptyList();
+        }
     }
 
     public String getCurrentDiaryName(){
@@ -116,7 +144,12 @@ public abstract class UIManager {
         pb.setPassword(password);
         FilePathBean fp = new FilePathBean();
         fp.setPath(currentDiaryPath);
-        return df.checkPasswordBean(pb, fp);
+        try {
+            return df.checkPasswordBean(pb, fp);
+        } catch (MetadataParserException e) {
+            toError(e);
+            return null;
+        }
     }
 
     public String generateKey(String password){
@@ -127,7 +160,12 @@ public abstract class UIManager {
 
     //cambia il currentDiary, richiede inserimento password se necessario, va al calendario
     public void openDiary(String diaryName){
-        DiaryBean d = df.getDiaryMetadata(diaryName);
+        DiaryBean d = null;
+        try {
+            d = df.getDiaryMetadata(diaryName);
+        } catch (MetadataParserException e) {
+            toError(e);
+        }
         String storedHash = d.getPwdHash();
         switchDiary(d.getName(),d.getFolder(),""); //imposto il diario, ma non ho ancora la key
         if(storedHash.equals("notFound")){ //se non c'è pwd, vai direttamente al calendario, senza key
@@ -141,7 +179,7 @@ public abstract class UIManager {
         if(diaryPath != null){
             currentDiaryPath = diaryPath + File.separator + diaryName + ".jm";
             currentDiaryFolder = diaryPath;
-        } else {currentDiaryFolder = "";} //TODO vedi sta cosa
+        } else {currentDiaryFolder = "";}
 
         currentKey = key;
     }

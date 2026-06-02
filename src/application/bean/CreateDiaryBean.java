@@ -8,7 +8,7 @@ public class CreateDiaryBean {
     private String confirmPassword;
 
     public void setName(String s) {
-        if(s == null || s == "") {
+        if(s == null || s.equals("")) {
             throw new IllegalArgumentException("Il nome del CreateDiaryBean è invalido!");
         }else {
             name = s;
@@ -22,7 +22,7 @@ public class CreateDiaryBean {
     //------
 
     public void setPath(String p) {
-        if(p == null || p == "") {
+        if(p == null || p.equals("")) {
             throw new IllegalArgumentException("Il percorso del CreateDiaryBean è invalido!");
             //TODO incolla controllo valid path
         }else {
