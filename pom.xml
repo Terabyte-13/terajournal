@@ -5,10 +5,10 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>terajournal</name>
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
+    <sourceDirectory>src</sourceDirectory>
     <resources>
       <resource>
-        <directory>src/main/resources</directory>
+        <directory>src</directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>
