@@ -38,7 +38,7 @@ public class Cipher {
 
 		if (direction == 0) {
 			// cifra: porto i byte in forma di una stringa da scrivere nel file
-			return Base64.getEncoder().encodeToString(inputBytes);
+			return Base64.getMimeEncoder().encodeToString(inputBytes);
 		} else {
 			// decifra: riporto i byte in testo leggibile nell'editor
 			return new String(inputBytes, StandardCharsets.UTF_8);
