@@ -31,7 +31,8 @@ public abstract class UIManager {
     String currentDiaryPath = ""; //path del file metadati TODO cambia nome
     String currentDiaryFolder; //path della cartella
 
-    Logger logger;
+    Logger logger = Logger.getLogger("UIManager");
+
     public static final String BEAN_ERROR = "Errore nell'impostazione di un bean.";
 
     public abstract void initAndStart(Stage primaryStage) throws IOException;
