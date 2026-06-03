@@ -5,7 +5,9 @@ import com.tera13.application.bean.FileBean;
 import com.tera13.application.exception.FileFacadeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +17,10 @@ class DiaryFacadeTest {
 
     private DiaryFacade df;
     Logger logger = Logger.getLogger("DiaryFacadeTest");
+
+    @TempDir //cartella temporanea per i test
+    Path tempDir;
+
 
     @BeforeEach
     void setUp(){
@@ -28,9 +34,11 @@ class DiaryFacadeTest {
         String data2 = "";
 
         FileBean fb = new FileBean();
+        Path tempFile = tempDir.resolve("test_diary.txt");
+
         fb.setData(data);
         fb.setKey("123abc");
-        fb.setPath("/home/giacomo-framework/Documenti/terajournal/test.txt");
+        fb.setPath(tempFile.toAbsolutePath().toString());
 
         try {
             df.savePage(fb);

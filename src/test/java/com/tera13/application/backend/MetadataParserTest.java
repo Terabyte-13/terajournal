@@ -6,7 +6,9 @@ import com.tera13.application.exception.FileFacadeException;
 import com.tera13.application.exception.MetadataParserException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +20,9 @@ class MetadataParserTest {
     private FileFacade ff;
     Logger logger = Logger.getLogger("MetadataParserTest");
 
+    @TempDir //cartella temporanea per i test
+    Path tempDir;
+
     @BeforeEach
     void setUp(){
         mp = new MetadataParser();
@@ -27,9 +32,11 @@ class MetadataParserTest {
 
     @Test
     void saveAndLoadField() {
-        String path = "/home/giacomo-framework/Documenti/terajournal/test.jm";
+        Path tempFile = tempDir.resolve("test_metadata.jm");
+        String path = tempFile.toAbsolutePath().toString();
         String s = "a";
         String s2 = "b";
+
 
         try { //creo file
             ff.encryptAndSave(path, "", "", true, false);
