@@ -19,7 +19,7 @@
          <left>
             <HBox alignment="BOTTOM_LEFT" prefHeight="80.0" prefWidth="412.0" spacing="6.0" BorderPane.alignment="CENTER">
                <children>
-                  <ComboBox fx:id="diaryPicker" disable="true" onAction="#onDiaryPickerPress" prefHeight="40.0" prefWidth="240.0" promptText="Scegli un diario..." />
+                  <ComboBox fx:id="diaryPicker" onAction="#onDiaryPickerPress" prefHeight="40.0" prefWidth="240.0" promptText="Scegli un diario..." />
                   <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="95.0" text=". . ." />
                </children>
                <padding>

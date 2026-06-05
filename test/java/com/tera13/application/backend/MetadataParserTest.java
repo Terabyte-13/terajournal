@@ -39,7 +39,7 @@ class MetadataParserTest {
 
 
         try { //creo file
-            ff.encryptAndSave(path, "", "", true, false);
+            ff.encryptAndSave(path, "", "", false);
         } catch (FileFacadeException e) {
             logger.log(Level.SEVERE, "Eccezione in MetadataParserTest");
             e.printStackTrace();

@@ -23,7 +23,7 @@ public class NewDiaryViewCLI extends ViewCLI{
             else System.out.println(ANSI_YELLOW + "Password e conferma password non combaciano!" + ANSI_RESET);
         }
 
-        sm.createDiary(name, path, password, confirmPassword);
+        getSm().createDiary(name, path, password, confirmPassword);
 
     }
 }

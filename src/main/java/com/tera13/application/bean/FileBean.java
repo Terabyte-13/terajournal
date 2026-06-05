@@ -1,11 +1,15 @@
 package com.tera13.application.bean;
 
+import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class FileBean {
 	private String data;
 	private String path;
 	private String key;
 
-	
+	Logger logger = Logger.getLogger("FileBean");
 	
 	public void setData(String s) {
 		if(s == null) {
@@ -22,6 +26,9 @@ public class FileBean {
 	//-----------------------------
 	
 	public void setPath(String s) {
+		if(s == null){
+			logger.log(Level.WARNING, "Un FileBean ha percorso NULL!");
+		}
 		path = s;
 	}
 	

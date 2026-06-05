@@ -2,8 +2,6 @@ package com.tera13.application.bean;
 
 public class DiaryBean {
 
-    //TODO controlli sintattici
-
     private String name;
     private String folder; //il percorso del file .jm
     private String pwdHash;
@@ -24,7 +22,7 @@ public class DiaryBean {
 //------
 
     public void setFolder(String s) {
-        if(s == null) { //TODO controllo valid path
+        if(s == null) {
             throw new IllegalArgumentException("Il percorso del diaryBean è invalido!");
         }else {
             folder = s;

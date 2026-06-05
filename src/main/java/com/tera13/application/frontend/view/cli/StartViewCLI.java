@@ -19,7 +19,7 @@ public class StartViewCLI extends ViewCLI {
 
             switch (choice) {
                 case 1 -> diaryPicker();
-                case 2 -> sm.toNewDiary();
+                case 2 -> getSm().toNewDiary();
                 case 3 -> {
                     System.out.println(ANSI_CYAN + "Arrivederci!" + ANSI_RESET);
                     stay = false;
@@ -33,12 +33,12 @@ public class StartViewCLI extends ViewCLI {
     void diaryPicker(){
         System.out.println(ANSI_CYAN_BG + ANSI_BLACK + "   Seleziona il diario...   " + ANSI_RESET);
 
-        List<String> diaries = sm.getDiaryNames(); //TODO beanizza?
+        List<String> diaries = getSm().getDiaryNames();
         int choice = s.getChoice(diaries.toArray(new String[0])); //mando la lista di stringhe come argomenti
 
         String d = diaries.get(choice-1);
         System.out.println(ANSI_YELLOW + "Apro il diario: " + d +  ANSI_RESET);
-        sm.openDiary(d);
+        getSm().openDiary(d);
     }
 
 }

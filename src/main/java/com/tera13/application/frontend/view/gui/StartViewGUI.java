@@ -12,15 +12,13 @@ import javafx.stage.Stage;
 public class StartViewGUI extends ViewGUI {
 	
 	@FXML ComboBox<String> diaryPicker;
-	
-	Logger logger = Logger.getLogger("StartSceneController");
 
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/main/resources/fxml/Start.fxml"));
 
-	public void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse TODO ?? rivedi sto commento
+	public void loadScene(Stage stage) {
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
-		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
+		currentStage = stage;
 		
 		//se non e' gia' presente, crea il file diaryList ------
 		sm.checkForDiaryList();

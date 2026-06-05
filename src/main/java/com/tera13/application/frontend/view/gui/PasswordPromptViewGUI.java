@@ -19,10 +19,10 @@ public class PasswordPromptViewGUI extends ViewGUI {
 	
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/main/resources/fxml/PasswordPrompt.fxml"));
-	public void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
+	public void loadScene(Stage stage) {
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
-		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
+		currentStage = stage;
 	}
 
 	public void setStoredHash(String s){

@@ -1,5 +1,10 @@
 package com.tera13.application.bean;
 
+import com.tera13.application.exception.CreateDiaryException;
+
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
+
 public class CreateDiaryBean {
 
     private String name;
@@ -7,9 +12,9 @@ public class CreateDiaryBean {
     private String password;
     private String confirmPassword;
 
-    public void setName(String s) {
+    public void setName(String s) throws CreateDiaryException {
         if(s == null || s.equals("")) {
-            throw new IllegalArgumentException("Il nome del CreateDiaryBean è invalido!");
+            throw new CreateDiaryException("Il nome del CreateDiaryBean è invalido!");
         }else {
             name = s;
         }
@@ -21,11 +26,15 @@ public class CreateDiaryBean {
 
     //------
 
-    public void setPath(String p) {
+    public void setPath(String p) throws CreateDiaryException {
         if(p == null || p.equals("")) {
-            throw new IllegalArgumentException("Il percorso del CreateDiaryBean è invalido!");
-            //TODO incolla controllo valid path
+            throw new CreateDiaryException("Il percorso del CreateDiaryBean è invalido!");
         }else {
+            try{ //controllo se il path è invalido per qualche altro motivo
+                Paths.get(p);
+            }catch(InvalidPathException e){
+                throw new CreateDiaryException("Il percorso del CreateDiaryBean è invalido!");
+            }
             path = p;
         }
     }
@@ -36,9 +45,9 @@ public class CreateDiaryBean {
 
     //------
 
-    public void setPassword(String p) {
+    public void setPassword(String p) throws CreateDiaryException {
         if(p == null) { //la password puo essere vuota, ma se qualcosa la imposta a null c'è un problema
-            throw new IllegalArgumentException("La password del CreateDiaryBean è invalido!");
+            throw new CreateDiaryException("La password del CreateDiaryBean è invalido!");
         }else {
             password = p;
         }
@@ -50,9 +59,9 @@ public class CreateDiaryBean {
 
     //------
 
-    public void setConfirmPassword(String p) {
+    public void setConfirmPassword(String p) throws CreateDiaryException {
         if(!p.equals(password)) {
-            throw new IllegalArgumentException("ConfirmPassword non coincide con Password nel CreateDiaryBean!");
+            throw new CreateDiaryException("ConfirmPassword non coincide con Password nel CreateDiaryBean!");
         }else {
             confirmPassword = p;
         }

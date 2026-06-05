@@ -17,32 +17,32 @@ import java.util.logging.Logger;
 
 
 public class MetadataParser {
-	
+
 	public static final String ANSI_YELLOW = "\u001B[33m";
 	public static final String ANSI_CYAN = "\u001B[36m";
 	public static final String ANSI_RESET = "\u001B[0m";
-	
+
 	BufferedReader fr;
 	StringTokenizer tok;
 	FileFacade ff;
 
 	String lineSeparator = "\n";
 	String tokSeparator = ":";
-	
+
 	Logger logger = Logger.getLogger("MetadataParser");
-	
+
 	MetadataParser(){
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
 		logger.log(Level.FINE, "Creato da {0}.", caller);
 	}
-	
+
 	void setFF(FileFacade newff) {
 		ff = newff;
 		logger.log(Level.INFO, "FileFacade impostato: {0}", ff);
 	}
-	
+
 	//------------------------------------------------------------------------------------------------------------------------------------
-	
+
 	//restituisce il numero della riga in cui si trova il field specificato
 	public int findField(String fieldName, String filePath) throws MetadataParserException{
 		String line = "";
@@ -82,13 +82,13 @@ public class MetadataParser {
 	logger.log(Level.SEVERE, "{0}findField: field non trovata.{1}", new Object[] {ANSI_YELLOW, ANSI_RESET});
 	return -1;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------------------------------------------
 
-	
+
 	public String getField(String fieldName, String filePath) throws MetadataParserException {
 		String output = "";
-		
+
 		int i = findField(fieldName, filePath);
 		if(i < 0) {
 			logger.log(Level.SEVERE, "{0}field {1} non trovata in {2}.{3}", new Object[] {ANSI_YELLOW, fieldName, filePath, ANSI_RESET});
@@ -112,15 +112,13 @@ public class MetadataParser {
 			t = tok.nextToken(); //avanzo al secondo token
 			logger.log(Level.INFO, "leggo token:{0}", t);
 			return t;
-			//tok.nextToken(); //avanzo al secondo token TODO leva la roba sopra e rimetti questo
-			//return tok.nextToken();
-			
+
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "{0}Errore in getField. fieldName:{1}; filePath:{2}; Dati: {3}{4}", new Object[] {ANSI_YELLOW, fieldName, filePath, "-", ANSI_RESET});
 			throw new MetadataParserException(e.getMessage(), e.getCause());
 		}
 	}
-	
+
 	//------------------------------------------------------------------------------------------------------------------------------------
 
 	public void setField(String fieldName, String filePath, String newValue) throws MetadataParserException {
@@ -143,12 +141,12 @@ public class MetadataParser {
 		if(data.charAt(0) == lineSeparator.charAt(0)) {data = data.substring(1);}
 		logger.log(Level.INFO, "dati setField:[{0}]", data);
         try {
-            ff.encryptAndSave(filePath, data, null, true, false);
+            ff.encryptAndSave(filePath, data, null, false);
         } catch (FileFacadeException e) {
 			throw new MetadataParserException(e.getMessage(),e.getCause());
         }
     }
-	
+
 	//------------------------------------------------------------------------------------------------------------------------------------
 
 	public List<String> getFieldNames(String filePath) throws MetadataParserException{
@@ -160,7 +158,7 @@ public class MetadataParser {
 		}
 		return output;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------------------------------------------
 
 	public List<String> fileToList(String filePath) throws MetadataParserException {
@@ -174,7 +172,7 @@ public class MetadataParser {
         if(data != null) {output = new ArrayList<>(Arrays.asList(data.split(lineSeparator)));}
 		return output;
 	}
-	
+
 	//------------------------------------------------------------------------------------------------------------------------------------
-	
+
 }

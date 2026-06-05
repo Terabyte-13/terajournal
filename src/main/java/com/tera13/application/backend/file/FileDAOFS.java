@@ -17,7 +17,7 @@ public class FileDAOFS extends FileDAO {
 	Logger logger = Logger.getLogger("Hasher");
 	StringBuilder bui = new StringBuilder();
 
-	int save(String data, String outputPath, String fileName, Boolean confirmOverwrite) throws IOException{
+	int save(String data, String outputPath, String fileName) throws IOException{
 		// creazione cartelle e file ------------------------------------------------------------------------
 		if(!outputPath.equals("")) {
 			outputFile = new File(outputPath); //directory
@@ -28,11 +28,8 @@ public class FileDAOFS extends FileDAO {
 		}
 		//controllo se il file esiste già
 		//			 vv  uso questo perchè restituisce false anche se OutputFile.exists() restituisse null.
-		if(Boolean.FALSE.equals(outputFile.exists()) || Boolean.TRUE.equals(confirmOverwrite)) {
-			outputFile.createNewFile();
+		if(outputFile.createNewFile()) {
 			logger.log(Level.INFO, "File creato: {0}", outputFile.getName());
-		} else { // popup file già esistente --------------------------------------------------------------
-
 		}
 		
 		//creando il writer fra le parentesi del try, viene chiuso il writer automaticamente in caso di eccezione

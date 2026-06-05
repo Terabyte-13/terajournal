@@ -24,7 +24,7 @@ public class Cipher {
 			inputBytes = input.getBytes(StandardCharsets.UTF_8);
 		} else {
 			// decifra: da byte base64 a byte cifrati (mimedecoder gestisce i caratteri speciali html senza dare problemi)
-			inputBytes = Base64.getMimeDecoder().decode(input.trim());;
+			inputBytes = Base64.getMimeDecoder().decode(input.trim());
 		}
 
 		for (int i = 0; i < inputBytes.length; i++) {

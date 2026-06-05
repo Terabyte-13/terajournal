@@ -27,7 +27,7 @@ public class DateBean {
             month = m;
         } else {
             logger.log(Level.SEVERE, "DateBean ha ricevuto un mese invalido! ({0})", m);
-            //TODO eccezione
+            throw new IllegalArgumentException("Mese invalido!");
         }
     }
 
@@ -42,8 +42,8 @@ public class DateBean {
         if(d > 0 && d <= daysInMonth){
             day = d;
         } else {
-            logger.log(Level.SEVERE, "DateBean ha ricevuto un giorno invalido! {0} nel mese {1}. \nRicorda di impostare prima l'anno e il mese!",new Object[]{d, month});
-            //TODO eccezione
+            logger.log(Level.SEVERE, "DateBean ha ricevuto un giorno invalido! {0} nel mese {1}. \nRicorda di impostare prima l anno e il mese!",new Object[]{d, month});
+            throw new IllegalArgumentException("Giorno invalido!");
         }
     }
 

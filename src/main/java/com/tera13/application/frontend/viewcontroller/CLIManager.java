@@ -14,7 +14,7 @@ public class CLIManager extends UIManager{
     }
 
     public void loadScene(){
-        currentView.sm = this;
+        currentView.setSm(this);
         currentView.show();
     }
 

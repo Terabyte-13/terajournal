@@ -14,6 +14,8 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,24 +45,26 @@ public class CalendarViewGUI extends ViewGUI {
 	//--------------------
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/main/resources/fxml/Calendar.fxml"));
-	public void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
+	public void loadScene(Stage stage) {
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
-		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua
+		currentStage = stage;
 
-		//populateDiaryList();
+		populateDiaryList();
 
-		diaryPicker.setValue(sm.getCurrentDiaryName()); //imposto sull'UI il nome del diario attuale
-		
+		String dn = sm.getCurrentDiaryName();
+		diaryPicker.setValue(dn); //imposto sull'UI il nome del diario attuale
+		stage.setTitle(dn);
+
 		updateCalendar();
 	}
 	
 	//non va TODO df.getDiaryList
 	void populateDiaryList() {
-		//List<String> diaries = sm.mp.getFieldNames("diaryList");
-		//for(int i = 0; i < diaries.size(); i++) {
-			//diaryPicker .getItems().add(diaries.get(i));
-		//}
+		List<String> diaries = sm.getDiaryNames();
+		for(int i = 0; i < diaries.size(); i++) {
+			diaryPicker .getItems().add(diaries.get(i));
+		}
 	}
 
 	//aggiunge programmaticamente i tasti dei giorni del calendario
@@ -114,15 +118,10 @@ public class CalendarViewGUI extends ViewGUI {
 		sm.toEditor(year, month, selectedDay);
 	}
 	
-	//prendo da diaryList il filepath del diario selezionato TODO leva?
-	public void onDiaryPickerPress(ActionEvent event) { //viene chiamato subito al partire della scena per qualche motivo
-		/*
+	//prendo da diaryList il filepath del diario selezionato
+	public void onDiaryPickerPress(ActionEvent event) {
 		String selection = diaryPicker.getValue();
-		
-		Path p = Paths.get(mp.getField(selection, "diaryList"));
-		System.out.printf("path: %s, cartella contenitore: %s\n", p, p.getParent());
-		
-		toPasswordPrompt(p.toString());*/
+		sm.openDiary(selection);
 	}
 	
 	public void jumpToDate(ActionEvent event) {

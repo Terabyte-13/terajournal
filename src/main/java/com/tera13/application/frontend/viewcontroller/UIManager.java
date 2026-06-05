@@ -63,13 +63,13 @@ public abstract class UIManager {
             return;
         }
 
-        CreateDiaryBean cd = new CreateDiaryBean();
-        cd.setName(name);
-        cd.setPath(path);
-        cd.setPassword(password);
-        cd.setConfirmPassword(confirmPassword);
+            CreateDiaryBean cd = new CreateDiaryBean();
 
         try {
+            cd.setName(name);
+            cd.setPath(path);
+            cd.setPassword(password);
+            cd.setConfirmPassword(confirmPassword);
             String k = df.createDiaryBean(cd).getKey();
         } catch (CreateDiaryException e) {
             toError(e);
@@ -141,7 +141,11 @@ public abstract class UIManager {
 
     public Boolean checkPassword(String password){
         PasswordBean pb = new PasswordBean();
-        pb.setPassword(password);
+        try {
+            pb.setPassword(password);
+        } catch (IllegalArgumentException e) {
+            toError(e);
+        }
         FilePathBean fp = new FilePathBean();
         fp.setPath(currentDiaryPath);
         try {
@@ -154,7 +158,11 @@ public abstract class UIManager {
 
     public String generateKey(String password){
         PasswordBean pb = new PasswordBean();
-        pb.setPassword(password);
+        try {
+            pb.setPassword(password);
+        } catch (IllegalArgumentException e) {
+            toError(e);
+        }
         return df.generateKeyBean(pb);
     }
 
@@ -188,12 +196,16 @@ public abstract class UIManager {
         currentKey = key;
     }
 
-    //restituisce la lista di giorni che hanno pagina, per un dato mese
+    //restituisce true se il giorno specificato ha una pagina di diario scritta
     public Boolean isPageWritten(int year, int month, int day){
         DateBean db = new DateBean();
-        db.setYear(year);
-        db.setMonth(month);
-        db.setDay(day);
+        try{
+            db.setYear(year);
+            db.setMonth(month);
+            db.setDay(day);
+        }catch(IllegalArgumentException e){
+            toError(e);
+        }
         FilePathBean fp = new FilePathBean();
         fp.setPath(currentDiaryFolder);
         return df.isPageWrittenBean(db, fp);

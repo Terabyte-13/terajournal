@@ -25,10 +25,10 @@ public class NewDiaryViewGUI extends ViewGUI {
 	Logger logger = Logger.getLogger("NewDiarySceneController");
 	
 
-	public void loadScene(Stage stage) { //per passare la variabile sceneLoader alla superclasse
+	public void loadScene(Stage stage) {
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
-		currentStage = stage; //immagazzino lo stage passato dalla scena precedente, per poterlo utilizzare qua TODO rivedi questo
+		currentStage = stage;
 	}
 	
 	public void toStart() {

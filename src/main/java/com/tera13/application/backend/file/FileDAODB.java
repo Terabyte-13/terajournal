@@ -39,7 +39,7 @@ public class FileDAODB extends FileDAO {
 	}
 	
 	@Override
-	int save(String data, String outputPath, String fileName, Boolean confirmOverwrite) throws IOException {
+	int save(String data, String outputPath, String fileName) throws IOException {
 		int parentId = 0; 
 		List<String> dirs = parsePath(outputPath);
 
@@ -132,7 +132,7 @@ public class FileDAODB extends FileDAO {
 		return bui.toString();
 			
 		}catch(SQLException e) {
-			logger.log(Level.INFO, "DB: Il file esiste, ma c'è stato un errore nella lettura: {0}", inputPath);
+			logger.log(Level.INFO, "DB: Il file esiste, ma c è stato un errore nella lettura: {0}", inputPath);
 			throw new IOException(e.getMessage(), e.getCause());
 		}
 	}

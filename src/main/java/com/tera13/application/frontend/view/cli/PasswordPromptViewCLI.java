@@ -14,13 +14,13 @@ public class PasswordPromptViewCLI extends ViewCLI {
             System.out.println(ANSI_CYAN_BG + ANSI_BLACK + " Il diario è protetto da password " + ANSI_RESET);
 
             String p = s.getString(false, 0, 0, "la password per il diario");
-            Boolean match = sm.checkPassword(p);
+            Boolean match = getSm().checkPassword(p);
             if(Boolean.TRUE.equals(match)){ //se la password inserita è corretta
-                String k = sm.generateKey(p);
-                sm.setKey(k); //imposto la key di DF a quella ottenuta
+                String k = getSm().generateKey(p);
+                getSm().setKey(k); //imposto la key di DF a quella ottenuta
                 System.out.println(ANSI_YELLOW + "Password corretta!" + ANSI_RESET);
                 stay = false;
-                sm.toCalendar();
+                getSm().toCalendar();
             }else {
                 System.out.println(ANSI_YELLOW + "Password errata!" + ANSI_RESET);
             }

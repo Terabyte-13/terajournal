@@ -18,7 +18,7 @@ public class FileFacade {
 		else{fm = new FileDAOFS();}
 	}
 
-	public int encryptAndSave(String outputPath, String data, String key, Boolean confirmOverwrite, Boolean encrypt) throws FileFacadeException {
+	public int encryptAndSave(String outputPath, String data, String key, Boolean encrypt) throws FileFacadeException {
 
 		String encryptedData;
 		
@@ -41,12 +41,12 @@ public class FileFacade {
 		try{
 			if(key != null && encrypt) {
 				encryptedData = c.cipher(key, data, 0);
-				if(fm.save(encryptedData, directory, fileName, confirmOverwrite) == 1) {
+				if(fm.save(encryptedData, directory, fileName) == 1) {
 					return 1;
 				}else { return 0;}
 			}else {
 				logger.log(Level.INFO, "salvo il file senza cifrare");
-				if(fm.save(data, directory, fileName, confirmOverwrite) == 1) {
+				if(fm.save(data, directory, fileName) == 1) {
 					return 1;
 				}else { return 0;}
 			}

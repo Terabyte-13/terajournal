@@ -27,9 +27,9 @@ public class EditorViewCLI extends ViewCLI {
     void edit(){
         String data;
         try{
-            data = sm.loadPage(y, m, d);
+            data = getSm().loadPage(y, m, d);
         }catch(Exception e){
-            data = ""; //TODO vedi se conviene metterci l'html
+            data = "";
         }
         System.out.println(ANSI_CYAN_BG + ANSI_BLACK + "Pagina: " + y + "/" + m + "/" + d + ANSI_RESET);
         System.out.println(data);
@@ -37,7 +37,7 @@ public class EditorViewCLI extends ViewCLI {
         String clinput = s.getString(false, 0, 0, "una riga da aggiungere alla pagina");
         System.out.println(ANSI_CYAN + "(Inserisci una riga vuota per uscire)" + ANSI_RESET);
         if(clinput.equals("")) stay = false; //se si inserisce una riga vuota, torna alla schermata iniziale
-        sm.savePage(data + clinput + "<br>" + System.lineSeparator(), y, m, d);
+        getSm().savePage(data + clinput + "<br>" + System.lineSeparator(), y, m, d);
         //br per l'html. lineseparator per rendere il file piu' ordinato
     }
 }

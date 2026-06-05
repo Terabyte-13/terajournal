@@ -41,7 +41,7 @@ public class DiaryFacade {
 
         int s = 0;
         try {
-            s = ff.encryptAndSave(metadataFilePath, "", null, false, false);
+            s = ff.encryptAndSave(metadataFilePath, "", null, false);
         } catch (FileFacadeException e) {
             throw new CreateDiaryException(e.getMessage(), e.getCause());
         }
@@ -77,14 +77,14 @@ public class DiaryFacade {
             }
 
         }else {logger.log(Level.INFO, "Diario NON creato.");}
-        return ""; //TODO leva?
+        return "";
     }
 
     public void savePage(FileBean fb) throws FileFacadeException {
         //combina i dati in arrivo dalla view con quelli che conosce questa classe (key e path del diario attuale)
         String p = fb.getPath();
         logger.log(Level.INFO, "Salvo la pagina in: {0}", p);
-        ff.encryptAndSave(p, fb.getData(), fb.getKey(), true, true);
+        ff.encryptAndSave(p, fb.getData(), fb.getKey(), true);
     }
 
     public FileBean loadPageBean(FileBean fb) throws FileFacadeException {
@@ -102,7 +102,7 @@ public class DiaryFacade {
     public void checkForDiaryList() throws FileFacadeException{
         if(Boolean.FALSE.equals(ff.checkForFile(DIARYLIST))) {
             logger.log(Level.INFO, "diaryList non esiste, lo creo.");
-            ff.encryptAndSave(DIARYLIST, "", null, true, false);
+            ff.encryptAndSave(DIARYLIST, "", null, false);
         }
     }
 

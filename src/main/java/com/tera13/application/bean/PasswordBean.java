@@ -10,7 +10,8 @@ public class PasswordBean {
 
     public void setPassword(String p){
         if(p == null || p.equals("")){
-            logger.log(Level.WARNING, "qualcosa è andato storto! Non dovrebbero passare password NULL o \"\" per PasswordBean!");
+            logger.log(Level.SEVERE, "qualcosa è andato storto! Non dovrebbero passare password NULL o \"\" per PasswordBean!");
+            throw new IllegalArgumentException("qualcosa è andato storto! Non dovrebbero passare password NULL o \"\" per PasswordBean!");
         }
         password = p;
     }

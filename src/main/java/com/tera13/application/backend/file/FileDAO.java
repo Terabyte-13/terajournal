@@ -4,7 +4,7 @@ import java.io.IOException;
 
 public abstract class FileDAO {
 	
-	abstract int save(String data, String outputPath, String fileName, Boolean confirmOverwrite) throws IOException;
+	abstract int save(String data, String outputPath, String fileName) throws IOException;
 	abstract String load(String inputPath) throws IOException;
 	abstract Boolean checkForFile(String path);
 
