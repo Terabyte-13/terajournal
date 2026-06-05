@@ -11,6 +11,7 @@ public class CreateDiaryBean {
     private String path; //path della cartella
     private String password;
     private String confirmPassword;
+    private String key;
 
     public void setName(String s) throws CreateDiaryException {
         if(s == null || s.equals("")) {
@@ -69,6 +70,20 @@ public class CreateDiaryBean {
 
     public String getConfirmPassword() {
         return confirmPassword;
+    }
+
+    //------
+
+    public void setKey(String k) {
+        if(k == null) {
+            throw new IllegalArgumentException("La key del CreateDiaryBean è null!");
+        }else {
+            key = k;
+        }
+    }
+
+    public String getKey(){
+        return key;
     }
 
 }

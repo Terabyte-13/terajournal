@@ -126,7 +126,7 @@ public abstract class UIManager {
     //Restituisce i nomi dei diari in diaryList
     public List<String> getDiaryNames(){
         try{
-            return df.getDiaryNames();
+            return df.getDiaryNames().getNames();
         } catch (MetadataParserException e) {
             toError(e);
             return Collections.emptyList();
@@ -156,12 +156,14 @@ public abstract class UIManager {
 
     public String generateKey(String password){
         PasswordBean pb = new PasswordBean();
+        String key = "";
         try {
             pb.setPassword(password);
+            key = df.generateKeyBean(pb).getKey();
         } catch (IllegalArgumentException e) {
             toError(e);
         }
-        return df.generateKeyBean(pb);
+        return key;
     }
 
     //cambia il currentDiary, richiede inserimento password se necessario, va al calendario

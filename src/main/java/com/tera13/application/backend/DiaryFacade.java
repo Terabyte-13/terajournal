@@ -28,15 +28,12 @@ public class DiaryFacade {
         mp.setFF(ff);
     }
 
-    public DiaryBean createDiaryBean(CreateDiaryBean cd) throws CreateDiaryException{
-        String k = createDiary(cd.getName(), cd.getPath(), cd.getPassword());
-        DiaryBean db = new DiaryBean();
-        db.setKey(k);
-        return db; //restituisco la chiave attraverso un diaryBean
+    public void createDiaryBean(CreateDiaryBean cd) throws CreateDiaryException{
+        createDiary(cd.getName(), cd.getPath(), cd.getPassword());
     }
 
     //creazione di un nuovo diario
-    public String createDiary(String name, String path, String password) throws CreateDiaryException {
+    public void createDiary(String name, String path, String password) throws CreateDiaryException {
         String metadataFilePath = path + File.separator + name + File.separator + name + ".jm";
 
         int s = 0;
@@ -65,19 +62,11 @@ public class DiaryFacade {
 
                 logger.log(Level.INFO, "Diario creato.");
 
-                //uso l'hash MD5 come key per decifrare. l'altro hash serve a farti entrare
-                if(!password.equals("")) {
-                    return hasher.getHash(password, "MD5");
-                } else {
-                    return "";
-                }
-
             }catch(MetadataParserException e){
                 throw new CreateDiaryException(e.getMessage(), e.getCause());
             }
 
         }else {logger.log(Level.INFO, "Diario NON creato.");}
-        return "";
     }
 
     public void savePage(FileBean fb) throws FileFacadeException {
@@ -106,8 +95,10 @@ public class DiaryFacade {
         }
     }
 
-    public List<String> getDiaryNames() throws MetadataParserException{
-        return mp.getFieldNames(DIARYLIST);
+    public DiaryNamesBean getDiaryNames() throws MetadataParserException{
+        DiaryNamesBean dn = new DiaryNamesBean();
+        dn.setNames(mp.getFieldNames(DIARYLIST));
+        return dn;
     }
 
     public DiaryBean getDiaryMetadata(String name) throws MetadataParserException{
@@ -130,8 +121,9 @@ public class DiaryFacade {
         return hash.equals(storedHash); //se gli hash combaciano, la password inserita e' corretta
     }
 
-    public String generateKeyBean(PasswordBean pb){
-        return generateKey(pb.getPassword());
+    public PasswordBean generateKeyBean(PasswordBean pb){
+        pb.setKey(generateKey(pb.getPassword()));
+        return pb;
     }
 
     String generateKey(String password){ //genera key per cifrare/decifrare le pagine di diario

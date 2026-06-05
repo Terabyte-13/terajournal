@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 public class PasswordBean {
 
     private String password;
+    private String key; //la key generata utilizzando la password
+
     Logger logger = Logger.getLogger("passwordBean");
 
     public void setPassword(String p){
@@ -18,6 +20,14 @@ public class PasswordBean {
 
     public String getPassword(){
         return password;
+    }
+
+    public void setKey(String k){
+        if(k == null) throw new IllegalArgumentException("la key di un PasswordBean è stata impostata a NULL!");
+    }
+
+    public String getKey(){
+        return key;
     }
 
 }
