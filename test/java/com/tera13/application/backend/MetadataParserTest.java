@@ -1,7 +1,6 @@
 package com.tera13.application.backend;
 
 import com.tera13.application.backend.file.FileFacade;
-import com.tera13.application.bean.FileBean;
 import com.tera13.application.exception.FileFacadeException;
 import com.tera13.application.exception.MetadataParserException;
 import org.junit.jupiter.api.BeforeEach;

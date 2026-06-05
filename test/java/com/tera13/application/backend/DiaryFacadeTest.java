@@ -1,7 +1,6 @@
 package com.tera13.application.backend;
 
-import com.tera13.application.backend.file.FileFacade;
-import com.tera13.application.bean.FileBean;
+import com.tera13.application.bean.PageBean;
 import com.tera13.application.exception.FileFacadeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class DiaryFacadeTest {
         String data = "test 123";
         String data2 = "";
 
-        FileBean fb = new FileBean();
+        PageBean fb = new PageBean();
         Path tempFile = tempDir.resolve("test_diary.txt");
 
         fb.setData(data);

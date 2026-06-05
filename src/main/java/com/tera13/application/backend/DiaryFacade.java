@@ -68,19 +68,19 @@ public class DiaryFacade {
         }else {logger.log(Level.INFO, "Diario NON creato.");}
     }
 
-    public void savePage(FileBean fb) throws FileFacadeException {
+    public void savePage(PageBean fb) throws FileFacadeException {
         //combina i dati in arrivo dalla view con quelli che conosce questa classe (key e path del diario attuale)
         String p = fb.getPath();
         logger.log(Level.INFO, "Salvo la pagina in: {0}", p);
         ff.encryptAndSave(p, fb.getData(), fb.getKey(), true);
     }
 
-    public FileBean loadPageBean(FileBean fb) throws FileFacadeException {
+    public PageBean loadPageBean(PageBean fb) throws FileFacadeException {
         return loadPage(fb.getPath(),fb.getKey());
     }
 
-    FileBean loadPage(String path, String key) throws FileFacadeException {
-        FileBean fb = new FileBean();
+    PageBean loadPage(String path, String key) throws FileFacadeException {
+        PageBean fb = new PageBean();
         fb.setData(ff.loadAndDecrypt(path, key, true));
         fb.setPath(path);
         fb.setKey(key);
@@ -100,14 +100,13 @@ public class DiaryFacade {
         return dn;
     }
 
-    public DiaryBean getDiaryMetadata(String name) throws MetadataParserException{
-        String p = mp.getField(name, DIARYLIST);
-        DiaryBean b = new DiaryBean();
+    public DiaryBean getDiaryMetadata(DiaryBean db) throws MetadataParserException{
+        String p = mp.getField(db.getName(), DIARYLIST);
 
-        b.setName(mp.getField("name", p));
-        b.setFolder(mp.getField("folder", p));
-        b.setPwdHash(mp.getField(PWDHASH, p));
-        return b;
+        db.setName(mp.getField("name", p));
+        db.setFolder(mp.getField("folder", p));
+        db.setPwdHash(mp.getField(PWDHASH, p));
+        return db;
     }
 
     public Boolean checkPasswordBean(PasswordBean pb, FilePathBean fp) throws MetadataParserException{

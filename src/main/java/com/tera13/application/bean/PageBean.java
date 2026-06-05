@@ -3,7 +3,7 @@ package com.tera13.application.bean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class FileBean {
+public class PageBean {
 	private String data;
 	private String path;
 	private String key;

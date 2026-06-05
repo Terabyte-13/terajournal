@@ -2,6 +2,10 @@ package com.tera13.application.bean;
 
 public class DiaryBean {
 
+    /*
+        Usato per recuperare i metadati del diario e passarli da diaryFacade a UIManager
+    */
+
     private String name;
     private String folder; //il percorso del file .jm
     private String pwdHash;

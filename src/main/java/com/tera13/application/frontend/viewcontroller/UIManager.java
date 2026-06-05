@@ -1,7 +1,7 @@
 package com.tera13.application.frontend.viewcontroller;
 
 import com.tera13.application.backend.DiaryFacade;
-import com.tera13.application.bean.FileBean;
+import com.tera13.application.bean.PageBean;
 import com.tera13.application.bean.*;
 import com.tera13.application.exception.CreateDiaryException;
 import com.tera13.application.exception.FileFacadeException;
@@ -17,8 +17,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
-    gestore delle scene, funge da controller grafico centrale che prende/passa
-    il controllo alle varie View e da mediatore tra le View e diaryFacade
+    Controller grafico centrale, mediatore tra le View e diaryFacade.
+    Contiene funzioni generali del diario che ogni view può chiamare,
+    e funzioni per prendere/passare il controllo alle varie View.
 */
 
 public abstract class UIManager {
@@ -80,7 +81,7 @@ public abstract class UIManager {
         //se il file è vuoto, non salvo
         if(!data.equals("<html dir=\"ltr\"><head></head><body contenteditable=\"true\"></body></html>")) {
             //impacchettamento bean --------
-            FileBean fb = new FileBean();
+            PageBean fb = new PageBean();
             try {
                 fb.setData(data);
                 String p = currentDiaryFolder + File.separator + year + File.separator + month + File.separator + day + ".html";
@@ -101,7 +102,7 @@ public abstract class UIManager {
     }
 
     public String loadPage(int year, int month, int day) {
-        FileBean fb = new FileBean();
+        PageBean fb = new PageBean();
         fb.setPath(currentDiaryFolder + File.separator + year + File.separator + month + File.separator + day + ".html");
         fb.setKey(currentKey);
 
@@ -168,9 +169,10 @@ public abstract class UIManager {
 
     //cambia il currentDiary, richiede inserimento password se necessario, va al calendario
     public void openDiary(String diaryName){
-        DiaryBean d = null;
+        DiaryBean d = new DiaryBean();
         try {
-            d = df.getDiaryMetadata(diaryName);
+            d.setName(diaryName);
+            d = df.getDiaryMetadata(d);
         } catch (MetadataParserException e) {
             toError(e);
         }

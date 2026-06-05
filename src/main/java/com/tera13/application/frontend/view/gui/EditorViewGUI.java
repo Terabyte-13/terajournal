@@ -39,7 +39,7 @@ public class EditorViewGUI extends ViewGUI {
 		day = d;
 	}
 
-	public void loadPage(){
+	private void loadPage(){
 		try {
 			editorText.setHtmlText(getSm().loadPage(year, month, day));
 		} catch (Exception e) {
@@ -48,6 +48,7 @@ public class EditorViewGUI extends ViewGUI {
 	}
 
 	//salva i dati dall'editor sul file e torna al calendario
+	//public perchè viene chiamato da javafx
 	public void savePage() {
 		getSm().savePage(editorText.getHtmlText(), year, month, day);
 		toCalendar();
