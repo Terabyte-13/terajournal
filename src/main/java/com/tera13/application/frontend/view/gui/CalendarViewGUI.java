@@ -115,7 +115,6 @@ public class CalendarViewGUI extends ViewGUI {
 		Node caller = (Node)event.getSource();
 		int selectedDay = (int)caller.getUserData(); //serve per capire il numero del giorno del tasto premuto
 
-		//String fp = diaryFolder + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
 		getSm().toEditor(year, month, selectedDay);
 	}
 	
