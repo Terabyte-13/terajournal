@@ -8,7 +8,6 @@ import com.tera13.application.exception.FileFacadeException;
 import com.tera13.application.exception.MetadataParserException;
 
 import java.io.File;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
