@@ -32,7 +32,7 @@ public class NewDiaryViewGUI extends ViewGUI {
 	}
 	
 	public void toStart() {
-		sm.toStart();
+		getSm().toStart();
 	}
 	
 	public void pickDirectory(){
@@ -45,7 +45,7 @@ public class NewDiaryViewGUI extends ViewGUI {
 	}
 
 	public void createDiary() {
-		sm.createDiary(nameField.getText(), pathField.getText(), passwordField.getText(), confirmPasswordField.getText());
+		getSm().createDiary(nameField.getText(), pathField.getText(), passwordField.getText(), confirmPasswordField.getText());
 	}
 	
 }

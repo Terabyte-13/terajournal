@@ -20,17 +20,17 @@ public class StartViewGUI extends ViewGUI {
 		currentStage = stage;
 		
 		//se non e' gia' presente, crea il file diaryList ------
-		sm.checkForDiaryList();
+		getSm().checkForDiaryList();
 		populateDiaryList();
 	}
 	
 	public void toNewDiary(ActionEvent event) {
-		sm.toNewDiary();
+		getSm().toNewDiary();
 	}
 	
 	
 	void populateDiaryList() {
-		List<String> diaries = sm.getDiaryNames();
+		List<String> diaries = getSm().getDiaryNames();
 		if(diaries.isEmpty()){return;}
 		for(int i = 0; i < diaries.size(); i++) {
 			diaryPicker.getItems().add(diaries.get(i));
@@ -40,7 +40,7 @@ public class StartViewGUI extends ViewGUI {
 	//prendo da diaryList il filepath del diario selezionato
 	public void onDiaryPickerPress(ActionEvent event) {
 		String selection = diaryPicker.getValue();
-		sm.openDiary(selection);
+		getSm().openDiary(selection);
 	}
 	
 

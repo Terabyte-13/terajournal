@@ -26,7 +26,7 @@ public class EditorViewGUI extends ViewGUI {
 		showScene(stage, sceneLoader);
 		currentStage = stage;
 
-		String dn = String.format("%s, %d-%d-%d", sm.getCurrentDiaryName(), day, month, year);
+		String dn = String.format("%s, %d-%d-%d", getSm().getCurrentDiaryName(), day, month, year);
 		stage.setTitle(dn);
 
 		logger.log(Level.INFO, "Carico il file...");
@@ -41,7 +41,7 @@ public class EditorViewGUI extends ViewGUI {
 
 	public void loadPage(){
 		try {
-			editorText.setHtmlText(sm.loadPage(year, month, day));
+			editorText.setHtmlText(getSm().loadPage(year, month, day));
 		} catch (Exception e) {
 			editorText.setHtmlText("");
 		}
@@ -49,11 +49,11 @@ public class EditorViewGUI extends ViewGUI {
 
 	//salva i dati dall'editor sul file e torna al calendario
 	public void savePage() {
-		sm.savePage(editorText.getHtmlText(), year, month, day);
+		getSm().savePage(editorText.getHtmlText(), year, month, day);
 		toCalendar();
 	}
 	
 	public void toCalendar(){
-		sm.toCalendar();
+		getSm().toCalendar();
 	}
 }

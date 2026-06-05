@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public class ErrorPopupGUI {
     GUIManager sm;
-    public void setSm(GUIManager GuiManager){
-        sm = GuiManager;
+    public void setSm(GUIManager guiManager){
+        sm = guiManager;
     }
 
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

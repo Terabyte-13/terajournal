@@ -54,7 +54,7 @@ public class CalendarViewGUI extends ViewGUI {
 
 		populateDiaryList();
 
-		String dn = sm.getCurrentDiaryName();
+		String dn = getSm().getCurrentDiaryName();
 		diaryPicker.setValue(dn); //imposto sull'UI il nome del diario attuale
 		stage.setTitle(dn);
 
@@ -62,7 +62,7 @@ public class CalendarViewGUI extends ViewGUI {
 	}
 
 	void populateDiaryList() {
-		List<String> diaries = sm.getDiaryNames();
+		List<String> diaries = getSm().getDiaryNames();
 		for(int i = 0; i < diaries.size(); i++) {
 			diaryPicker.getItems().add(diaries.get(i));
 		}
@@ -79,7 +79,7 @@ public class CalendarViewGUI extends ViewGUI {
 			if(i == LocalDate.now(timeZone).getDayOfMonth() && month == LocalDate.now(timeZone).getMonth().getValue() && year == LocalDate.now(timeZone).getYear()) {
 				button.setId("calendarButtonToday");
 			//Evidenzio i giorni con un file associato
-			}else if(Boolean.TRUE.equals(sm.isPageWritten(year, month, i))) {
+			}else if(Boolean.TRUE.equals(getSm().isPageWritten(year, month, i))) {
 				button.setId("calendarButtonHasFile");
 			}else button.setId("calendarButton");
 			
@@ -116,13 +116,13 @@ public class CalendarViewGUI extends ViewGUI {
 		int selectedDay = (int)caller.getUserData(); //serve per capire il numero del giorno del tasto premuto
 
 		//String fp = diaryFolder + File.separator + year + File.separator + month + File.separator + selectedDay + ".html";
-		sm.toEditor(year, month, selectedDay);
+		getSm().toEditor(year, month, selectedDay);
 	}
 	
 	//prendo da diaryList il filepath del diario selezionato
 	public void onDiaryPickerPress(ActionEvent event) {
 		String selection = diaryPicker.getValue();
-		sm.openDiary(selection);
+		getSm().openDiary(selection);
 	}
 	
 	public void jumpToDate(ActionEvent event) {
@@ -141,11 +141,11 @@ public class CalendarViewGUI extends ViewGUI {
 	}
 
 	public void toStart() {
-		sm.toStart();
+		getSm().toStart();
 	}
 	
 	void toPasswordPrompt(String diaryPath) {
-		sm.toPasswordPrompt(diaryPath);
+		getSm().toPasswordPrompt(diaryPath);
 	}
 	
 }

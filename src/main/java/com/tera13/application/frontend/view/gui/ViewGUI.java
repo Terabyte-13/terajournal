@@ -19,11 +19,7 @@ public abstract class ViewGUI {
 	Scene scene;
 	Parent root;
 	Logger l = Logger.getLogger("SceneController");
-	public GUIManager sm;
-
-	void setSm(GUIManager GuiManager){
-		sm = GuiManager;
-	}
+	private GUIManager sm;
 
 	void showScene(Stage stage, FXMLLoader sceneLoader) {
 		try{
@@ -49,5 +45,12 @@ public abstract class ViewGUI {
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();
 		l.log(Level.FINE, "Nuova istanza creata da {0}: {1}", new Object[]{caller, this});
 	}
-	
+
+	public GUIManager getSm() {
+		return sm;
+	}
+
+	public void setSm(GUIManager sm) {
+		this.sm = sm;
+	}
 }

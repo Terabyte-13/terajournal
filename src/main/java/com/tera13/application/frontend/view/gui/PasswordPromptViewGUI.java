@@ -29,15 +29,16 @@ public class PasswordPromptViewGUI extends ViewGUI {
 		storedHash = s;
 	}
 
-	public void toStart() {sm.toStart();}
+	public void toStart() {
+		getSm().toStart();}
 	
 	public void submitPassword() {
 		String password = passwordField.getText(); //password inserita
-		Boolean match = sm.checkPassword(password);
+		Boolean match = getSm().checkPassword(password);
 		if(Boolean.TRUE.equals(match)){ //se la password inserita è corretta
-			String k = sm.generateKey(password);
-			sm.setKey(k); //imposto la key di DF a quella ottenuta
-			sm.toCalendar();
+			String k = getSm().generateKey(password);
+			getSm().setKey(k); //imposto la key di DF a quella ottenuta
+			getSm().toCalendar();
 		}else {
 			passwordField.setText("");
 			passwordField.setPromptText("Password errata!");

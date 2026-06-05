@@ -33,7 +33,7 @@ public class GUIManager extends UIManager {
     }
 
     public void loadScene(){
-        currentView.sm = this; //passo un riferimento in modo che la view può comunicare con questa classe
+        currentView.setSm(this); //passo un riferimento in modo che la view può comunicare con questa classe
         currentView.loadScene(currentStage);
     }
 

@@ -68,6 +68,7 @@ public abstract class UIManager {
             cd.setPath(path);
             cd.setPassword(password);
             cd.setConfirmPassword(confirmPassword);
+            df.createDiaryBean(cd);
         } catch (CreateDiaryException e) {
             toError(e);
         }
@@ -149,7 +150,7 @@ public abstract class UIManager {
             return df.checkPasswordBean(pb, fp);
         } catch (MetadataParserException e) {
             toError(e);
-            return false;
+            return null;
         }
     }
 
