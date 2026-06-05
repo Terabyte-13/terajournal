@@ -1,7 +1,6 @@
 package com.tera13.application.frontend.view.gui;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,10 +41,6 @@ public class StartViewGUI extends ViewGUI {
 	public void onDiaryPickerPress(ActionEvent event) {
 		String selection = diaryPicker.getValue();
 		sm.openDiary(selection);
-	}
-	
-	public void onImportButtonPress(ActionEvent event) {
-		
 	}
 	
 

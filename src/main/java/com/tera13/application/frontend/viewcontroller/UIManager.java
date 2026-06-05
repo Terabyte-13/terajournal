@@ -1,7 +1,5 @@
 package com.tera13.application.frontend.viewcontroller;
 
-//TODO leva sto commento: nel diagramma metti questa astratta come quadratino accanto a GUIManager che la implementa
-
 import com.tera13.application.backend.DiaryFacade;
 import com.tera13.application.bean.FileBean;
 import com.tera13.application.bean.*;
@@ -28,7 +26,7 @@ public abstract class UIManager {
     DiaryFacade df = new DiaryFacade();
 
     String currentKey = "";
-    String currentDiaryPath = ""; //path del file metadati TODO cambia nome
+    String currentDiaryPath = ""; //path del file metadati
     String currentDiaryFolder; //path della cartella
 
     Logger logger = Logger.getLogger("UIManager");
@@ -70,7 +68,6 @@ public abstract class UIManager {
             cd.setPath(path);
             cd.setPassword(password);
             cd.setConfirmPassword(confirmPassword);
-            String k = df.createDiaryBean(cd).getKey();
         } catch (CreateDiaryException e) {
             toError(e);
         }
@@ -152,7 +149,7 @@ public abstract class UIManager {
             return df.checkPasswordBean(pb, fp);
         } catch (MetadataParserException e) {
             toError(e);
-            return null;
+            return false;
         }
     }
 

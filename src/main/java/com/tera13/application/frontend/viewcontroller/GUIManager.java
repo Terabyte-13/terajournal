@@ -13,9 +13,9 @@ public class GUIManager extends UIManager {
 
     //stage della finestra principale
     Stage currentStage;
-    /*mantenendo un unico currentSceneController che mantiene il riferimento a solo la scene attuale, teoricamente
+    /*mantenendo un unico currentView che mantiene il riferimento a solo la scene attuale, teoricamente
     gli scenecontroller precedenti, una volta rimosso il riferimento, vengono rimossi dal garbage collector*/
-    ViewGUI currentView; //TODO rinomina
+    ViewGUI currentView;
 
     public void initAndStart(Stage primaryStage) throws IOException {
 

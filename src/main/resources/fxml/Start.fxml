@@ -19,7 +19,7 @@
                <children>
                   <ComboBox fx:id="diaryPicker" onAction="#onDiaryPickerPress" prefHeight="40.0" prefWidth="240.0" promptText="Scegli un diario...">
                   </ComboBox>
-                  <Button fx:id="importButton" ellipsisString="" mnemonicParsing="false" onAction="#onImportButtonPress" prefHeight="40.0" prefWidth="126.0" text="Importa un diario" />
+                  <Button fx:id="importButton" disable="true" ellipsisString="" mnemonicParsing="false" prefHeight="40.0" prefWidth="138.0" text="Importa un diario" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

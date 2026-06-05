@@ -1,6 +1,5 @@
 package com.tera13.application.bean;
 
-import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

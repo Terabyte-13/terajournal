@@ -15,7 +15,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.time.ZoneId;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,8 +28,8 @@ public class CalendarViewGUI extends ViewGUI {
 	@FXML Label monthYearDisplay;
 	@FXML DatePicker datePicker;
 
-	
-	LocalDate date = LocalDate.now();
+	ZoneId timeZone = TimeZone.getDefault().toZoneId();
+	LocalDate date = LocalDate.now(timeZone);
 	int month = date.getMonthValue();
 	int year = date.getYear();
 
@@ -58,12 +60,11 @@ public class CalendarViewGUI extends ViewGUI {
 
 		updateCalendar();
 	}
-	
-	//non va TODO df.getDiaryList
+
 	void populateDiaryList() {
 		List<String> diaries = sm.getDiaryNames();
 		for(int i = 0; i < diaries.size(); i++) {
-			diaryPicker .getItems().add(diaries.get(i));
+			diaryPicker.getItems().add(diaries.get(i));
 		}
 	}
 
@@ -75,7 +76,7 @@ public class CalendarViewGUI extends ViewGUI {
 		for(int i = 1; i <= daysInMonth; i++) {
 			Button button = new Button(Integer.toString(i));	
 			//Evidenzio il giorno attuale
-			if(i == LocalDate.now().getDayOfMonth() && month == LocalDate.now().getMonth().getValue() && year == LocalDate.now().getYear()) {
+			if(i == LocalDate.now(timeZone).getDayOfMonth() && month == LocalDate.now(timeZone).getMonth().getValue() && year == LocalDate.now(timeZone).getYear()) {
 				button.setId("calendarButtonToday");
 			//Evidenzio i giorni con un file associato
 			}else if(Boolean.TRUE.equals(sm.isPageWritten(year, month, i))) {
