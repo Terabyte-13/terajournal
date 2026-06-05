@@ -25,10 +25,9 @@ public abstract class ViewGUI {
 		try{
 			//inizializzazione interfaccia: prepara variabili, carica CSS e carica la scena Main ---------------------
 			scene = new Scene(sceneLoader.load());
-			//scene.getStylesheets().add(getClass().getResource("main.java.com.tera13.application.css").toExternalForm()); //TODO posso levarlo? il css se lo carica da solo
 			stage.setScene(scene);
 			//titolo e icona -------------------------------------------------
-			stage.setTitle("terajournal"); //TODO titolo in base al documento aperto
+			stage.setTitle("terajournal");
 			Image icon = new Image("file:./src/main.resources/images/icon.png");
 			stage.getIcons().add(icon);
 			stage.show();

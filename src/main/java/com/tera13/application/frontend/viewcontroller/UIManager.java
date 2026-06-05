@@ -150,7 +150,7 @@ public abstract class UIManager {
             return df.checkPasswordBean(pb, fp);
         } catch (MetadataParserException e) {
             toError(e);
-            return null;
+            return false;
         }
     }
 
