@@ -8,12 +8,14 @@ import java.util.logging.Logger;
 
 public class UserDAO {
 
+    private static final String DB_DEFAULT_PWD = "LaPassword";
     boolean demoMode = false;
     Logger logger = Logger.getLogger("userDAO");
     Hasher hasher = new Hasher();
 
     public String userLogin(String username, String password) {
         String url;
+        String p = System.getenv().getOrDefault("APP_DB_PWD", DB_DEFAULT_PWD);
 
         if(Boolean.TRUE.equals(demoMode)){ //in modalità demo, il DB non ha persistenza
             url = "jdbc:h2:mem:users;INIT=RUNSCRIPT FROM 'src/main/resources/sql/login.sql'";
@@ -24,7 +26,7 @@ public class UserDAO {
         String sql = "SELECT diary_list_path FROM Users WHERE username = ? AND hash_password = ?";
 
 
-        try (Connection conn = DriverManager.getConnection(url, "sa", "LaPassword");
+        try (Connection conn = DriverManager.getConnection(url, "sa", p);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 
