@@ -2,7 +2,7 @@ package com.tera13.application.frontend.view.gui;
 
 import java.io.IOException;
 
-import com.tera13.application.frontend.viewcontroller.GUIManager;
+import com.tera13.application.frontend.viewcontroller.DiaryGUIManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -19,11 +19,11 @@ public abstract class ViewGUI {
 	Scene scene;
 	Parent root;
 	Logger l = Logger.getLogger("SceneController");
-	private GUIManager sm;
+	private DiaryGUIManager sm;
 
 	void showScene(Stage stage, FXMLLoader sceneLoader) {
 		try{
-			//inizializzazione interfaccia: prepara variabili, carica CSS e carica la scena Main ---------------------
+			//inizializzazione interfaccia: prepara variabili e carica la scena ---------------------
 			scene = new Scene(sceneLoader.load());
 			stage.setScene(scene);
 			//titolo e icona -------------------------------------------------
@@ -33,7 +33,7 @@ public abstract class ViewGUI {
 			stage.show();
 			
 		}catch(IOException e){
-			l.log(Level.SEVERE, "IOException nello SceneController");
+			l.log(Level.SEVERE, "IOException nel ViewGUI");
 			e.printStackTrace();
 		}
 	}
@@ -45,11 +45,12 @@ public abstract class ViewGUI {
 		l.log(Level.FINE, "Nuova istanza creata da {0}: {1}", new Object[]{caller, this});
 	}
 
-	public GUIManager getSm() {
+	public DiaryGUIManager getSm() {
 		return sm;
 	}
 
-	public void setSm(GUIManager sm) {
+	public void setSm(DiaryGUIManager sm) {
 		this.sm = sm;
 	}
+
 }

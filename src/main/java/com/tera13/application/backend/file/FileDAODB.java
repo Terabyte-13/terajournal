@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 /*
   File manager versione in-RAM, utilizzando un database H2
-  In tutto il programma le view si passano la stessa istanza di FileFacade, come un testimone.
+  In tutto il programma le view devono utilizzare la stessa istanza di FileFacade
   In questo modo il database rimane in memoria durante la modalità demo.
 */
 

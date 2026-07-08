@@ -7,7 +7,7 @@ esegui "xhost +si:localuser:$(whoami)" nel terminale*/
 
 public class Main {
 	public static void main(String[] args) {
-		JavafxStarter j = new JavafxStarter();
+        JavafxStarter j = new JavafxStarter();
 		j.l(args);
 	}
 }

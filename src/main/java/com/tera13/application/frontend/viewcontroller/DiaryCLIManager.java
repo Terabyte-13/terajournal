@@ -5,17 +5,22 @@ import javafx.stage.Stage;
 
 import static com.tera13.application.frontend.view.cli.Colors.*;
 
-public class CLIManager extends UIManager{
+public class DiaryCLIManager extends DiaryUIManager {
 
     ViewCLI currentView;
 
     public void initAndStart(Stage primaryStage){
-        toStart();
+        toLogin();
     }
 
     public void loadScene(){
         currentView.setSm(this);
         currentView.show();
+    }
+
+    public void toLogin(){
+        currentView = new UserLoginViewCLI();
+        loadScene();
     }
 
     public void toNewDiary(){

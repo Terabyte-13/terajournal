@@ -1,6 +1,7 @@
 package com.tera13.application.frontend.viewcontroller;
 
 import com.tera13.application.backend.DiaryFacade;
+import com.tera13.application.backend.userLogin.LoginFacade;
 import com.tera13.application.bean.PageBean;
 import com.tera13.application.bean.*;
 import com.tera13.application.exception.CreateDiaryException;
@@ -17,26 +18,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
-    Controller grafico centrale, mediatore tra le View e diaryFacade.
+    Controller grafico per lo use case "leggi/scrivi pagina di diario",
+    mediatore tra le View e diaryFacade.
     Contiene funzioni generali del diario che ogni view può chiamare,
     e funzioni per prendere/passare il controllo alle varie View.
 */
 
-public abstract class UIManager {
+public abstract class DiaryUIManager {
 
+    LoginFacade lf = new LoginFacade();
     DiaryFacade df = new DiaryFacade();
 
     String currentKey = "";
     String currentDiaryPath = ""; //path del file metadati
     String currentDiaryFolder; //path della cartella
 
-    Logger logger = Logger.getLogger("UIManager");
+    Logger logger = Logger.getLogger("DiaryUIManager");
 
     public static final String BEAN_ERROR = "Errore nell'impostazione di un bean.";
 
     public abstract void initAndStart(Stage primaryStage) throws IOException;
 
     public abstract void loadScene();
+
+    public abstract void toLogin();
 
     public abstract void toNewDiary();
 
@@ -135,7 +140,15 @@ public abstract class UIManager {
     }
 
     public String getCurrentDiaryName(){
-        return Paths.get(currentDiaryPath).getFileName().toString();
+        String fileName = Paths.get(currentDiaryPath).getFileName().toString();
+        int lastDotIndex = fileName.lastIndexOf('.');
+
+        // Se c'è un punto e non è all'inizio del file (es. file nascosti tipo .gitignore)
+        if (lastDotIndex > 0) {
+            return fileName.substring(0, lastDotIndex);
+        }
+
+        return fileName;
     }
 
     public Boolean checkPassword(String password){
@@ -160,10 +173,13 @@ public abstract class UIManager {
         String key = "";
         try {
             pb.setPassword(password);
-            key = df.generateKeyBean(pb).getKey();
+            pb = df.generateKeyBean(pb);
+            key = pb.getKey();
+            if(key == null) toError(new Exception("Errore nella generazione della chiave!")); //TODO vedi se levare
         } catch (IllegalArgumentException e) {
             toError(e);
         }
+        System.out.println(key);
         return key;
     }
 
@@ -212,4 +228,20 @@ public abstract class UIManager {
         fp.setPath(currentDiaryFolder);
         return df.isPageWrittenBean(db, fp);
     }
+
+    public Boolean userLogin(String username, String password){
+        LoginBean lb = new LoginBean();
+        lb.setUsername(username);
+        lb.setPassword(password);
+        lb = lf.userLogin(lb);
+
+        String p = lb.getDiaryListPath();
+        if(!p.equals("notFound")){
+            df.setDiaryList(lb);
+            return true;
+        }
+
+        return false;
+    }
+
 }

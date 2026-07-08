@@ -24,6 +24,7 @@ public class PasswordBean {
 
     public void setKey(String k){
         if(k == null) throw new IllegalArgumentException("la key di un PasswordBean è stata impostata a NULL!");
+        key = k;
     }
 
     public String getKey(){

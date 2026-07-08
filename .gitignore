@@ -3,3 +3,6 @@ diaryList
 settings
 /bin/
 /target/
+/users.mv.db
+/users.trace.db
+diaryLists

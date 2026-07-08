@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 
-public class GUIManager extends UIManager {
+public class DiaryGUIManager extends DiaryUIManager {
 
     //stage della finestra principale
     Stage currentStage;
@@ -29,12 +29,17 @@ public class GUIManager extends UIManager {
 
         currentStage = primaryStage;
 
-        toStart();
+        toLogin();
     }
 
     public void loadScene(){
         currentView.setSm(this); //passo un riferimento in modo che la view può comunicare con questa classe
         currentView.loadScene(currentStage);
+    }
+
+    public void toLogin(){
+        currentView = new UserLoginViewGUI();
+        loadScene();
     }
 
     public void toNewDiary() {
@@ -70,7 +75,6 @@ public class GUIManager extends UIManager {
 
     public void toError(Exception e){
         ErrorPopupGUI ep = new ErrorPopupGUI();
-        ep.setSm(this);
         ep.show(e);
     }
 

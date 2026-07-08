@@ -9,7 +9,7 @@ public class Cipher {
 
 	Logger logger = Logger.getLogger("Cipher");
 
-	String cipher(String key, String input, int direction) {
+	public String cipher(String key, String input, int direction) {
 		//direction = 0: encrypt     direction = 1: decrypt
 		if(key == null || key.isEmpty() || input == null || input.isEmpty()){
 			logger.log(Level.INFO, "cipher chiamato senza key o con input vuoto. restituisco l'input così com'è.");

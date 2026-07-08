@@ -21,6 +21,7 @@ class CipherTest {
         String sEncrypted = c.cipher("key123", "String 123", 0);
         String sDecrypted = c.cipher("key123", sEncrypted, 1);
 
+        assertNotEquals(s, sEncrypted);
         assertEquals(s, sDecrypted);
     }
 }

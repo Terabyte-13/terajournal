@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 
 public class DiaryFacade {
 
-    public static final String DIARYLIST = "diaryList";
+    public String diaryList = "diaryList";
 
     public static final String PWDHASH = "pwdHash";
 
@@ -25,6 +25,10 @@ public class DiaryFacade {
 
     public DiaryFacade() {
         mp.setFF(ff);
+    }
+
+    public void setDiaryList(LoginBean lb){
+        diaryList = lb.getDiaryListPath();
     }
 
     public void createDiaryBean(CreateDiaryBean cd) throws CreateDiaryException{
@@ -46,7 +50,7 @@ public class DiaryFacade {
 
             try{
                 //aggiungo il diario alla lista dei diari
-                mp.setField(name, DIARYLIST, metadataFilePath);
+                mp.setField(name, diaryList, metadataFilePath);
                 logger.log(Level.INFO, "Diario aggiunto alla lista dei diari");
 
                 //riempio metadati
@@ -88,20 +92,20 @@ public class DiaryFacade {
     }
 
     public void checkForDiaryList() throws FileFacadeException{
-        if(Boolean.FALSE.equals(ff.checkForFile(DIARYLIST))) {
+        if(Boolean.FALSE.equals(ff.checkForFile(diaryList))) {
             logger.log(Level.INFO, "diaryList non esiste, lo creo.");
-            ff.encryptAndSave(DIARYLIST, "", null, false);
+            ff.encryptAndSave(diaryList, "", null, false);
         }
     }
 
     public DiaryNamesBean getDiaryNames() throws MetadataParserException{
         DiaryNamesBean dn = new DiaryNamesBean();
-        dn.setNames(mp.getFieldNames(DIARYLIST));
+        dn.setNames(mp.getFieldNames(diaryList));
         return dn;
     }
 
     public DiaryBean getDiaryMetadata(DiaryBean db) throws MetadataParserException{
-        String p = mp.getField(db.getName(), DIARYLIST);
+        String p = mp.getField(db.getName(), diaryList);
 
         db.setName(mp.getField("name", p));
         db.setFolder(mp.getField("folder", p));
@@ -120,7 +124,8 @@ public class DiaryFacade {
     }
 
     public PasswordBean generateKeyBean(PasswordBean pb){
-        pb.setKey(generateKey(pb.getPassword()));
+        String k = generateKey(pb.getPassword());
+        pb.setKey(k);
         return pb;
     }
 

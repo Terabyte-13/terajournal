@@ -1,7 +1,6 @@
 package com.tera13.application.frontend;
 
-import com.tera13.application.frontend.viewcontroller.UIManager;
-import com.tera13.application.frontend.viewcontroller.UIManagerFactory;
+import com.tera13.application.frontend.viewcontroller.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -20,12 +19,18 @@ public class JavafxStarter extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        UIManagerFactory uf = new UIManagerFactory();
-        UIManager u = uf.getUiManager(useCLI);
+
+        DiaryUIManager du;
+        if(Boolean.TRUE.equals(useCLI)){
+            du = new DiaryCLIManager();
+        }else{
+            du = new DiaryGUIManager();
+        }
+
         try {
-            u.initAndStart(primaryStage);
+            du.initAndStart(primaryStage);
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "IOException nell'inizializzazione dell'UIManager");
+            logger.log(Level.SEVERE, "IOException nell'inizializzazione del DiaryUIManager");
             e.printStackTrace();
         }
     }

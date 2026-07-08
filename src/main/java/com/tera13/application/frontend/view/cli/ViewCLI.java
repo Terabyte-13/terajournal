@@ -1,17 +1,17 @@
 package com.tera13.application.frontend.view.cli;
 
-import com.tera13.application.frontend.viewcontroller.CLIManager;
+import com.tera13.application.frontend.viewcontroller.DiaryCLIManager;
 
 public abstract class ViewCLI {
-    private CLIManager sm;
+    private DiaryCLIManager sm;
 
     public abstract void show();
 
-    public CLIManager getSm() {
+    public DiaryCLIManager getSm() {
         return sm;
     }
 
-    public void setSm(CLIManager sm) {
+    public void setSm(DiaryCLIManager sm) {
         this.sm = sm;
     }
 }

@@ -54,10 +54,6 @@ public class CalendarViewGUI extends ViewGUI {
 
 		populateDiaryList();
 
-		String dn = getSm().getCurrentDiaryName();
-		diaryPicker.setValue(dn); //imposto sull'UI il nome del diario attuale
-		stage.setTitle(dn);
-
 		updateCalendar();
 	}
 

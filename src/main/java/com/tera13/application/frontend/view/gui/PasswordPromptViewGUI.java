@@ -15,9 +15,6 @@ public class PasswordPromptViewGUI extends ViewGUI {
 
 	String storedHash = "";
 	
-	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean."; 
-	
-	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/main/resources/fxml/PasswordPrompt.fxml"));
 	public void loadScene(Stage stage) {
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
@@ -36,8 +33,8 @@ public class PasswordPromptViewGUI extends ViewGUI {
 		String password = passwordField.getText(); //password inserita
 		Boolean match = getSm().checkPassword(password);
 		if(Boolean.TRUE.equals(match)){ //se la password inserita è corretta
-			String k = getSm().generateKey(password);
-			getSm().setKey(k); //imposto la key di DF a quella ottenuta
+			String k = getSm().generateKey(password); //imposto la key di DF a quella ottenuta
+			getSm().setKey(k);
 			getSm().toCalendar();
 		}else {
 			passwordField.setText("");
