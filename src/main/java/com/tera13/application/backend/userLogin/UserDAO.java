@@ -24,7 +24,7 @@ public class UserDAO {
         String sql = "SELECT diary_list_path FROM Users WHERE username = ? AND hash_password = ?";
 
 
-        try (Connection conn = DriverManager.getConnection(url, "sa", ""); //utente root per h2 (sa = system administrator)
+        try (Connection conn = DriverManager.getConnection(url, "sa", "LaPassword");
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
 

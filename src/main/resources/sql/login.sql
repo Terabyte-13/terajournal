@@ -14,3 +14,6 @@ WHERE NOT EXISTS (SELECT 1 FROM Users WHERE username = 'marco');
 INSERT INTO Users (username, hash_password, diary_list_path)
 SELECT 'giulia', '81dc9bdb52d04dc20036dbd8313ed055', '/home/giacomo-framework/IdeaProjects/terajournal/diaryLists/giulia.jm'
 WHERE NOT EXISTS (SELECT 1 FROM Users WHERE username = 'giulia');
+
+
+ALTER USER sa SET PASSWORD 'LaPassword';
