@@ -11,14 +11,14 @@ import static java.lang.System.getenv;
 
 public class UserDAO {
 
-    private static final String persistenceMode = getenv("APP_PERSISTENCE");
+    private static final String PERSISTENCE_MODE = getenv("APP_PERSISTENCE");
     private static final Logger logger = Logger.getLogger("userDAO");
     private static final Hasher hasher = new Hasher();
 
     public String userLogin(String username, String password) {
         String url;
 
-        if(persistenceMode.equals("demo")){ //in modalità demo, il DB non ha persistenza
+        if(PERSISTENCE_MODE.equals("demo")){ //in modalità demo, il DB non ha persistenza
             url = "jdbc:h2:mem:users;INIT=RUNSCRIPT FROM 'src/main/resources/sql/login.sql'";
         } else {
             url = "jdbc:h2:./users;INIT=RUNSCRIPT FROM 'src/main/resources/sql/login.sql'";

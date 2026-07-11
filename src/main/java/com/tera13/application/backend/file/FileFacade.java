@@ -12,11 +12,11 @@ import static java.lang.System.getenv;
 public class FileFacade {
 	private static final Cipher c = new Cipher();
 	private FileDAO fm;
-	private static final String persistenceMode = getenv("APP_PERSISTENCE");
+	private static final String PERSISTENCE_MODE = getenv("APP_PERSISTENCE");
 	private static final Logger logger = Logger.getLogger("FileFacade");
 
 	public FileFacade(){
-		if(persistenceMode.equals("demo")) {fm = new FileDAODB();}
+		if(PERSISTENCE_MODE.equals("demo")) {fm = new FileDAODB();}
 		else{fm = new FileDAOFS();}
 	}
 

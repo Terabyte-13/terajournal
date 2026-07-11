@@ -26,8 +26,8 @@ public class MetadataParser {
 	private StringTokenizer tok;
 	private FileFacade ff;
 
-	private static final String lineSeparator = "\n";
-	private static final String tokSeparator = ":";
+	private static final String LINE_SEPARATOR = "\n";
+	private static final String TOK_SEPARATOR = ":";
 
 	private static final Logger logger = Logger.getLogger("MetadataParser");
 
@@ -64,7 +64,7 @@ public class MetadataParser {
 		try{
 			line = fr.readLine(); //prendi la riga
 			while(line != null) {
-				tok = new StringTokenizer(line, tokSeparator);
+				tok = new StringTokenizer(line, TOK_SEPARATOR);
 				if(tok.hasMoreTokens()){ //estrai il primo token della riga
 					line = tok.nextToken();
 				}
@@ -106,7 +106,7 @@ public class MetadataParser {
 			}
 			output = fr.readLine();
 			logger.log(Level.INFO, "leggo riga metadati:{0}", output);
-			tok = new StringTokenizer(output, tokSeparator);
+			tok = new StringTokenizer(output, TOK_SEPARATOR);
 			String t = tok.nextToken(); //avanzo al secondo token
 			logger.log(Level.INFO, "leggo token:{0}", t);
 			t = tok.nextToken(); //avanzo al secondo token
@@ -130,15 +130,15 @@ public class MetadataParser {
 			throw new MetadataParserException(e.getMessage(),e.getCause());
         }
 
-        List<String> lines = new ArrayList<>(Arrays.asList(data.split(lineSeparator))); //leggo il file metadati e divido i field ogni separator
+        List<String> lines = new ArrayList<>(Arrays.asList(data.split(LINE_SEPARATOR))); //leggo il file metadati e divido i field ogni separator
 
 		//se è presente, aggiorna il dato, altrimenti crea una nuova riga
 		int i = findField(fieldName, filePath);
 		if(i >= 0) {lines.set(i, fieldName + ":" + newValue);}
 		else {lines.add(fieldName + ":" + newValue);}
 
-		data = String.join(lineSeparator, lines);
-		if(data.charAt(0) == lineSeparator.charAt(0)) {data = data.substring(1);}
+		data = String.join(LINE_SEPARATOR, lines);
+		if(data.charAt(0) == LINE_SEPARATOR.charAt(0)) {data = data.substring(1);}
 		logger.log(Level.INFO, "dati setField:[{0}]", data);
         try {
             ff.encryptAndSave(filePath, data, null, false);
@@ -153,7 +153,7 @@ public class MetadataParser {
 		List<String> output = fileToList(filePath);
 		if(output.isEmpty()) {return Collections.emptyList();}
 		for(int i = 0; i < output.size(); i++) {
-			tok = new StringTokenizer(output.get(i), tokSeparator);
+			tok = new StringTokenizer(output.get(i), TOK_SEPARATOR);
 			if(tok.hasMoreElements()) {output.set(i, tok.nextToken());} //prendo il primo token
 		}
 		return output;
@@ -169,7 +169,7 @@ public class MetadataParser {
         } catch (FileFacadeException e) {
             throw new MetadataParserException(e.getMessage(), e.getCause());
         }
-        if(data != null) {output = new ArrayList<>(Arrays.asList(data.split(lineSeparator)));}
+        if(data != null) {output = new ArrayList<>(Arrays.asList(data.split(LINE_SEPARATOR)));}
 		return output;
 	}
 

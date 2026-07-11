@@ -12,7 +12,7 @@ import static java.lang.System.getenv;
 
 public class JavafxStarter extends Application {
 
-    private static final String frontend = getenv("APP_FRONTEND");
+    private static final String FRONTEND = getenv("APP_FRONTEND");
     private static final Logger logger = Logger.getLogger("JavafxStarter");
 
     public void l(String[] args){
@@ -23,7 +23,7 @@ public class JavafxStarter extends Application {
     public void start(Stage primaryStage) {
 
         DiaryUIManager du;
-        if(frontend.equals("cli")){
+        if(FRONTEND.equals("cli")){
             du = new DiaryCLIManager();
         }else{
             du = new DiaryGUIManager();

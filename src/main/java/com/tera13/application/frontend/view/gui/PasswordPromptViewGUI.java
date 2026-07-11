@@ -11,17 +11,11 @@ public class PasswordPromptViewGUI extends ViewGUI {
 	
 	@FXML PasswordField passwordField;
 
-	private String storedHash = "";
-	
-	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/main/resources/fxml/PasswordPrompt.fxml"));
+    FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/main/resources/fxml/PasswordPrompt.fxml"));
 	public void loadScene(Stage stage) {
 		sceneLoader.setController(this); //per far usare l'istanza che ho creato nel codice, altrimenti se ne crea una nuova
 		showScene(stage, sceneLoader);
 		currentStage = stage;
-	}
-
-	public void setStoredHash(String s){
-		storedHash = s;
 	}
 
 	public void toStart() {

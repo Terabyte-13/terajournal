@@ -50,7 +50,6 @@ public class DiaryGUIManager extends DiaryUIManager {
     public void toPasswordPrompt(String storedHash){
         PasswordPromptViewGUI p = new PasswordPromptViewGUI();
         currentView = p;
-        p.setStoredHash(storedHash);
         loadScene();
     }
 
