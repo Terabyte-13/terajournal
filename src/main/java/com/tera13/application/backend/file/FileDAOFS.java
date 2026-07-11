@@ -11,15 +11,14 @@ import java.util.logging.Logger;
 
 public class FileDAOFS extends FileDAO {
 
-	
-	private File outputFile;
 
-	private static final Logger logger = Logger.getLogger("Hasher");
+    private static final Logger logger = Logger.getLogger("Hasher");
 	private static final StringBuilder bui = new StringBuilder();
 
 	int save(String data, String outputPath, String fileName) throws IOException{
 		// creazione cartelle e file ------------------------------------------------------------------------
-		if(!outputPath.equals("")) {
+        File outputFile;
+        if(!outputPath.equals("")) {
 			outputFile = new File(outputPath); //directory
 			outputFile.mkdirs();
 			outputFile = new File(outputPath, fileName); //il file

@@ -5,8 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
-import java.util.logging.Logger;
-
 public class PasswordPromptViewGUI extends ViewGUI {
 	
 	@FXML PasswordField passwordField;

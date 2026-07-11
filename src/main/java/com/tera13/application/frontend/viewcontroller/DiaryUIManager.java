@@ -1,7 +1,7 @@
 package com.tera13.application.frontend.viewcontroller;
 
 import com.tera13.application.backend.DiaryFacade;
-import com.tera13.application.backend.userLogin.LoginFacade;
+import com.tera13.application.backend.userlogin.LoginFacade;
 import com.tera13.application.bean.PageBean;
 import com.tera13.application.bean.*;
 import com.tera13.application.exception.CreateDiaryException;
