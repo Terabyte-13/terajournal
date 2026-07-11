@@ -1,7 +1,7 @@
 package com.tera13.application.frontend.viewcontroller;
 
 import com.tera13.application.backend.DiaryFacade;
-import com.tera13.application.backend.userLogin.LoginFacade;
+import com.tera13.application.backend.UserLogin.LoginFacade;
 import com.tera13.application.bean.PageBean;
 import com.tera13.application.bean.*;
 import com.tera13.application.exception.CreateDiaryException;
@@ -175,11 +175,10 @@ public abstract class DiaryUIManager {
             pb.setPassword(password);
             pb = df.generateKeyBean(pb);
             key = pb.getKey();
-            if(key == null) toError(new Exception("Errore nella generazione della chiave!")); //TODO vedi se levare
+            if(key == null) toError(new Exception("Errore nella generazione della chiave!"));
         } catch (IllegalArgumentException e) {
             toError(e);
         }
-        System.out.println(key);
         return key;
     }
 

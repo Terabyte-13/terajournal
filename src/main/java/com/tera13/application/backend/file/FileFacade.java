@@ -7,14 +7,16 @@ import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.System.getenv;
+
 public class FileFacade {
 	Cipher c = new Cipher();
 	FileDAO fm;
-	Boolean demoMode = false;
+	String persistenceMode = getenv("APP_PERSISTENCE");
 	Logger logger = Logger.getLogger("FileFacade");
 
 	public FileFacade(){
-		if(Boolean.TRUE.equals(demoMode)) {fm = new FileDAODB();}
+		if(persistenceMode.equals("demo")) {fm = new FileDAODB();}
 		else{fm = new FileDAOFS();}
 	}
 

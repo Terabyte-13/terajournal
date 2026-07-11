@@ -1,21 +1,24 @@
-package com.tera13.application.backend.userLogin;
+package com.tera13.application.backend.UserLogin;
 
 import com.tera13.application.backend.file.Hasher;
+import com.tera13.application.exception.UserLoginException;
 
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.System.getenv;
+
 public class UserDAO {
 
-    boolean demoMode = false;
+    String persistenceMode = getenv("APP_PERSISTENCE");
     Logger logger = Logger.getLogger("userDAO");
     Hasher hasher = new Hasher();
 
     public String userLogin(String username, String password) {
         String url;
 
-        if(Boolean.TRUE.equals(demoMode)){ //in modalità demo, il DB non ha persistenza
+        if(persistenceMode.equals("demo")){ //in modalità demo, il DB non ha persistenza
             url = "jdbc:h2:mem:users;INIT=RUNSCRIPT FROM 'src/main/resources/sql/login.sql'";
         } else {
             url = "jdbc:h2:./users;INIT=RUNSCRIPT FROM 'src/main/resources/sql/login.sql'";
@@ -23,7 +26,7 @@ public class UserDAO {
 
         String sql = "SELECT diary_list_path FROM Users WHERE username = ? AND hash_password = ?";
 
-        String p = System.getenv("APP_DB_PWD");
+        String p = getenv("APP_DB_PWD");
 
         try (Connection conn = DriverManager.getConnection(url, "sa", p);
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -40,7 +43,7 @@ public class UserDAO {
             }
         } catch (Exception e) {
             logger.log(Level.SEVERE, "Errore nel login utente.");
-            e.printStackTrace();
+            throw new UserLoginException("Errore nel DAO utenti");
         }
 
         // utente non trovato o password non corrispondente

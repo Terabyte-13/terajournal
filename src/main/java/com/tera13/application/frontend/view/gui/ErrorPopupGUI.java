@@ -1,6 +1,5 @@
 package com.tera13.application.frontend.view.gui;
 
-import com.tera13.application.frontend.viewcontroller.DiaryGUIManager;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import java.util.Optional;

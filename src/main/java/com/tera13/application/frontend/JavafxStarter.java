@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static java.lang.System.getenv;
+
 public class JavafxStarter extends Application {
 
-    Boolean useCLI = false;
+    String frontend = getenv("APP_FRONTEND");
     Logger logger = Logger.getLogger("JavafxStarter");
 
     public void l(String[] args){
@@ -21,7 +23,7 @@ public class JavafxStarter extends Application {
     public void start(Stage primaryStage) {
 
         DiaryUIManager du;
-        if(Boolean.TRUE.equals(useCLI)){
+        if(frontend.equals("cli")){
             du = new DiaryCLIManager();
         }else{
             du = new DiaryGUIManager();
