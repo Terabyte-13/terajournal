@@ -10,12 +10,11 @@ import java.util.logging.Logger;
 
 public class EditorViewGUI extends ViewGUI {
 
-	int year;
-	int month;
-	int day;
-	
-	Logger logger = Logger.getLogger("EditorSceneController");
-	public static final String BEAN_ERROR = "Errore nell'impostazione di un bean.";
+	private int year;
+	private int month;
+	private int day;
+
+	private static final Logger logger = Logger.getLogger("EditorSceneController");
 	
 	@FXML HTMLEditor editorText;
 	

@@ -8,7 +8,7 @@ import static com.tera13.application.frontend.view.cli.Colors.ANSI_YELLOW;
 
 public class Selector {
 
-    Scanner scanner;
+    private Scanner scanner;
     private static final String INSERT = "inserisci ";
 
     Selector(){

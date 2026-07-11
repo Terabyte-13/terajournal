@@ -12,10 +12,10 @@ import java.util.logging.Logger;
 public class FileDAOFS extends FileDAO {
 
 	
-	File outputFile;
-	
-	Logger logger = Logger.getLogger("Hasher");
-	StringBuilder bui = new StringBuilder();
+	private File outputFile;
+
+	private static final Logger logger = Logger.getLogger("Hasher");
+	private static final StringBuilder bui = new StringBuilder();
 
 	int save(String data, String outputPath, String fileName) throws IOException{
 		// creazione cartelle e file ------------------------------------------------------------------------

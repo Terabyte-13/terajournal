@@ -27,8 +27,7 @@ public class StartViewGUI extends ViewGUI {
 	public void toNewDiary(ActionEvent event) {
 		getSm().toNewDiary();
 	}
-	
-	
+
 	void populateDiaryList() {
 		List<String> diaries = getSm().getDiaryNames();
 		if(diaries.isEmpty()){return;}

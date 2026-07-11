@@ -25,9 +25,9 @@ import java.util.logging.Logger;
 
 public class FileDAODB extends FileDAO {
 	
-	Connection connection;
-	Logger logger = Logger.getLogger("FileManagerDemo");
-	StringBuilder bui = new StringBuilder();
+	private Connection connection;
+	private static final Logger logger = Logger.getLogger("FileManagerDemo");
+	private static final StringBuilder bui = new StringBuilder();
 	
 	FileDAODB(){
 		try {

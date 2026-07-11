@@ -1,7 +1,7 @@
 package com.tera13.application.frontend.viewcontroller;
 
 import com.tera13.application.backend.DiaryFacade;
-import com.tera13.application.backend.UserLogin.LoginFacade;
+import com.tera13.application.backend.userLogin.LoginFacade;
 import com.tera13.application.bean.PageBean;
 import com.tera13.application.bean.*;
 import com.tera13.application.exception.CreateDiaryException;
@@ -26,14 +26,14 @@ import java.util.logging.Logger;
 
 public abstract class DiaryUIManager {
 
-    LoginFacade lf = new LoginFacade();
-    DiaryFacade df = new DiaryFacade();
+    private static final LoginFacade lf = new LoginFacade();
+    private static final DiaryFacade df = new DiaryFacade();
 
-    String currentKey = "";
-    String currentDiaryPath = ""; //path del file metadati
-    String currentDiaryFolder; //path della cartella
+    private String currentKey = "";
+    private String currentDiaryPath = ""; //path del file metadati
+    private String currentDiaryFolder; //path della cartella
 
-    Logger logger = Logger.getLogger("DiaryUIManager");
+    private static final Logger logger = Logger.getLogger("DiaryUIManager");
 
     public static final String BEAN_ERROR = "Errore nell'impostazione di un bean.";
 

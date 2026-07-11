@@ -3,7 +3,7 @@ package com.tera13.application.frontend.view.cli;
 import static com.tera13.application.frontend.view.cli.Colors.*;
 
 public class NewDiaryViewCLI extends ViewCLI{
-    Selector s = new Selector();
+    private static final Selector s = new Selector();
 
     public void show(){
 

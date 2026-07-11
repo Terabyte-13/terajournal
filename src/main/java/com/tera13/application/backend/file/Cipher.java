@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 public class Cipher {
 
-	Logger logger = Logger.getLogger("Cipher");
+	private static final Logger logger = Logger.getLogger("Cipher");
 
 	public String cipher(String key, String input, int direction) {
 		//direction = 0: encrypt     direction = 1: decrypt

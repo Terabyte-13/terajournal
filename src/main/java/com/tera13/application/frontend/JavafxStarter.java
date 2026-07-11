@@ -12,8 +12,8 @@ import static java.lang.System.getenv;
 
 public class JavafxStarter extends Application {
 
-    String frontend = getenv("APP_FRONTEND");
-    Logger logger = Logger.getLogger("JavafxStarter");
+    private static final String frontend = getenv("APP_FRONTEND");
+    private static final Logger logger = Logger.getLogger("JavafxStarter");
 
     public void l(String[] args){
         launch(args); //questa funzione non può essere chiamata da altre classi, quindi faccio così

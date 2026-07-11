@@ -9,11 +9,9 @@ import java.util.logging.Logger;
 
 public class PasswordPromptViewGUI extends ViewGUI {
 	
-	Logger logger = Logger.getLogger("PasswordPromptSC");
-	
 	@FXML PasswordField passwordField;
 
-	String storedHash = "";
+	private String storedHash = "";
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/main/resources/fxml/PasswordPrompt.fxml"));
 	public void loadScene(Stage stage) {

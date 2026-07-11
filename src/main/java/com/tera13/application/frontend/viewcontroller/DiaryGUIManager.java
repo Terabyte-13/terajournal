@@ -12,10 +12,10 @@ import java.io.IOException;
 public class DiaryGUIManager extends DiaryUIManager {
 
     //stage della finestra principale
-    Stage currentStage;
+    private Stage currentStage;
     /*mantenendo un unico currentView che mantiene il riferimento a solo la scene attuale, teoricamente
     gli scenecontroller precedenti, una volta rimosso il riferimento, vengono rimossi dal garbage collector*/
-    ViewGUI currentView;
+    private ViewGUI currentView;
 
     public void initAndStart(Stage primaryStage) throws IOException {
 

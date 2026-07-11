@@ -10,10 +10,10 @@ import java.util.logging.Logger;
 import static java.lang.System.getenv;
 
 public class FileFacade {
-	Cipher c = new Cipher();
-	FileDAO fm;
-	String persistenceMode = getenv("APP_PERSISTENCE");
-	Logger logger = Logger.getLogger("FileFacade");
+	private static final Cipher c = new Cipher();
+	private FileDAO fm;
+	private static final String persistenceMode = getenv("APP_PERSISTENCE");
+	private static final Logger logger = Logger.getLogger("FileFacade");
 
 	public FileFacade(){
 		if(persistenceMode.equals("demo")) {fm = new FileDAODB();}

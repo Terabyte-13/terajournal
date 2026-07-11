@@ -20,6 +20,6 @@ public class Colors {
     public static final String ANSI_CYAN_BG = "\u001B[46m";
     public static final String ANSI_WHITE_BG = "\u001B[47m";
 
-    private Colors(){} //lo vuole sonarcloud, boh
+    private Colors(){}
 }
 

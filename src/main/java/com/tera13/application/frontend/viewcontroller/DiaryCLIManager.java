@@ -7,7 +7,7 @@ import static com.tera13.application.frontend.view.cli.Colors.*;
 
 public class DiaryCLIManager extends DiaryUIManager {
 
-    ViewCLI currentView;
+    private ViewCLI currentView;
 
     public void initAndStart(Stage primaryStage){
         toLogin();

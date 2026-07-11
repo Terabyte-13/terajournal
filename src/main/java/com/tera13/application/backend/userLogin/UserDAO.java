@@ -1,4 +1,4 @@
-package com.tera13.application.backend.UserLogin;
+package com.tera13.application.backend.userLogin;
 
 import com.tera13.application.backend.file.Hasher;
 import com.tera13.application.exception.UserLoginException;
@@ -11,9 +11,9 @@ import static java.lang.System.getenv;
 
 public class UserDAO {
 
-    String persistenceMode = getenv("APP_PERSISTENCE");
-    Logger logger = Logger.getLogger("userDAO");
-    Hasher hasher = new Hasher();
+    private static final String persistenceMode = getenv("APP_PERSISTENCE");
+    private static final Logger logger = Logger.getLogger("userDAO");
+    private static final Hasher hasher = new Hasher();
 
     public String userLogin(String username, String password) {
         String url;

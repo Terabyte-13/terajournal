@@ -18,18 +18,18 @@ import java.util.logging.Logger;
 
 public class MetadataParser {
 
-	public static final String ANSI_YELLOW = "\u001B[33m";
-	public static final String ANSI_CYAN = "\u001B[36m";
-	public static final String ANSI_RESET = "\u001B[0m";
+	private static final String ANSI_YELLOW = "\u001B[33m";
+	private static final String ANSI_CYAN = "\u001B[36m";
+	private static final String ANSI_RESET = "\u001B[0m";
 
-	BufferedReader fr;
-	StringTokenizer tok;
-	FileFacade ff;
+	private BufferedReader fr;
+	private StringTokenizer tok;
+	private FileFacade ff;
 
-	String lineSeparator = "\n";
-	String tokSeparator = ":";
+	private static final String lineSeparator = "\n";
+	private static final String tokSeparator = ":";
 
-	Logger logger = Logger.getLogger("MetadataParser");
+	private static final Logger logger = Logger.getLogger("MetadataParser");
 
 	MetadataParser(){
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();

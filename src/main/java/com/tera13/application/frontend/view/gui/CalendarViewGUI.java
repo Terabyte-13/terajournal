@@ -28,12 +28,12 @@ public class CalendarViewGUI extends ViewGUI {
 	@FXML Label monthYearDisplay;
 	@FXML DatePicker datePicker;
 
-	ZoneId timeZone = TimeZone.getDefault().toZoneId();
-	LocalDate date = LocalDate.now(timeZone);
-	int month = date.getMonthValue();
-	int year = date.getYear();
+	private static final ZoneId timeZone = TimeZone.getDefault().toZoneId();
+	private final LocalDate date = LocalDate.now(timeZone);
+	private int month = date.getMonthValue();
+	private int year = date.getYear();
 
-	Logger logger = Logger.getLogger("FileManagerDemo");
+	private static final Logger logger = Logger.getLogger("FileManagerDemo");
 	
 	public CalendarViewGUI(){
 		String caller = Thread.currentThread().getStackTrace()[2].getClassName();

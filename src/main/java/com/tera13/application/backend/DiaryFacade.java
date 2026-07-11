@@ -17,9 +17,9 @@ public class DiaryFacade {
 
     public static final String PWDHASH = "pwdHash";
 
-    FileFacade ff = new FileFacade(); //questo fileFacade deve essere l'unica istanza di fileFacade, altrimenti in modalità demo verranno creati più DB separati
-    MetadataParser mp = new MetadataParser();
-    Hasher hasher = new Hasher();
+    private static final FileFacade ff = new FileFacade(); //questo fileFacade deve essere l'unica istanza di fileFacade, altrimenti in modalità demo verranno creati più DB separati
+    private static final MetadataParser mp = new MetadataParser();
+    private static final Hasher hasher = new Hasher();
 
     Logger logger = Logger.getLogger("diaryFacade");
 

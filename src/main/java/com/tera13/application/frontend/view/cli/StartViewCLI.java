@@ -6,8 +6,8 @@ import static com.tera13.application.frontend.view.cli.Colors.*;
 
 public class StartViewCLI extends ViewCLI {
 
-    Selector s = new Selector();
-    Boolean stay = true;
+    private static final Selector s = new Selector();
+    private Boolean stay = true;
 
     public void show(){
         while(Boolean.TRUE.equals(stay)) {

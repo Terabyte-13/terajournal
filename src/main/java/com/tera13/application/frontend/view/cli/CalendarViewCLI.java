@@ -6,7 +6,7 @@ import static com.tera13.application.frontend.view.cli.Colors.ANSI_RESET;
 
 public class CalendarViewCLI extends ViewCLI {
 
-    Selector s = new Selector();
+    private static final Selector s = new Selector();
 
     public void show(){
         System.out.println(ANSI_CYAN_BG + ANSI_BLACK + " Diario: " + getSm().getCurrentDiaryName() + " " + ANSI_RESET);

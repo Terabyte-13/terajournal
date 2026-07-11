@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public class ErrorPopupGUI {
 
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    ButtonType quit = new ButtonType("Esci");
+    private Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    private ButtonType quit = new ButtonType("Esci");
 
     public void show(Exception e){
         alert.setTitle("Errore!");

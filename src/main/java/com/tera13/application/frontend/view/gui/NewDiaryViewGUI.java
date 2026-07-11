@@ -21,8 +21,8 @@ public class NewDiaryViewGUI extends ViewGUI {
 	@FXML TextField pathField;
 	
 	FXMLLoader sceneLoader = new FXMLLoader(getClass().getResource("/main/resources/fxml/NewDiary.fxml"));
-	DirectoryChooser dc = new DirectoryChooser();
-	Logger logger = Logger.getLogger("NewDiarySceneController");
+	private static final DirectoryChooser dc = new DirectoryChooser();
+	private static final Logger logger = Logger.getLogger("NewDiarySceneController");
 	
 
 	public void loadScene(Stage stage) {

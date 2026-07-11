@@ -6,11 +6,11 @@ import static com.tera13.application.frontend.view.cli.Colors.ANSI_RESET;
 
 public class EditorViewCLI extends ViewCLI {
 
-    int y;
-    int m;
-    int d;
-    Selector s = new Selector();
-    Boolean stay = true;
+    private int y;
+    private int m;
+    private int d;
+    private static final Selector s = new Selector();
+    private Boolean stay = true;
 
     public EditorViewCLI(int year, int month, int day){
         y = year;
